@@ -381,7 +381,7 @@ Future<void> showLogoutDialog(BuildContext context) {
             height: btnH,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
+                Navigator.pushReplacementNamed(context, '/login');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: kColorPrimaryBlue,

@@ -7,11 +7,13 @@ enum LoginButtonType { logIn, send, verify, reset }
 
 class LoginButton extends StatefulWidget {
   final LoginButtonType btnType;
+  final bool isLoading;
   final VoidCallback onPressed;
 
   const LoginButton({
     Key? key,
     required this.btnType,
+    this.isLoading = false,
     required this.onPressed,
   }) : super(key: key);
 
@@ -87,18 +89,21 @@ class _LoginButtonState extends State<LoginButton> {
           child: Image.asset('assets/images/btn_login.png'),
         ),
         Positioned.fill(
-          child: TextButton(
-            onPressed: widget.onPressed,
-            child: Text(
-              btnTitle,
-              style: const TextStyle(
-                color: kColorPrimaryBlue,
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
-            ),
-          ),
+          child: widget.isLoading
+              ? const SizedBox(
+                  child: Center(child: CircularProgressIndicator()))
+              : TextButton(
+                  onPressed: widget.onPressed,
+                  child: Text(
+                    btnTitle,
+                    style: const TextStyle(
+                      color: kColorPrimaryBlue,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
         ),
       ],
     );

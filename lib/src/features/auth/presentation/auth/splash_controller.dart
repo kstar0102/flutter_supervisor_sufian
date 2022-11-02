@@ -8,13 +8,13 @@ class SplashController extends StateNotifier<AsyncValue<void>> {
   final AuthRepository authRepository;
 
   Future<void> fetchToken() async {
-    // set the state to loading
-    state = const AsyncLoading<void>();
+    state = const AsyncValue.loading();
 
-    // call authRepository.fetchToken and await for the result
     state = await AsyncValue.guard<void>(
       () => authRepository.fetchToken(),
     );
+
+    //if (state.hasError) print('error');
   }
 }
 

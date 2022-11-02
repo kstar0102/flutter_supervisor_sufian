@@ -28,7 +28,7 @@ class AuthRepository {
     await Future.delayed(const Duration(seconds: 2));
   }
 
-  Future<void> signOut() async {
+  Future<void> logOut() async {
     await Future.delayed(const Duration(seconds: 2));
   }
 
