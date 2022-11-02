@@ -1,8 +1,10 @@
+import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/login_textfield.dart';
 import 'package:alnabali_driver/src/widgets/login_button.dart';
+import 'package:go_router/go_router.dart';
 
 class ForgetPwdScreen extends StatefulWidget {
   const ForgetPwdScreen({Key? key}) : super(key: key);
@@ -69,7 +71,7 @@ class _ForgetPwdScreenState extends State<ForgetPwdScreen> {
               LoginButton(
                 btnType: LoginButtonType.reset,
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/home');
+                  context.goNamed(AppRoute.home.name);
                 },
               ),
               Flexible(

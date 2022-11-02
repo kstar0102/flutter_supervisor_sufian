@@ -1,6 +1,6 @@
-import 'package:alnabali_driver/src/features/auth/presentation/account/home_account.dart';
-import 'package:alnabali_driver/src/features/trip/presentation/home_notification.dart';
-import 'package:alnabali_driver/src/features/trip/presentation/home_trips.dart';
+import 'package:alnabali_driver/src/features/auth/presentation/account/home_account_page.dart';
+import 'package:alnabali_driver/src/features/trip/presentation/home_notifications_page.dart';
+import 'package:alnabali_driver/src/features/trip/presentation/home_trips_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (position == 0) {
               return const HomeTripsPage();
             } else if (position == 1) {
-              return const HomeNotificationPage();
+              return const HomeNotificationsPage();
             } else {
               return const HomeAccountPage();
             }

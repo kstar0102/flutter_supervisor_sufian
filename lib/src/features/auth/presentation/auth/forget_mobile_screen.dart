@@ -1,8 +1,10 @@
+import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/login_textfield.dart';
 import 'package:alnabali_driver/src/widgets/login_button.dart';
+import 'package:go_router/go_router.dart';
 
 class ForgetMobileScreen extends StatefulWidget {
   const ForgetMobileScreen({Key? key}) : super(key: key);
@@ -75,7 +77,7 @@ class _ForgetMobileScreenState extends State<ForgetMobileScreen> {
               LoginButton(
                 btnType: LoginButtonType.send,
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/forget_otp');
+                  context.goNamed(AppRoute.forgetOTP.name);
                 },
               ),
               Flexible(
@@ -88,7 +90,7 @@ class _ForgetMobileScreenState extends State<ForgetMobileScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: IconButton(
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/login');
+            context.goNamed(AppRoute.login.name);
           },
           iconSize: 89 * SizeConfig.scaleY,
           icon: Image.asset('assets/images/btn_back.png'),

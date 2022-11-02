@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/notification_card.dart';
 
-class HomeNotificationPage extends StatefulWidget {
-  const HomeNotificationPage({Key? key}) : super(key: key);
+class HomeNotificationsPage extends StatefulWidget {
+  const HomeNotificationsPage({Key? key}) : super(key: key);
 
   @override
-  State<HomeNotificationPage> createState() => _HomeNotificationPageState();
+  State<HomeNotificationsPage> createState() => _HomeNotificationsPageState();
 }
 
-class _HomeNotificationPageState extends State<HomeNotificationPage> {
+class _HomeNotificationsPageState extends State<HomeNotificationsPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

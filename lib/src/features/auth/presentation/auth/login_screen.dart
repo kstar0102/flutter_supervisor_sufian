@@ -1,4 +1,5 @@
 import 'package:alnabali_driver/src/features/auth/presentation/auth/login_controller.dart';
+import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/utils/string_validators.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -48,28 +50,6 @@ class LoginScreen extends StatelessWidget {
               Flexible(
                   flex: 1, child: SizedBox(height: 250 * SizeConfig.scaleY)),
               const LoginInputContent(),
-              Flexible(
-                  flex: 1, child: SizedBox(height: 310 * SizeConfig.scaleY)),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/forget_mobile');
-                },
-                child: Text(
-                  "FORGET PASSWORD".hardcoded,
-                  style: const TextStyle(
-                    shadows: [
-                      Shadow(color: Colors.white, offset: Offset(0, -6))
-                    ],
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: Colors.transparent,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.white,
-                    decorationThickness: 2,
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -111,16 +91,13 @@ class _LoginInputContentState extends ConsumerState<LoginInputContent> {
     super.dispose();
   }
 
-  Future<void> _submit(LoginState state) async {
+  Future<void> _submit(LoginState state, BuildContext context) async {
     setState(() => _submitted = true);
 
     // only submit the form if validation passes
     if (_formKey.currentState!.validate()) {
       final controller = ref.read(loginControllerProvider.notifier);
-      final success = await controller.submit(username, password);
-      if (success) {
-        //widget.onSignedIn?.call();
-      }
+      controller.tryLogin(username, password);
     }
   }
 
@@ -130,27 +107,23 @@ class _LoginInputContentState extends ConsumerState<LoginInputContent> {
     }
   }
 
-  void _passwordEditingComplete(LoginState state) {
+  void _passwordEditingComplete(BuildContext context) {
+    final state = ref.read(loginControllerProvider);
+    if (state.isLoading) return; // at editing complted time, state is old one.
+
     if (!state.canSubmitEmail(username)) {
       _node.previousFocus();
       return;
     }
-    _submit(state);
+
+    _submit(state, context);
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
-      loginControllerProvider.select((state) => state.value),
-      (_, state) {
-        state.showAlertDialogOnError(context);
-        state.whenData((value) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.of(context).pushReplacementNamed('/home');
-          });
-        });
-      },
-    );
+        loginControllerProvider.select((state) => state.value),
+        (_, state) => state.showAlertDialogOnError(context));
 
     final textfieldW = SizeConfig.screenW * 0.69;
     final textfieldH = textfieldW * 0.16;
@@ -247,7 +220,7 @@ class _LoginInputContentState extends ConsumerState<LoginInputContent> {
                 autocorrect: false,
                 textInputAction: TextInputAction.done,
                 cursorColor: Colors.white,
-                onEditingComplete: () => _passwordEditingComplete(state),
+                onEditingComplete: () => _passwordEditingComplete(context),
                 decoration: InputDecoration(
                   label: Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
@@ -271,11 +244,26 @@ class _LoginInputContentState extends ConsumerState<LoginInputContent> {
             LoginButton(
               btnType: LoginButtonType.logIn,
               isLoading: state.isLoading,
-              onPressed: () {
-                if (!state.isLoading) {
-                  _submit(state);
-                }
-              },
+              onPressed: state.isLoading ? null : () => _submit(state, context),
+            ),
+            Flexible(flex: 1, child: SizedBox(height: 310 * SizeConfig.scaleY)),
+            TextButton(
+              onPressed: state.isLoading
+                  ? null
+                  : () => context.goNamed(AppRoute.forgetMobile.name),
+              child: Text(
+                "FORGET PASSWORD".hardcoded,
+                style: const TextStyle(
+                  shadows: [Shadow(color: Colors.white, offset: Offset(0, -6))],
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13,
+                  color: Colors.transparent,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Colors.white,
+                  decorationThickness: 2,
+                ),
+              ),
             ),
           ],
         ),

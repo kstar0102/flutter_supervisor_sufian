@@ -1,8 +1,10 @@
+import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/login_button.dart';
 import 'package:alnabali_driver/src/widgets/otp_field.dart';
+import 'package:go_router/go_router.dart';
 
 class ForgetOTPScreen extends StatefulWidget {
   const ForgetOTPScreen({Key? key}) : super(key: key);
@@ -115,7 +117,7 @@ class _ForgetOTPScreenState extends State<ForgetOTPScreen> {
               LoginButton(
                 btnType: LoginButtonType.verify,
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/forget_pwd');
+                  context.goNamed(AppRoute.forgetPwd.name);
                 },
               ),
               Flexible(
@@ -163,7 +165,7 @@ class _ForgetOTPScreenState extends State<ForgetOTPScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: IconButton(
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/forget1');
+            context.goNamed(AppRoute.forgetMobile.name);
           },
           iconSize: 89 * SizeConfig.scaleY,
           icon: Image.asset('assets/images/btn_back.png'),

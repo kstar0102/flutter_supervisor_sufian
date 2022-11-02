@@ -8,7 +8,7 @@ enum LoginButtonType { logIn, send, verify, reset }
 class LoginButton extends StatefulWidget {
   final LoginButtonType btnType;
   final bool isLoading;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const LoginButton({
     Key? key,

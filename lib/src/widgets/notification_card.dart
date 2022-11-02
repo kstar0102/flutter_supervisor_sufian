@@ -1,7 +1,9 @@
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
+import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:go_router/go_router.dart';
 
 class NotificationCard extends StatefulWidget {
   final TripInfo info;
@@ -46,7 +48,7 @@ class _NotificationCardState extends State<NotificationCard> {
               child: InkWell(
                 borderRadius: borderRadius,
                 onTap: () {
-                  Navigator.pushNamed(context, '/trip_detail');
+                  context.goNamed(AppRoute.tripDetail.name);
                 },
                 //splashColor: kColorPrimaryBlue.withOpacity(0.1),
                 //splashFactory: InkSplash.splashFactory,

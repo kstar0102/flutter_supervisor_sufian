@@ -1,3 +1,4 @@
+import 'package:alnabali_driver/src/features/exceptions/app_exception.dart';
 import 'package:alnabali_driver/src/widgets/alert_dialogs.dart';
 //import 'package:alnabali_driver/src/exceptions/app_exception.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
@@ -19,10 +20,10 @@ extension AsyncValueUI on AsyncValue {
   }
 
   String _errorMessage(Object? error) {
-    // if (error is AppException) {
-    //   return error.details.message;
-    // } else {
-    return error.toString();
-    // }
+    if (error is AppException) {
+      return error.details.message;
+    } else {
+      return error.toString();
+    }
   }
 }

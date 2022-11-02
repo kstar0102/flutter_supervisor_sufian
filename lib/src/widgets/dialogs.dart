@@ -322,8 +322,8 @@ Future<String?> showRejectDialog(
 /// Trip Logout Dialog
 ///
 
-Future<void> showLogoutDialog(BuildContext context) {
-  return showDialog<void>(
+Future<bool?> showLogoutDialog(BuildContext context) {
+  return showDialog<bool?>(
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
@@ -381,7 +381,7 @@ Future<void> showLogoutDialog(BuildContext context) {
             height: btnH,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/login');
+                Navigator.pop(context, true);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: kColorPrimaryBlue,

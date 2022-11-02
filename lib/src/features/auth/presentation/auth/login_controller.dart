@@ -60,14 +60,18 @@ class LoginController extends StateNotifier<LoginState> {
 
   final AuthRepository authRepository;
 
-  Future<bool> submit(String email, String password) async {
+  Future<void> tryLogin(String email, String password) async {
     state = state.copyWith(value: const AsyncValue.loading());
 
     final value =
-        await AsyncValue.guard(() => authRepository.logIn(email, password));
-    state = state.copyWith(value: value);
+        await AsyncValue.guard(() => authRepository.tryLogIn(email, password));
 
-    return value.hasError == false;
+    // * Check if the controller is mounted before setting the state to prevent:
+    // * Bad state: Tried to use Controller after `dispose` was called.
+    if (mounted) {
+      state = state.copyWith(value: value);
+      //return value.hasError == false;
+    }
   }
 }
 

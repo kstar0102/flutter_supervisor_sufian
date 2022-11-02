@@ -7,14 +7,15 @@ class SplashController extends StateNotifier<AsyncValue<void>> {
 
   final AuthRepository authRepository;
 
-  Future<void> fetchToken() async {
+  Future<void> tryGetToken() async {
     state = const AsyncValue.loading();
+    final newState = await AsyncValue.guard(authRepository.tryGetToken);
 
-    state = await AsyncValue.guard<void>(
-      () => authRepository.fetchToken(),
-    );
-
-    //if (state.hasError) print('error');
+    // * Check if the controller is mounted before setting the state to prevent:
+    // * Bad state: Tried to use Controller after `dispose` was called.
+    if (mounted) {
+      state = newState;
+    }
   }
 }
 

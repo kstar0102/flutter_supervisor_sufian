@@ -1,10 +1,12 @@
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
+import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/trip_busline.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
+import 'package:go_router/go_router.dart';
 
 class TripCard extends StatefulWidget {
   final TripInfo info;
@@ -334,7 +336,7 @@ class _TripCardState extends State<TripCard> {
       onTap: () {
         if (widget.showDetail) return;
 
-        Navigator.pushNamed(context, '/trip_detail');
+        context.goNamed(AppRoute.tripDetail.name);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 30),

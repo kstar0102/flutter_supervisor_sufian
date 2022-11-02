@@ -1,39 +1,105 @@
 import 'package:alnabali_driver/src/features/auth/domain/app_user.dart';
+import 'package:alnabali_driver/src/features/exceptions/app_exception.dart';
+import 'package:alnabali_driver/src/network/dio_client.dart';
 import 'package:alnabali_driver/src/utils/in_memory_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthRepository {
-  final _tokenState = InMemoryStore<AppToken?>(null);
   final _userState = InMemoryStore<AppUser?>(null);
-
-  Stream<AppToken?> tokenStateChanges() => _tokenState.stream;
-  AppToken? get currentToken => _tokenState.value;
 
   Stream<AppUser?> userStateChanges() => _userState.stream;
   AppUser? get currentUser => _userState.value;
 
-  Future<void> fetchToken() async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<void> tryGetToken() async {
+    final response = await DioClient.getToken();
 
-    _tokenState.value = const AppToken(token: 'fake-token');
+    _userState.value = AppUser(token: response.data['token']);
   }
 
-  Future<void> logIn(String username, String password) async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<void> tryLogIn(String username, String password) async {
+    var user = _userState.value;
+    if (user == null || user.token.isEmpty) {
+      return; // token not ready yet.
+    }
 
-    _userState.value = const AppUser(uid: '0', username: 'fake-user');
+    final response = await DioClient.postLogin(user.token, username, password);
+
+    var result = response.data['result'];
+    if (result == 'Login Successfully') {
+      _userState.value = user.copyWith(
+        uid: response.data['id'].toString(),
+        username: username,
+      );
+    } else if (result == 'Invalid Driver') {
+      throw const AppException.userNotFound();
+    } else if (result == 'Invalid Password') {
+      throw const AppException.wrongPassword();
+    }
   }
 
-  Future<void> resetPassword(String newPassword) async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<void> tryGetProfile() async {
+    var user = _userState.value;
+    if (user == null || !user.isLogined()) {
+      return; // trying for invalid user.
+    } else if (user.profile != null) {
+      return; // already profile data fetched.
+    }
+
+    final response = await DioClient.getProfile(user.token, user.uid);
+
+    var driver = response.data['driver'];
+    // ? these null values must be from server?
+    final profileImg = driver['profile_image'] ?? '';
+    final addr = driver['address'] ?? '';
+    _userState.value = user.copyWith(
+      profile: Profile(
+        profileImage: profileImg,
+        nameEN: driver['name_en'],
+        phone: driver['phone'],
+        birthday: driver['age'],
+        address: addr,
+      ),
+    );
   }
 
-  Future<void> logOut() async {
+  Future<void> tryEditProfile(
+      String name, String phone, String birthday, String address) async {
+    var user = _userState.value;
+    if (user == null || !user.isLogined()) {
+      return; // trying for invalid user.
+    }
+
+    final response = await DioClient.postProfileEdit(
+        user.token, user.uid, name, phone, birthday, address);
+    var result = response.data['result'];
+    if (result == 'Update successfully') {
+      print('change ok');
+    } else if (result == 'Invalid Password') {
+      throw const AppException.wrongPassword();
+    }
+  }
+
+  Future<void> tryChangePwd(String currPwd, String newPwd) async {
+    var user = _userState.value;
+    if (user == null || !user.isLogined()) {
+      return; // trying for invalid user.
+    }
+
+    final response =
+        await DioClient.postChangePwd(user.token, user.uid, currPwd, newPwd);
+    var result = response.data['result'];
+    if (result == 'Changed successfully') {
+      print('change ok');
+    } else if (result == 'Invalid Password') {
+      throw const AppException.wrongPassword();
+    }
+  }
+
+  Future<void> tryLogOut() async {
     await Future.delayed(const Duration(seconds: 2));
   }
 
   void dispose() {
-    _tokenState.close();
     _userState.close();
   }
 }
@@ -42,4 +108,9 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final auth = AuthRepository();
   ref.onDispose(() => auth.dispose());
   return auth;
+});
+
+final userStateChangesProvider = StreamProvider<AppUser?>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.userStateChanges();
 });
