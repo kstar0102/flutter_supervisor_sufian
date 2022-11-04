@@ -1,15 +1,21 @@
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:flutter/material.dart';
 
-import 'package:alnabali_driver/src/widgets/constants.dart';
-import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:alnabali_driver/src/constants/app_styles.dart';
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 
 final dialogShape = RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(40.h)));
 final titlePadding = EdgeInsets.only(top: 80.h);
 final contentPadding = EdgeInsets.symmetric(horizontal: 30.w, vertical: 80.h);
 final actionsPadding = EdgeInsets.only(bottom: 70.h);
+final yesTextStyle = TextStyle(
+  fontFamily: 'Montserrat',
+  fontWeight: FontWeight.w700,
+  fontSize: 26.sp,
+);
 
 final btnW = 280.w;
 final btnH = 84.h;
@@ -187,11 +193,7 @@ Future<bool?> showAcceptFinishDialog(
               ),
               child: Text(
                 'YES'.hardcoded,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 26.sp,
-                ),
+                style: yesTextStyle,
               ),
             ),
           ),
@@ -374,11 +376,7 @@ Future<bool?> showLogoutDialog(BuildContext context) {
               ),
               child: Text(
                 'YES'.hardcoded,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 26.sp,
-                ),
+                style: yesTextStyle,
               ),
             ),
           ),

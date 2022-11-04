@@ -1,7 +1,9 @@
-import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:alnabali_driver/src/routing/app_router.dart';
 
 class AlnabaliDriverApp extends ConsumerWidget {
   const AlnabaliDriverApp({super.key});

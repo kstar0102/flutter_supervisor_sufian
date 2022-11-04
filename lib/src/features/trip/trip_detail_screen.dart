@@ -1,10 +1,12 @@
-import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
-import 'package:alnabali_driver/src/routing/app_router.dart';
-import 'package:alnabali_driver/src/widgets/trip_card.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:alnabali_driver/src/constants/app_styles.dart';
+import 'package:alnabali_driver/src/features/trip/trip_info.dart';
+import 'package:alnabali_driver/src/routing/app_router.dart';
+import 'package:alnabali_driver/src/widgets/trip_card.dart';
 
 class TripDetailScreen extends StatefulWidget {
   const TripDetailScreen({Key? key}) : super(key: key);

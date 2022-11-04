@@ -1,6 +1,7 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:alnabali_driver/src/exceptions/app_exception.dart';
 import 'package:alnabali_driver/src/network/dio_client.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthRepository {
   String? _uid; // AuthRepository will not use data model.

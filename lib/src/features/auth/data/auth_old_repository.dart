@@ -1,8 +1,9 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:alnabali_driver/src/exceptions/app_exception.dart';
 import 'package:alnabali_driver/src/features/auth/domain/app_user.dart';
 import 'package:alnabali_driver/src/network/dio_client.dart';
 import 'package:alnabali_driver/src/utils/in_memory_store.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthOldRepository {
   final _userState = InMemoryStore<AppUser?>(null);

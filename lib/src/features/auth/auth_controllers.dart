@@ -1,5 +1,6 @@
-import 'package:alnabali_driver/src/features/auth/auth_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:alnabali_driver/src/features/auth/auth_repository.dart';
 
 // *
 // * LoginController

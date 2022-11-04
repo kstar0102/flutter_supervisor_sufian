@@ -1,5 +1,6 @@
-import 'package:alnabali_driver/src/features/auth/data/auth_old_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:alnabali_driver/src/features/auth/data/auth_old_repository.dart';
 
 class EditProfileController extends StateNotifier<AsyncValue<void>> {
   EditProfileController({required this.authRepository})

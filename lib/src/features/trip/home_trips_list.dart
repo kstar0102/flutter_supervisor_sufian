@@ -1,10 +1,11 @@
-import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:flutter/material.dart';
 
-import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:alnabali_driver/src/constants/app_styles.dart';
+import 'package:alnabali_driver/src/features/trip/trip_info.dart';
 import 'package:alnabali_driver/src/widgets/buttons_tabbar.dart';
 import 'package:alnabali_driver/src/widgets/trip_card.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum TripsListType {
   todayTrips,

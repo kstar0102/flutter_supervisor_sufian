@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:alnabali_driver/src/constants/app_styles.dart';
 
 // text field types used in profile screen.
 enum ProfileTextFieldType {

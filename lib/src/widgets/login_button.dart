@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:alnabali_driver/src/constants/app_styles.dart';
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
 // button types used in login course.
 enum LoginButtonType { logIn, send, verify, reset }
@@ -28,19 +30,19 @@ class _LoginButtonState extends State<LoginButton> {
     String btnTitle;
     switch (widget.btnType) {
       case LoginButtonType.logIn:
-        btnTitle = 'LOGIN';
+        btnTitle = 'LOGIN'.hardcoded;
         break;
       case LoginButtonType.send:
-        btnTitle = 'SEND';
+        btnTitle = 'SEND'.hardcoded;
         break;
       case LoginButtonType.verify:
-        btnTitle = 'VERIFY';
+        btnTitle = 'VERIFY'.hardcoded;
         break;
       case LoginButtonType.reset:
-        btnTitle = 'RESET';
+        btnTitle = 'RESET'.hardcoded;
         break;
       default:
-        btnTitle = 'UNKNOWN';
+        btnTitle = 'UNKNOWN'.hardcoded;
     }
 
     // return Stack(

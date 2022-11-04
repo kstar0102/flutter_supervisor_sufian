@@ -1,3 +1,8 @@
+import 'package:flutter/material.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:alnabali_driver/src/features/auth/forget_mobile_screen.dart';
 import 'package:alnabali_driver/src/features/auth/forget_otp_screen.dart';
 import 'package:alnabali_driver/src/features/auth/forget_pwd_screen.dart';
@@ -7,9 +12,6 @@ import 'package:alnabali_driver/src/features/profile/edit_profile_screen.dart';
 import 'package:alnabali_driver/src/features/auth/splash_screen.dart';
 import 'package:alnabali_driver/src/features/trip/home_screen.dart';
 import 'package:alnabali_driver/src/features/trip/trip_detail_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 enum AppRoute {
   splash,

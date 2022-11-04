@@ -1,17 +1,18 @@
+import 'package:flutter/material.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/auth/data/auth_old_repository.dart';
 import 'package:alnabali_driver/src/features/profile/home_account_controller.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
-import 'package:flutter/material.dart';
-
-import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeAccountPage extends ConsumerStatefulWidget {
   const HomeAccountPage({Key? key}) : super(key: key);

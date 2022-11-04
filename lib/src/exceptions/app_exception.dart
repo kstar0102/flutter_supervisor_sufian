@@ -1,5 +1,6 @@
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
 part 'app_exception.freezed.dart';
 

@@ -1,6 +1,6 @@
-import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:flutter/material.dart';
 
+import 'package:alnabali_driver/src/features/trip/trip_info.dart';
 import 'package:alnabali_driver/src/widgets/notification_card.dart';
 
 class HomeNotificationsPage extends StatefulWidget {
