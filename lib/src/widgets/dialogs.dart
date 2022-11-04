@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
@@ -46,9 +47,9 @@ Widget _buildDialogTitle(String companyName, String tripName) {
   );
 }
 
-///
-/// Trip Accept/Finish Okay Dialog
-///
+// * ---------------------------------------------------------------------------
+// * Trip Accept/Finish Okay Dialog
+// * ---------------------------------------------------------------------------
 
 Future<void> showOkayDialog(
   BuildContext context,
@@ -126,9 +127,9 @@ Future<void> showOkayDialog(
   );
 }
 
-///
-/// Trip Accept Dialog
-///
+// * ---------------------------------------------------------------------------
+// * Trip Accept Dialog
+// * ---------------------------------------------------------------------------
 
 Future<bool?> showAcceptFinishDialog(
   BuildContext context,
@@ -211,9 +212,9 @@ Future<bool?> showAcceptFinishDialog(
   );
 }
 
-///
-/// Trip Reject Dialog
-///
+// * ---------------------------------------------------------------------------
+// * Trip Reject Dialog
+// * ---------------------------------------------------------------------------
 
 Future<String?> showRejectDialog(
   BuildContext context,
@@ -312,9 +313,9 @@ Future<String?> showRejectDialog(
   );
 }
 
-///
-/// Trip Logout Dialog
-///
+// * ---------------------------------------------------------------------------
+// * Trip Logout Dialog
+// * ---------------------------------------------------------------------------
 
 Future<bool?> showLogoutDialog(BuildContext context) {
   return showDialog<bool?>(
@@ -391,5 +392,21 @@ Future<bool?> showLogoutDialog(BuildContext context) {
         ],
       );
     },
+  );
+}
+
+// * ---------------------------------------------------------------------------
+// * Show Toast Message
+// * ---------------------------------------------------------------------------
+
+void showToastMessage(String msg) {
+  Fluttertoast.showToast(
+    msg: msg,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: kColorPrimaryBlue,
+    textColor: Colors.white,
+    fontSize: 40.sp,
   );
 }

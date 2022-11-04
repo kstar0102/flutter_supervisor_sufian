@@ -61,21 +61,21 @@ class DioClient {
   // }
 
   // * GET: '/profile/uid'
-  static Future<Response> getProfile(String uid) async {
+  static Future<dynamic> getProfile(String uid) async {
     final token = await _getToken();
 
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
       final response = await dio.get('/profile/$uid');
-      return response;
+      return response.data;
     } on DioError {
       rethrow;
     }
   }
 
   // * POST '/profile_edit'
-  static Future<Response> postProfileEdit(
+  static Future<dynamic> postProfileEdit(
     String uid,
     String name,
     String phone,
@@ -97,14 +97,14 @@ class DioClient {
           'address': address,
         },
       );
-      return response;
+      return response.data;
     } on DioError {
       rethrow;
     }
   }
 
   // * POST '/pwd/change'
-  static Future<Response> postChangePwd(
+  static Future<dynamic> postChangePwd(
       String uid, String currPwd, String newPwd) async {
     final token = await _getToken();
 
@@ -115,7 +115,7 @@ class DioClient {
         '/pwd/change',
         data: {'id': uid, 'current_pwd': currPwd, 'new_pwd': newPwd},
       );
-      return response;
+      return response.data;
     } on DioError {
       rethrow;
     }

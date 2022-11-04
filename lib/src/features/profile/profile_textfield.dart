@@ -17,12 +17,14 @@ enum ProfileTextFieldType {
 }
 
 class ProfileTextField extends StatefulWidget {
-  final ProfileTextFieldType txtFieldType;
-
   const ProfileTextField({
     Key? key,
     required this.txtFieldType,
+    required this.controller,
   }) : super(key: key);
+
+  final ProfileTextFieldType txtFieldType;
+  final TextEditingController controller;
 
   @override
   State<ProfileTextField> createState() => _ProfileTextFieldState();
@@ -117,6 +119,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
                         BorderRadius.horizontal(right: Radius.circular(100)),
                   ),
                   child: TextField(
+                    controller: widget.controller,
                     obscureText: isObscureText,
                     keyboardType: inputType,
                     inputFormatters: formatters,

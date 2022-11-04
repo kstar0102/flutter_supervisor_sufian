@@ -2,16 +2,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/features/auth/auth_repository.dart';
 
-// *
+// * ---------------------------------------------------------------------------
 // * LoginController
-// *
+// * ---------------------------------------------------------------------------
 
-class LoginController extends StateNotifier<AsyncValue<String>> {
+class LoginController extends StateNotifier<AsyncValue<String?>> {
   LoginController({required this.authRepo}) : super(const AsyncData(''));
 
   final AuthRepository authRepo;
 
   Future<void> doLogin(String email, String password) async {
+    if (authRepo.uid != null) {
+      // already logined!
+      state = AsyncData(authRepo.uid);
+      return;
+    }
+
     state = const AsyncValue.loading();
 
     final newState =
@@ -26,14 +32,14 @@ class LoginController extends StateNotifier<AsyncValue<String>> {
 }
 
 final loginControllerProvider =
-    StateNotifierProvider.autoDispose<LoginController, AsyncValue<String>>(
+    StateNotifierProvider.autoDispose<LoginController, AsyncValue<String?>>(
         (ref) {
   return LoginController(authRepo: ref.watch(authRepositoryProvider));
 });
 
-// *
+// * ---------------------------------------------------------------------------
 // * ForgetMobileController
-// *
+// * ---------------------------------------------------------------------------
 
 class ForgetMobileController extends StateNotifier<AsyncValue<bool>> {
   ForgetMobileController({required this.authRepo})
@@ -59,9 +65,9 @@ final forgetMobileControllerProvider =
   return ForgetMobileController(authRepo: ref.watch(authRepositoryProvider));
 });
 
-// *
+// * ---------------------------------------------------------------------------
 // * ForgetOTPController
-// *
+// * ---------------------------------------------------------------------------
 
 class ForgetOTPController extends StateNotifier<AsyncValue<bool>> {
   ForgetOTPController({required this.authRepo}) : super(const AsyncData(false));
@@ -85,9 +91,9 @@ final forgetOTPControllerProvider =
   return ForgetOTPController(authRepo: ref.watch(authRepositoryProvider));
 });
 
-// *
+// * ---------------------------------------------------------------------------
 // * ForgetOTPController
-// *
+// * ---------------------------------------------------------------------------
 
 class ResetPwdController extends StateNotifier<AsyncValue<bool>> {
   ResetPwdController({required this.authRepo}) : super(const AsyncData(false));

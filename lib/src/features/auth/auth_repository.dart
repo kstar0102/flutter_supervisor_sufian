@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/exceptions/app_exception.dart';
@@ -8,20 +10,22 @@ class AuthRepository {
 
   String? get uid => _uid;
 
-  Future<String> doLogIn(String username, String password) async {
+  Future<String?> doLogIn(String username, String password) async {
     final data = await DioClient.postLogin(username, password);
 
     var result = data['result'];
+    developer.log('doLogin() returned: $result');
+
     if (result == 'Login Successfully') {
       _uid = data['id'].toString();
-      return _uid!;
+      return _uid;
     } else if (result == 'Invalid Driver') {
       throw const AppException.userNotFound();
     } else if (result == 'Invalid Password') {
       throw const AppException.wrongPassword();
     }
 
-    return '';
+    return null;
   }
 
   Future<bool> doSendMobile(String phone) async {

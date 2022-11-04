@@ -5,13 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/profile/edit_profile_controller.dart';
+import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/features/profile/profile_textfield.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
-import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
+import 'package:alnabali_driver/src/widgets/dialogs.dart';
+import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -21,6 +22,34 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+  final _birthday = TextEditingController();
+  final _address = TextEditingController();
+
+  @override
+  initState() {
+    super.initState();
+
+    final profile =
+        ref.read(editProfileControllerProvider.notifier).getCurrProfile();
+    if (profile != null) {
+      _name.text = profile.nameEN;
+      _phone.text = profile.phone;
+      _birthday.text = profile.birthday;
+      _address.text = profile.address;
+    }
+  }
+
+  void _submit() {
+    final controller = ref.read(editProfileControllerProvider.notifier);
+    controller
+        .doEditProfile(_name.text, _phone.text, _birthday.text, _address.text)
+        .then((value) {
+      showToastMessage(value);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
@@ -78,7 +107,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         ),
                         Flexible(child: SizedBox(height: 30.h)),
                         Text(
-                          'Sufian Abu Alabban',
+                          _name.text,
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w500,
@@ -87,32 +116,30 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           ),
                         ),
                         Flexible(child: SizedBox(height: 100.h)),
-                        const ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.name),
+                        ProfileTextField(
+                          txtFieldType: ProfileTextFieldType.name,
+                          controller: _name,
+                        ),
                         spacer,
-                        const ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.phone),
+                        ProfileTextField(
+                          txtFieldType: ProfileTextFieldType.phone,
+                          controller: _phone,
+                        ),
                         spacer,
-                        const ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.dateOfBirth),
+                        ProfileTextField(
+                          txtFieldType: ProfileTextFieldType.dateOfBirth,
+                          controller: _birthday,
+                        ),
                         spacer,
-                        const ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.address),
+                        ProfileTextField(
+                          txtFieldType: ProfileTextFieldType.address,
+                          controller: _address,
+                        ),
                         Flexible(child: SizedBox(height: 140.h)),
                         SizedBox(
                           width: 685.w,
                           child: ElevatedButton(
-                            onPressed: () {
-                              ref
-                                  .read(editProfileControllerProvider.notifier)
-                                  .tryEditProfile(
-                                    'Alabban',
-                                    '987654321',
-                                    '1992-6-6',
-                                    'amman city',
-                                  );
-                              //context.goNamed(AppRoute.home.name);
-                            },
+                            onPressed: _submit,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: kColorPrimaryBlue,
                               shape: const StadiumBorder(),

@@ -1,17 +1,13 @@
 name: alnabali_driver
 description: Alnabali Driver App
 
-
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # version and build number for your application.
 version: 1.0.0+1
 
-
 environment:
-  sdk: '>=2.18.2 <3.0.0'
-
+  sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -25,6 +21,7 @@ dependencies:
   dio: ^4.0.6
   freezed_annotation: ^2.2.0
   flutter_screenutil: ^5.6.0
+  fluttertoast: ^8.1.1
 
 dev_dependencies:
   flutter_test:
@@ -33,7 +30,6 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.3.2
   freezed: ^2.2.0
-
 
 flutter:
   uses-material-design: true

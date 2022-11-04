@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/auth/data/auth_old_repository.dart';
-import 'package:alnabali_driver/src/features/profile/home_account_controller.dart';
+import 'package:alnabali_driver/src/features/profile/profile.dart';
+import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
@@ -22,12 +22,26 @@ class HomeAccountPage extends ConsumerStatefulWidget {
 }
 
 class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
+  var _profile = Profile(
+    username: 'unknown@email.com',
+    profileImage: 'assets/images/user_avatar.png',
+    nameEN: 'Unknown Driver',
+    phone: '123456789',
+    birthday: '1900-01-01',
+    address: 'Unknown Address',
+    workingHours: 0,
+    totalDistance: 0,
+    totalTrips: 0,
+  );
+
   @override
   void initState() {
     super.initState();
 
-    //* if profile not loaded ever, do it now.
-    ref.read(accountControllerProvider.notifier).tryGetProfile();
+    final controller = ref.read(homeAccountControllerProvider.notifier);
+    controller.doGetProfile().then((value) {
+      setState(() => _profile = value);
+    });
   }
 
   Widget _buildSummaryInfo(int index, String value) {
@@ -78,25 +92,11 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(accountControllerProvider.select((state) => state),
+    ref.listen<AsyncValue>(
+        homeAccountControllerProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
 
-    final state = ref.watch(accountControllerProvider);
-    final user = ref.watch(userStateChangesProvider).value;
-
-    String profileImg = 'assets/images/user_avatar.png';
-    String nameEn = 'Driver\'s Name';
-    double hours = 0, dist = 0, trips = 0;
-    var profile = user?.profile;
-    if (profile != null) {
-      profileImg = profile.profileImage.isEmpty
-          ? 'assets/images/user_avatar.png'
-          : profile.profileImage;
-      nameEn = profile.nameEN;
-      hours = 10.2;
-      dist = 30;
-      trips = 20;
-    }
+    final state = ref.watch(homeAccountControllerProvider);
 
     final btnStyle = ButtonStyle(
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -147,12 +147,12 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         child: CircleAvatar(
                           radius: 165.h,
                           backgroundColor: Colors.transparent,
-                          backgroundImage: AssetImage(profileImg),
+                          backgroundImage: AssetImage(_profile.profileImage),
                         ),
                       ),
                       Flexible(child: SizedBox(height: 20.h)),
                       Text(
-                        nameEn,
+                        _profile.nameEN,
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w500,
@@ -165,9 +165,9 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          _buildSummaryInfo(0, hours.toString()),
-                          _buildSummaryInfo(1, '$dist KM'),
-                          _buildSummaryInfo(2, trips.toString()),
+                          _buildSummaryInfo(0, '${_profile.workingHours}'),
+                          _buildSummaryInfo(1, '${_profile.totalDistance} KM'),
+                          _buildSummaryInfo(2, '${_profile.totalTrips}'),
                         ],
                       ),
                       Flexible(child: SizedBox(height: 100.h)),

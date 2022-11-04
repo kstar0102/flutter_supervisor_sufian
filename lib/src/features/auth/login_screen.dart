@@ -58,10 +58,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   //   return showErrorText ? errorText : null;
   // }
 
-  Future<void> _submit() async {
+  void _submit() {
     if (_emailValidator.isValid(username) &&
         _passwordValidator.isValid(password)) {
-      ref.read(loginControllerProvider.notifier).doLogin(username, password);
+      final controller = ref.read(loginControllerProvider.notifier);
+      controller.doLogin(username, password).then(
+        (value) {
+          context.goNamed(AppRoute.home.name);
+        },
+      );
     }
   }
 
