@@ -74,6 +74,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
+    // i can't understand why this called multiple...
+    if (ref.watch(loginControllerProvider).isLoading) return;
+
     _submit();
   }
 

@@ -1,4 +1,3 @@
-import 'package:alnabali_driver/src/constants/app_sizes.dart';
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:flutter/material.dart';
 
@@ -35,8 +34,6 @@ class _TripsListViewState extends State<TripsListView> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
     List<int> tabIDArray = [100, 0, 1, 2, 3, 4, 5];
     var tabCount = 7;
     if (widget.listType == TripsListType.pastTrips) {
@@ -76,7 +73,9 @@ class _TripsListViewState extends State<TripsListView> {
                 borderColor: kColorPrimaryBlue,
                 unselectedBorderColor: tabColor,
                 radius: 100,
-                buttonMargin: const EdgeInsets.symmetric(horizontal: 2),
+                height: 70.h,
+                buttonMargin: EdgeInsets.symmetric(horizontal: 4.w),
+                //contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
                 tabs: tabIDArray
                     .map((t) => Tab(text: _getTabTextFromID(t)))
                     .toList(),

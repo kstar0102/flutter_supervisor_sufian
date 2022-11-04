@@ -1,4 +1,4 @@
-import 'package:alnabali_driver/src/features/trip/presentation/home_trips_list.dart';
+import 'package:alnabali_driver/src/features/trip/home_trips_list.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:flutter/material.dart';
 

@@ -1,8 +1,18 @@
-import 'package:alnabali_driver/src/constants/app_sizes.dart';
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+final dialogShape = RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(40.h)));
+final titlePadding = EdgeInsets.only(top: 80.h);
+final contentPadding = EdgeInsets.symmetric(horizontal: 30.w, vertical: 80.h);
+final actionsPadding = EdgeInsets.only(bottom: 70.h);
+
+final btnW = 280.w;
+final btnH = 84.h;
 
 Widget _buildDialogTitle(String companyName, String tripName) {
   return Column(
@@ -10,19 +20,19 @@ Widget _buildDialogTitle(String companyName, String tripName) {
     children: [
       Text(
         companyName,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Montserrat',
           fontWeight: FontWeight.w700,
-          fontSize: 19,
-          color: Color(0xFF333333),
+          fontSize: 46.sp,
+          color: const Color(0xFF333333),
         ),
       ),
       Text(
         tripName,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Montserrat',
           fontWeight: FontWeight.w500,
-          fontSize: 15,
+          fontSize: 38.sp,
           color: kColorPrimaryGrey,
         ),
       ),
@@ -45,41 +55,35 @@ Future<void> showOkayDialog(
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
-      SizeConfig().init(context);
-
-      final btnW = 268 * SizeConfig.scaleX;
-      final btnH = btnW * 0.26;
       String title = '';
       if (isAccept) {
-        title = 'You have accepted trip # $tripNo';
+        title = 'You have accepted trip # $tripNo'.hardcoded;
       } else {
-        title = 'You have finished trip # $tripNo';
+        title = 'You have finished trip # $tripNo'.hardcoded;
       }
 
       return AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(18))),
-        titlePadding: const EdgeInsets.only(top: 36),
+        shape: dialogShape,
+        titlePadding: titlePadding,
         title: _buildDialogTitle(companyName, tripName),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 38, vertical: 30),
+        contentPadding: contentPadding,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 30),
-              height: 150 * SizeConfig.scaleY,
+              margin: EdgeInsets.only(bottom: 60.h),
+              height: 150.h,
               child: Image.asset('assets/images/icon_dialog.png'),
             ),
             SizedBox(
-              width: 660 * SizeConfig.scaleX,
+              width: 660.w,
               child: Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 42.sp,
                   color: kColorPrimaryBlue,
                 ),
               ),
@@ -87,7 +91,7 @@ Future<void> showOkayDialog(
           ],
         ),
         actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.only(bottom: 24),
+        actionsPadding: actionsPadding,
         actions: <Widget>[
           SizedBox(
             width: btnW,
@@ -100,12 +104,12 @@ Future<void> showOkayDialog(
                 backgroundColor: kColorPrimaryBlue,
                 shape: const StadiumBorder(),
               ),
-              child: const Text(
-                'OKAY',
+              child: Text(
+                'OKAY'.hardcoded,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
-                  fontSize: 10,
+                  fontSize: 26.sp,
                 ),
               ),
             ),
@@ -131,10 +135,6 @@ Future<bool?> showAcceptFinishDialog(
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
-      SizeConfig().init(context);
-
-      final btnW = 268 * SizeConfig.scaleX;
-      final btnH = btnW * 0.26;
       String title = '';
       if (isAccept) {
         title = 'Are you sure you want to accept the trip # $tripNo ?';
@@ -143,29 +143,27 @@ Future<bool?> showAcceptFinishDialog(
       }
 
       return AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(18))),
-        titlePadding: const EdgeInsets.only(top: 36),
+        shape: dialogShape,
+        titlePadding: titlePadding,
         title: _buildDialogTitle(companyName, tripName),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 38, vertical: 30),
+        contentPadding: contentPadding,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 30),
-              height: 150 * SizeConfig.scaleY,
+              margin: EdgeInsets.only(bottom: 70.h),
+              height: 150.h,
               child: Image.asset('assets/images/icon_dialog.png'),
             ),
             SizedBox(
-              width: 660 * SizeConfig.scaleX,
+              width: 660.w,
               child: Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 42.sp,
                   color: kColorPrimaryBlue,
                 ),
               ),
@@ -173,8 +171,8 @@ Future<bool?> showAcceptFinishDialog(
           ],
         ),
         actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.only(bottom: 24),
-        buttonPadding: const EdgeInsets.symmetric(horizontal: 3),
+        actionsPadding: actionsPadding,
+        buttonPadding: EdgeInsets.symmetric(horizontal: 6.w),
         actions: <Widget>[
           SizedBox(
             width: btnW,
@@ -187,12 +185,12 @@ Future<bool?> showAcceptFinishDialog(
                 backgroundColor: kColorPrimaryBlue,
                 shape: const StadiumBorder(),
               ),
-              child: const Text(
-                'YES',
+              child: Text(
+                'YES'.hardcoded,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
-                  fontSize: 10,
+                  fontSize: 26.sp,
                 ),
               ),
             ),
@@ -203,7 +201,7 @@ Future<bool?> showAcceptFinishDialog(
             onPressed: () {
               Navigator.pop(context, false);
             },
-            title: 'NO',
+            title: 'NO'.hardcoded,
           ),
         ],
       );
@@ -225,53 +223,46 @@ Future<String?> showRejectDialog(
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
-      SizeConfig().init(context);
-
-      final btnW = 268 * SizeConfig.scaleX;
-      final btnH = btnW * 0.26;
-
       return AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(18))),
-        titlePadding: const EdgeInsets.only(top: 36),
+        shape: dialogShape,
+        titlePadding: titlePadding,
         title: _buildDialogTitle(companyName, tripName),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 38, vertical: 10),
+        contentPadding: contentPadding,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 30),
-              height: 150 * SizeConfig.scaleY,
+              margin: EdgeInsets.only(bottom: 30.h),
+              height: 150.h,
               child: Image.asset('assets/images/icon_dialog.png'),
             ),
             SizedBox(
-              width: 660 * SizeConfig.scaleX,
+              width: 660.w,
               child: Text(
-                'You have rejected trip # $tripNo',
+                'You have rejected trip # $tripNo'.hardcoded,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 42.sp,
                   color: kColorPrimaryBlue,
                 ),
               ),
             ),
-            const Text(
-              'Please fill the reason for rejection!',
+            Text(
+              'Please fill the reason for rejection!'.hardcoded,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w400,
-                fontSize: 11,
+                fontSize: 32.sp,
                 color: kColorPrimaryGrey,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 6),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 6.h),
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: kColorAvatarBorder)),
                   focusedBorder: OutlineInputBorder(
@@ -280,17 +271,17 @@ Future<String?> showRejectDialog(
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w500,
-                  fontSize: 13,
+                  fontSize: 42.sp,
                   color: kColorPrimaryGrey,
                 ),
-                maxLines: 3,
+                maxLines: 2,
                 cursorColor: kColorPrimaryBlue,
               ),
             ),
           ],
         ),
         actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.only(bottom: 24),
+        actionsPadding: actionsPadding,
         actions: <Widget>[
           SizedBox(
             width: btnW,
@@ -303,12 +294,12 @@ Future<String?> showRejectDialog(
                 backgroundColor: kColorPrimaryBlue,
                 shape: const StadiumBorder(),
               ),
-              child: const Text(
-                'OKAY',
+              child: Text(
+                'OKAY'.hardcoded,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
-                  fontSize: 10,
+                  fontSize: 26.sp,
                 ),
               ),
             ),
@@ -328,45 +319,38 @@ Future<bool?> showLogoutDialog(BuildContext context) {
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
-      SizeConfig().init(context);
-
-      final btnW = 268 * SizeConfig.scaleX;
-      final btnH = btnW * 0.26;
-
       return AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(18))),
-        titlePadding: const EdgeInsets.only(top: 36),
-        title: const Align(
+        shape: dialogShape,
+        titlePadding: titlePadding,
+        title: Align(
           child: Text(
-            'Log Out',
+            'Log Out'.hardcoded,
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w700,
-              fontSize: 19,
-              color: Color(0xFF333333),
+              fontSize: 46.sp,
+              color: const Color(0xFF333333),
             ),
           ),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 38, vertical: 20),
+        contentPadding: contentPadding,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 30),
-              height: 150 * SizeConfig.scaleY,
+              margin: EdgeInsets.only(bottom: 30.h),
+              height: 150.h,
               child: Image.asset('assets/images/icon_dialog.png'),
             ),
             SizedBox(
-              width: 680 * SizeConfig.scaleX,
-              child: const Text(
-                'Are you sure you want to logout ?',
+              width: 680.w,
+              child: Text(
+                'Are you sure you want to logout ?'.hardcoded,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 42.sp,
                   color: kColorPrimaryBlue,
                 ),
               ),
@@ -374,8 +358,8 @@ Future<bool?> showLogoutDialog(BuildContext context) {
           ],
         ),
         actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.symmetric(vertical: 30),
-        buttonPadding: const EdgeInsets.symmetric(horizontal: 3),
+        actionsPadding: actionsPadding,
+        buttonPadding: EdgeInsets.symmetric(horizontal: 4.w),
         actions: <Widget>[
           SizedBox(
             width: btnW,
@@ -388,12 +372,12 @@ Future<bool?> showLogoutDialog(BuildContext context) {
                 backgroundColor: kColorPrimaryBlue,
                 shape: const StadiumBorder(),
               ),
-              child: const Text(
-                'YES',
+              child: Text(
+                'YES'.hardcoded,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
-                  fontSize: 10,
+                  fontSize: 26.sp,
                 ),
               ),
             ),
@@ -404,7 +388,7 @@ Future<bool?> showLogoutDialog(BuildContext context) {
             onPressed: () {
               Navigator.pop(context, false);
             },
-            title: 'NO',
+            title: 'NO'.hardcoded,
           ),
         ],
       );

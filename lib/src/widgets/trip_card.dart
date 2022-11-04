@@ -1,4 +1,3 @@
-import 'package:alnabali_driver/src/constants/app_sizes.dart';
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
@@ -333,8 +332,6 @@ class _TripCardState extends State<TripCard> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
     return GestureDetector(
       onTap: () {
         if (widget.showDetail) return;

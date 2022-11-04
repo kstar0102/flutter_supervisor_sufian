@@ -1,3 +1,4 @@
+import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/edit_profile_controller.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
@@ -31,12 +32,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg_normal.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
+        decoration: kBgDecoration,
         child: ProgressHUD(
           inAsyncCall: state.isLoading,
           child: Column(

@@ -1,4 +1,4 @@
-import 'package:alnabali_driver/src/constants/app_sizes.dart';
+import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/widgets/trip_card.dart';
@@ -16,8 +16,6 @@ class TripDetailScreen extends StatefulWidget {
 class _TripDetailScreenState extends State<TripDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
     final dummyInfo = TripInfo(
       status: TripStatus.pending,
       tripNo: 123455,
@@ -40,14 +38,7 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
 
     return Scaffold(
       body: Container(
-        width: SizeConfig.screenW,
-        height: SizeConfig.screenH,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg_normal.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
+        decoration: kBgDecoration,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -67,9 +58,8 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                 child: Column(
                   children: [
                     Container(
-                      height: 573 * SizeConfig.scaleY,
-                      margin: EdgeInsets.symmetric(
-                          vertical: 90 * SizeConfig.scaleY),
+                      height: 573.h,
+                      margin: EdgeInsets.symmetric(vertical: 60.h),
                       child: Image.asset('assets/images/trip_detail.png'),
                     ),
                     TripCard(

@@ -1,3 +1,4 @@
+import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/change_password_controller.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
@@ -32,12 +33,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     return Scaffold(
       body: SizedBox.expand(
         child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/bg_normal.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
+          decoration: kBgDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Default values from the Flutter's TabBar.
-final double _kTabHeight = 70.h;
+const double _kTabHeight = 46;
 
 class ButtonsTabBar extends StatefulWidget implements PreferredSizeWidget {
   ButtonsTabBar({
@@ -24,17 +24,14 @@ class ButtonsTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 4),
     this.buttonMargin = const EdgeInsets.all(4),
     this.labelSpacing = 4.0,
-    this.radius = 100,
+    this.radius = 7.0,
     this.elevation = 0,
-    this.height = 46,
+    this.height = _kTabHeight,
     this.center = false,
     this.onTap,
   }) : super(key: key) {
     assert(backgroundColor == null || decoration == null);
     assert(unselectedBackgroundColor == null || unselectedDecoration == null);
-
-    labelSpacing = 4.w;
-    height = _kTabHeight;
   }
 
   /// Typically a list of two or more [Tab] widgets.
@@ -123,7 +120,7 @@ class ButtonsTabBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// The spacing between the [Icon] and the [Text]. If only one of those is provided,
   /// no spacing is applied.
-  /*final*/ double labelSpacing;
+  final double labelSpacing;
 
   /// The value of the [BorderRadius.circular] applied to each button.
   final double radius;
@@ -136,7 +133,7 @@ class ButtonsTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// If no value is provided, the material height, 46.0, is used. If height is [null],
   /// the height is computed by summing the material height, 46, and the vertical values
   /// for [contentPadding] and [buttonMargin].
-  /*final*/ double? height;
+  final double? height;
 
   /// Center the tab buttons
   final bool center;
@@ -340,7 +337,7 @@ class _ButtonsTabBarState extends State<ButtonsTabBar>
       key: _tabKeys[index],
       // padding for the buttons
       padding: widget.buttonMargin,
-      width: 62, height: 28,
+      width: 140.w, height: 70.h,
       child: TextButton(
         onPressed: () {
           _controller?.animateTo(index);
@@ -368,7 +365,7 @@ class _ButtonsTabBarState extends State<ButtonsTabBar>
         child: Ink(
           decoration: boxDecoration,
           child: Container(
-            padding: widget.contentPadding,
+            //padding: widget.contentPadding,
             alignment: Alignment.center,
             // child: Row(
             //   children: <Widget>[

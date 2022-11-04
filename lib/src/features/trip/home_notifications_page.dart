@@ -1,4 +1,3 @@
-import 'package:alnabali_driver/src/constants/app_sizes.dart';
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +13,6 @@ class HomeNotificationsPage extends StatefulWidget {
 class _HomeNotificationsPageState extends State<HomeNotificationsPage> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
     /// dummy codes for test
     final dummyInfos = [
       TripInfo(

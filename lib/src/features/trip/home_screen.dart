@@ -1,7 +1,7 @@
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/home_account_page.dart';
-import 'package:alnabali_driver/src/features/trip/presentation/home_notifications_page.dart';
-import 'package:alnabali_driver/src/features/trip/presentation/home_trips_page.dart';
+import 'package:alnabali_driver/src/features/trip/home_notifications_page.dart';
+import 'package:alnabali_driver/src/features/trip/home_trips_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';

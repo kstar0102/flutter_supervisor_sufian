@@ -6,7 +6,7 @@ import 'package:alnabali_driver/src/features/profile/change_password_screen.dart
 import 'package:alnabali_driver/src/features/profile/edit_profile_screen.dart';
 import 'package:alnabali_driver/src/features/auth/splash_screen.dart';
 import 'package:alnabali_driver/src/features/trip/home_screen.dart';
-import 'package:alnabali_driver/src/features/trip/presentation/trip_detail_screen.dart';
+import 'package:alnabali_driver/src/features/trip/trip_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
