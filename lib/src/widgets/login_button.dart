@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // button types used in login course.
 enum LoginButtonType { logIn, send, verify, reset }
@@ -42,9 +43,6 @@ class _LoginButtonState extends State<LoginButton> {
         btnTitle = 'UNKNOWN';
     }
 
-    SizeConfig().init(context);
-    final btnW = SizeConfig.screenW * 0.69;
-
     // return Stack(
     //   alignment: Alignment.center,
     //   children: [
@@ -84,8 +82,8 @@ class _LoginButtonState extends State<LoginButton> {
     return Stack(
       children: [
         SizedBox(
-          width: btnW,
-          height: btnW * 0.16,
+          width: 771.w,
+          height: 128.h,
           child: Image.asset('assets/images/btn_login.png'),
         ),
         Positioned.fill(

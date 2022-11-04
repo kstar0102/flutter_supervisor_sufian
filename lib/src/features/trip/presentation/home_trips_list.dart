@@ -1,9 +1,11 @@
+import 'package:alnabali_driver/src/constants/app_sizes.dart';
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/buttons_tabbar.dart';
 import 'package:alnabali_driver/src/widgets/trip_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum TripsListType {
   todayTrips,
@@ -51,24 +53,24 @@ class _TripsListViewState extends State<TripsListView> {
           Row(
             children: [
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                height: 26,
+                margin: EdgeInsets.symmetric(horizontal: 20.w),
+                height: 60.h,
                 child: Image.asset('assets/images/home_icon2.png'),
               ),
               ButtonsTabBar(
                 backgroundColor: kColorPrimaryBlue,
                 unselectedBackgroundColor: Colors.transparent,
-                labelStyle: const TextStyle(
+                labelStyle: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 26.sp,
                 ),
-                unselectedLabelStyle: const TextStyle(
+                unselectedLabelStyle: TextStyle(
                   color: tabColor,
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w400,
-                  fontSize: 10,
+                  fontSize: 26.sp,
                 ),
                 borderWidth: 1,
                 borderColor: kColorPrimaryBlue,
@@ -205,7 +207,7 @@ class _TripsListViewState extends State<TripsListView> {
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
-                      const SizedBox(height: 30),
+                      SizedBox(height: 90.h),
                 );
               }),
             ),

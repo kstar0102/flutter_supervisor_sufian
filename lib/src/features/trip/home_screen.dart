@@ -1,4 +1,5 @@
-import 'package:alnabali_driver/src/features/auth/presentation/account/home_account_page.dart';
+import 'package:alnabali_driver/src/constants/app_styles.dart';
+import 'package:alnabali_driver/src/features/profile/home_account_page.dart';
 import 'package:alnabali_driver/src/features/trip/presentation/home_notifications_page.dart';
 import 'package:alnabali_driver/src/features/trip/presentation/home_trips_page.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/app_icons_icons.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gnav.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gbutton.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,49 +19,43 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
-  double gap = 10;
-  final padding = const EdgeInsets.symmetric(horizontal: 18, vertical: 12);
   //int badge = 0;
   PageController controller = PageController();
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    double gap = 10;
+    final padding = EdgeInsets.symmetric(horizontal: 60.w, vertical: 30.h);
 
     return Scaffold(
       extendBody: true,
-      body: Container(
-        width: SizeConfig.screenW,
-        height: SizeConfig.screenH,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg_normal.jpg'),
-            fit: BoxFit.cover,
+      body: SizedBox.expand(
+        child: Container(
+          decoration: kBgDecoration,
+          child: PageView.builder(
+            onPageChanged: (page) {
+              setState(() {
+                selectedIndex = page;
+                //badge = badge + 1;
+              });
+            },
+            controller: controller,
+            itemBuilder: (context, position) {
+              if (position == 0) {
+                return const HomeTripsPage();
+              } else if (position == 1) {
+                return const HomeNotificationsPage();
+              } else {
+                return const HomeAccountPage();
+              }
+            },
+            itemCount: 3,
           ),
-        ),
-        child: PageView.builder(
-          onPageChanged: (page) {
-            setState(() {
-              selectedIndex = page;
-              //badge = badge + 1;
-            });
-          },
-          controller: controller,
-          itemBuilder: (context, position) {
-            if (position == 0) {
-              return const HomeTripsPage();
-            } else if (position == 1) {
-              return const HomeNotificationsPage();
-            } else {
-              return const HomeAccountPage();
-            }
-          },
-          itemCount: 3,
         ),
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          margin: EdgeInsets.all(24.h),
           decoration: BoxDecoration(
             color: kColorPrimaryBlue,
             borderRadius: const BorderRadius.all(Radius.circular(100)),
@@ -73,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: EdgeInsets.all(24.h),
             child: GNav(
               tabs: [
                 GButton(
@@ -81,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   iconActiveColor: kColorPrimaryBlue,
                   iconColor: Colors.white,
                   backgroundColor: Colors.white,
-                  iconSize: 32,
+                  iconSize: 80.sp,
                   padding: padding,
                   icon: AppIcons.nav1,
                   text: 'TRIPS',
@@ -91,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   iconActiveColor: kColorPrimaryBlue,
                   iconColor: Colors.white,
                   backgroundColor: Colors.white,
-                  iconSize: 32,
+                  iconSize: 80.sp,
                   padding: padding,
                   icon: AppIcons.nav2,
                   text: 'NOTIFICATION',
@@ -101,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   iconActiveColor: kColorPrimaryBlue,
                   iconColor: Colors.white,
                   backgroundColor: Colors.white,
-                  iconSize: 32,
+                  iconSize: 80.sp,
                   padding: padding,
                   icon: AppIcons.nav3,
                   text: 'ACCOUNT',

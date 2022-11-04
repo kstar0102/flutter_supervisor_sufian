@@ -1,8 +1,10 @@
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
-import 'package:flutter/material.dart';
-
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:go_router/go_router.dart';
 
 class NotificationCard extends StatefulWidget {
@@ -22,13 +24,11 @@ class NotificationCard extends StatefulWidget {
 class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
-    final borderRadius = BorderRadius.circular(8);
+    final borderRadius = BorderRadius.circular(20.w);
     const textColor = Color(0xFF333333);
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 34, vertical: 6),
+      margin: EdgeInsets.symmetric(horizontal: 80.w, vertical: 6.h),
       child: Wrap(
         alignment: WrapAlignment.end,
         children: [
@@ -53,24 +53,24 @@ class _NotificationCardState extends State<NotificationCard> {
                 //splashColor: kColorPrimaryBlue.withOpacity(0.1),
                 //splashFactory: InkSplash.splashFactory,
                 child: Container(
-                  height: 80,
+                  height: 200.h,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      EdgeInsets.symmetric(horizontal: 30.w, vertical: 10.h),
                   child: Row(
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           CircleAvatar(
-                            radius: 20,
+                            radius: 50.h,
                             backgroundColor: widget.info.getStatusColor(),
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                "TRIP",
+                                "TRIP".hardcoded,
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 10,
+                                  fontSize: 28.sp,
                                   color: Colors.white,
                                 ),
                               ),
@@ -81,40 +81,39 @@ class _NotificationCardState extends State<NotificationCard> {
                             style: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
-                              fontSize: 11,
+                              fontSize: 28.sp,
                               color: widget.info.getStatusColor(),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(width: 26),
+                      SizedBox(width: 50.w),
                       Flexible(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               widget.info.company.tripName,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w700,
-                                fontSize: 15,
+                                fontSize: 40.sp,
                                 color: textColor,
                               ),
                             ),
                             Text(
                               widget.info.getNotificationStr(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w500,
-                                fontSize: 15,
+                                fontSize: 38.sp,
                                 color: textColor,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 20),
                     ],
                   ),
                 ),
@@ -122,14 +121,14 @@ class _NotificationCardState extends State<NotificationCard> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: EdgeInsets.symmetric(vertical: 20.h),
             child: Text(
               widget.info.busLine.getFromTimeStr(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w600,
-                fontSize: 11,
-                color: textColor,
+                fontSize: 28.sp,
+                color: kColorPrimaryGrey,
               ),
             ),
           ),

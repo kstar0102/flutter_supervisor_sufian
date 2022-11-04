@@ -1,11 +1,11 @@
-import 'package:alnabali_driver/src/features/auth/data/auth_repository.dart';
+import 'package:alnabali_driver/src/features/auth/data/auth_old_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChangePasswordController extends StateNotifier<AsyncValue<void>> {
   ChangePasswordController({required this.authRepository})
       : super(const AsyncData<void>(null));
 
-  final AuthRepository authRepository;
+  final AuthOldRepository authRepository;
 
   Future<void> tryChangePwd(String currPwd, String newPwd) async {
     state = const AsyncValue.loading();

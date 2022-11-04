@@ -12,32 +12,58 @@ class DioClient {
     },
   );
 
+  // * keep token for future usage.
+  static String _token = '';
+
   // * GET: '/token'
-  static Future<Response> getToken() async {
+  static Future<String> _getToken() async {
+    if (_token.isNotEmpty) {
+      return _token;
+    }
+
     var dio = Dio(_baseOptions);
     try {
-      return await dio.get('/token');
+      final response = await dio.get('/token');
+      _token = response.data['token'];
+
+      return _token;
     } on DioError {
       rethrow;
     }
   }
 
   // * POST: '/login'
-  static Future<Response> postLogin(
-      String token, String email, String password) async {
+  static Future<dynamic> postLogin(String email, String password) async {
+    final token = await _getToken();
+
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
       final response = await dio
           .post('/login', data: {'email': email, 'password': password});
-      return response;
+      return response.data;
     } on DioError {
       rethrow;
     }
   }
 
+  // static Future<Map<String, dynamic>> postSendMobile(String phone) async {
+  //   final token = await _getToken();
+
+  //   var dio = Dio(_baseOptions);
+  //   dio.options.headers['X-CSRF-TOKEN'] = token;
+  //   try {
+  //     final response = await dio.post('/send', data: {'phone': phone});
+  //     return response.data;
+  //   } on DioError {
+  //     rethrow;
+  //   }
+  // }
+
   // * GET: '/profile/uid'
-  static Future<Response> getProfile(String token, String uid) async {
+  static Future<Response> getProfile(String uid) async {
+    final token = await _getToken();
+
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
@@ -50,13 +76,14 @@ class DioClient {
 
   // * POST '/profile_edit'
   static Future<Response> postProfileEdit(
-    String token,
     String uid,
     String name,
     String phone,
     String birthday,
     String address, // ? Map<> is better???
   ) async {
+    final token = await _getToken();
+
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
@@ -78,7 +105,9 @@ class DioClient {
 
   // * POST '/pwd/change'
   static Future<Response> postChangePwd(
-      String token, String uid, String currPwd, String newPwd) async {
+      String uid, String currPwd, String newPwd) async {
+    final token = await _getToken();
+
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {

@@ -1,19 +1,19 @@
+import 'package:alnabali_driver/src/exceptions/app_exception.dart';
 import 'package:alnabali_driver/src/features/auth/domain/app_user.dart';
-import 'package:alnabali_driver/src/features/exceptions/app_exception.dart';
 import 'package:alnabali_driver/src/network/dio_client.dart';
 import 'package:alnabali_driver/src/utils/in_memory_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthRepository {
+class AuthOldRepository {
   final _userState = InMemoryStore<AppUser?>(null);
 
   Stream<AppUser?> userStateChanges() => _userState.stream;
   AppUser? get currentUser => _userState.value;
 
   Future<void> tryGetToken() async {
-    final response = await DioClient.getToken();
+    // final response = await DioClient._getToken();
 
-    _userState.value = AppUser(token: response.data['token']);
+    // _userState.value = AppUser(token: response.data['token']);
   }
 
   Future<void> tryLogIn(String username, String password) async {
@@ -22,12 +22,12 @@ class AuthRepository {
       return; // token not ready yet.
     }
 
-    final response = await DioClient.postLogin(user.token, username, password);
+    final response = await DioClient.postLogin(username, password);
 
-    var result = response.data['result'];
+    var result = response['result'];
     if (result == 'Login Successfully') {
       _userState.value = user.copyWith(
-        uid: response.data['id'].toString(),
+        uid: response['id'].toString(),
         username: username,
       );
     } else if (result == 'Invalid Driver') {
@@ -45,7 +45,7 @@ class AuthRepository {
       return; // already profile data fetched.
     }
 
-    final response = await DioClient.getProfile(user.token, user.uid);
+    final response = await DioClient.getProfile(user.uid);
 
     var driver = response.data['driver'];
     // ? these null values must be from server?
@@ -70,10 +70,10 @@ class AuthRepository {
     }
 
     final response = await DioClient.postProfileEdit(
-        user.token, user.uid, name, phone, birthday, address);
+        user.uid, name, phone, birthday, address);
     var result = response.data['result'];
     if (result == 'Update successfully') {
-      print('change ok');
+      //print('change ok');
     } else if (result == 'Invalid Password') {
       throw const AppException.wrongPassword();
     }
@@ -85,11 +85,10 @@ class AuthRepository {
       return; // trying for invalid user.
     }
 
-    final response =
-        await DioClient.postChangePwd(user.token, user.uid, currPwd, newPwd);
+    final response = await DioClient.postChangePwd(user.uid, currPwd, newPwd);
     var result = response.data['result'];
     if (result == 'Changed successfully') {
-      print('change ok');
+      //print('change ok');
     } else if (result == 'Invalid Password') {
       throw const AppException.wrongPassword();
     }
@@ -104,8 +103,8 @@ class AuthRepository {
   }
 }
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final auth = AuthRepository();
+final authRepositoryProvider = Provider<AuthOldRepository>((ref) {
+  final auth = AuthOldRepository();
   ref.onDispose(() => auth.dispose());
   return auth;
 });

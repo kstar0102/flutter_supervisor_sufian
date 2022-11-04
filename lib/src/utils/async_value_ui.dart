@@ -1,4 +1,4 @@
-import 'package:alnabali_driver/src/features/exceptions/app_exception.dart';
+import 'package:alnabali_driver/src/exceptions/app_exception.dart';
 import 'package:alnabali_driver/src/widgets/alert_dialogs.dart';
 //import 'package:alnabali_driver/src/exceptions/app_exception.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';

@@ -1,7 +1,9 @@
 import 'package:alnabali_driver/src/features/trip/presentation/home_trips_list.dart';
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeTripsPage extends StatefulWidget {
   const HomeTripsPage({Key? key}) : super(key: key);
@@ -28,34 +30,33 @@ class _HomeTripsPageState extends State<HomeTripsPage>
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    final primaryTabBarHMargin = 150 * SizeConfig.scaleX;
+    final primaryTabBarHMargin = 150.w;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          height: 80,
+          margin: EdgeInsets.symmetric(vertical: 10.h),
+          height: 192.h,
           child: Image.asset('assets/images/home_icon.png'),
         ),
         Expanded(
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(36),
+                topLeft: Radius.circular(90.w),
               ),
             ),
             child: Column(
               children: [
                 Container(
-                  height: 50,
+                  height: 124.h,
                   margin: EdgeInsets.only(
                     left: primaryTabBarHMargin,
                     right: primaryTabBarHMargin,
-                    top: 54 * SizeConfig.scaleY,
-                    bottom: 34 * SizeConfig.scaleY,
+                    top: 54.h,
+                    bottom: 34.h,
                   ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFB3B3B3),
@@ -69,14 +70,14 @@ class _HomeTripsPageState extends State<HomeTripsPage>
                     ),
                     labelColor: Colors.white,
                     unselectedLabelColor: Colors.white,
-                    labelStyle: const TextStyle(
+                    labelStyle: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w700,
-                      fontSize: 16,
+                      fontSize: 40.sp,
                     ),
-                    tabs: const [
-                      Tab(text: 'TODAY TRIPS'),
-                      Tab(text: 'PAST TRIPS'),
+                    tabs: [
+                      Tab(text: 'TODAY TRIPS'.hardcoded),
+                      Tab(text: 'PAST TRIPS'.hardcoded),
                     ],
                   ),
                 ),

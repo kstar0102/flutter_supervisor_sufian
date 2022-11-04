@@ -1,11 +1,14 @@
+import 'package:alnabali_driver/src/constants/app_sizes.dart';
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:alnabali_driver/src/widgets/trip_busline.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class TripCard extends StatefulWidget {
@@ -26,7 +29,7 @@ class TripCard extends StatefulWidget {
 
 class _TripCardState extends State<TripCard> {
   Widget _buildCompanyRow() {
-    final avatarRadius = 106 * SizeConfig.scaleX * 0.5;
+    final avatarRadius = 60.h;
 
     return Row(
       children: [
@@ -44,16 +47,16 @@ class _TripCardState extends State<TripCard> {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 4),
+            padding: EdgeInsets.only(left: 10.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   widget.info.company.companyName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w700,
-                    fontSize: 13,
+                    fontSize: 32.sp,
                     color: kColorPrimaryGrey,
                   ),
                 ),
@@ -62,7 +65,7 @@ class _TripCardState extends State<TripCard> {
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w500,
-                    fontSize: 11,
+                    fontSize: 26.sp,
                     color: widget.info.getStatusColor(),
                   ),
                 ),
@@ -73,46 +76,46 @@ class _TripCardState extends State<TripCard> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'BUS NO.',
+            Text(
+              'BUS NO.'.hardcoded,
               style: TextStyle(
                 fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w500,
-                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                fontSize: 24.sp,
                 color: kColorPrimaryBlue,
               ),
             ),
             Text(
               widget.info.busNo,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w700,
-                fontSize: 14,
+                fontSize: 34.sp,
                 color: kColorPrimaryBlue,
               ),
             ),
-            const Text(
-              'Passengers',
+            Text(
+              'Passengers'.hardcoded,
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w500,
-                fontSize: 10,
+                fontSize: 24.sp,
                 color: kColorPrimaryBlue,
               ),
             ),
             Row(
               children: [
                 SizedBox(
-                  width: 38 * SizeConfig.scaleX,
+                  width: 38.w,
                   child: Image.asset('assets/images/passengers.png'),
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 8.w),
                 Text(
                   widget.info.passengers.toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w700,
-                    fontSize: 14,
+                    fontSize: 34.sp,
                     color: kColorPrimaryBlue,
                   ),
                 ),
@@ -132,23 +135,23 @@ class _TripCardState extends State<TripCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 20, bottom: 4),
-          child: const Text(
-            'REASON FOR REJECTION',
+          margin: EdgeInsets.only(top: 20.w, bottom: 4.h),
+          child: Text(
+            'REASON FOR REJECTION'.hardcoded,
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w600,
-              fontSize: 12,
+              fontSize: 12.sp,
               color: kColorPrimaryBlue,
             ),
           ),
         ),
         Text(
           widget.info.rejectReason,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w400,
-            fontSize: 12,
+            fontSize: 12.sp,
             color: kColorSecondaryGrey,
           ),
         ),
@@ -158,27 +161,27 @@ class _TripCardState extends State<TripCard> {
 
   Widget _buildDetailRow() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 20, bottom: 4),
-          child: const Text(
-            'DETAILS',
+          margin: EdgeInsets.only(top: 20.w, bottom: 4.h),
+          child: Text(
+            'DETAILS'.hardcoded,
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w600,
-              fontSize: 12,
+              fontSize: 32.sp,
               color: kColorPrimaryBlue,
             ),
           ),
         ),
         Text(
           widget.info.busLine.courseDetail,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
-            color: kColorSecondaryGrey,
+            fontWeight: FontWeight.w500,
+            fontSize: 28.sp,
+            color: kColorPrimaryGrey,
           ),
         ),
         _buildRejectResonRow(),
@@ -190,19 +193,19 @@ class _TripCardState extends State<TripCard> {
     if (widget.info.status == TripStatus.pending ||
         widget.info.status == TripStatus.accepted ||
         widget.info.status == TripStatus.started) {
-      final btnW = 268 * SizeConfig.scaleX;
-      final btnH = btnW * 0.26;
-      String yesTitle = 'ACCEPT';
-      String noTitle = 'REJECT';
+      final btnW = 280.w;
+      final btnH = 84.h;
+      String yesTitle = 'ACCEPT'.hardcoded;
+      String noTitle = 'REJECT'.hardcoded;
       if (widget.info.status == TripStatus.started) {
-        yesTitle = 'FINISH';
-        noTitle = 'NAVIGATION';
+        yesTitle = 'FINISH'.hardcoded;
+        noTitle = 'NAVIGATION'.hardcoded;
       } else if (widget.info.status == TripStatus.accepted) {
-        yesTitle = 'START';
+        yesTitle = 'START'.hardcoded;
       }
 
       return SizedBox(
-        height: btnH + 34,
+        height: btnH + 80.h,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -247,15 +250,15 @@ class _TripCardState extends State<TripCard> {
                 ),
                 child: Text(
                   yesTitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w700,
-                    fontSize: 10,
+                    fontSize: 26.sp,
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 2),
+            SizedBox(width: 8.w),
             GradientButton(
               width: btnW,
               height: btnH,
@@ -273,7 +276,7 @@ class _TripCardState extends State<TripCard> {
         ),
       );
     } else {
-      return const SizedBox(height: 36);
+      return SizedBox(height: 40.h);
     }
   }
 
@@ -286,38 +289,38 @@ class _TripCardState extends State<TripCard> {
           alignment: Alignment.center,
           children: [
             SizedBox(
-              width: 410 * SizeConfig.scaleX,
+              width: 410.w,
               child: Image.asset(widget.info.getStatusImgPath()),
             ),
             Text(
               widget.info.getStatusStr(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w400,
-                fontSize: 17,
+                fontSize: 40.sp,
                 color: Colors.white,
               ),
             ),
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 2),
+          padding: EdgeInsets.only(top: 2.h),
           child: Text(
             widget.info.getTripNoStr(),
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w500,
-              fontSize: 15,
+              fontSize: 36.sp,
               color: widget.info.getStatusColor(),
             ),
           ),
         ),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: EdgeInsets.symmetric(horizontal: 50.w),
           child: Column(
             children: [
               _buildCompanyRow(),
-              const SizedBox(height: 2),
+              SizedBox(height: 8.h),
               TripBusLine(info: widget.info.busLine),
               widget.showDetail ? _buildDetailRow() : const SizedBox(),
               _buildButtonsRow(),
@@ -339,11 +342,11 @@ class _TripCardState extends State<TripCard> {
         context.goNamed(AppRoute.tripDetail.name);
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 30),
+        margin: EdgeInsets.symmetric(horizontal: 60.w),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.grey.withOpacity(0.5)),
-          borderRadius: const BorderRadius.all(Radius.circular(18)),
+          borderRadius: BorderRadius.all(Radius.circular(40.w)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),

@@ -1,3 +1,4 @@
+import 'package:alnabali_driver/src/constants/app_sizes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';

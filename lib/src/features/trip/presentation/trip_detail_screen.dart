@@ -1,8 +1,10 @@
+import 'package:alnabali_driver/src/constants/app_sizes.dart';
 import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
+import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/widgets/trip_card.dart';
 import 'package:flutter/material.dart';
-
-import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class TripDetailScreen extends StatefulWidget {
   const TripDetailScreen({Key? key}) : super(key: key);
@@ -83,13 +85,14 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          iconSize: 89 * SizeConfig.scaleY,
-          icon: Image.asset('assets/images/btn_back.png'),
+        padding: EdgeInsets.symmetric(vertical: 20.h),
+        child: SizedBox(
+          height: 150.h,
+          child: IconButton(
+            onPressed: () => context.goNamed(AppRoute.home.name),
+            //iconSize: 89.h,
+            icon: Image.asset('assets/images/btn_back.png'),
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,

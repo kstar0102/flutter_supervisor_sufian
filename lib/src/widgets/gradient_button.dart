@@ -1,5 +1,6 @@
 import 'package:alnabali_driver/src/widgets/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GradientButton extends StatelessWidget {
   final double width;
@@ -17,7 +18,7 @@ class GradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(50);
+    final borderRadius = BorderRadius.circular(100);
     const gradientColor = Color(0xFFD4D4D4);
 
     return Container(
@@ -40,10 +41,10 @@ class GradientButton extends StatelessWidget {
         ),
         child: Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w700,
-            fontSize: 10,
+            fontSize: 26.sp,
             color: kColorPrimaryBlue,
           ),
         ),

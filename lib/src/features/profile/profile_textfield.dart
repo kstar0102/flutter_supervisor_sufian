@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // text field types used in profile screen.
 enum ProfileTextFieldType {
@@ -29,8 +30,6 @@ class ProfileTextField extends StatefulWidget {
 class _ProfileTextFieldState extends State<ProfileTextField> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
     String guideText = '';
     String prefixText = '';
     bool isObscureText = false;
@@ -67,20 +66,20 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
       inputType = TextInputType.visiblePassword;
     }
 
-    final fieldW = 685 * SizeConfig.scaleX;
-    final fieldH = 120 * SizeConfig.scaleY;
+    final fieldW = 700.w;
+    final fieldH = 130.h;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          margin: EdgeInsets.symmetric(horizontal: 46.w, vertical: 10.h),
           child: Text(
             guideText,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w500,
-              fontSize: 14,
+              fontSize: 32.sp,
               color: kColorPrimaryBlue,
             ),
           ),
@@ -96,21 +95,21 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
                 child: Text(
                   prefixText,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w500,
-                    fontSize: 14,
+                    fontSize: 36.sp,
                     color: Colors.white,
                   ),
                 ),
               ),
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
-                  alignment: Alignment.centerLeft,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius:
@@ -122,10 +121,10 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
                     inputFormatters: formatters,
                     cursorColor: kColorSecondaryGrey,
                     decoration: const InputDecoration(border: InputBorder.none),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 48.sp,
                       color: kColorSecondaryGrey,
                     ),
                   ),

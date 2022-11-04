@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'button.dart';
 import 'gnav.dart';
 
@@ -106,10 +107,10 @@ class _GButtonState extends State<GButton> {
         text: Text(
           widget.text,
           style: widget.textStyle ??
-              const TextStyle(
+              TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w700,
-                fontSize: 17,
+                fontSize: 38.sp,
                 color: kColorPrimaryBlue,
               ),
         ),

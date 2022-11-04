@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Default values from the Flutter's TabBar.
-const double _kTabHeight = 46.0;
+final double _kTabHeight = 70.h;
 
 class ButtonsTabBar extends StatefulWidget implements PreferredSizeWidget {
   ButtonsTabBar({
@@ -23,14 +24,17 @@ class ButtonsTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 4),
     this.buttonMargin = const EdgeInsets.all(4),
     this.labelSpacing = 4.0,
-    this.radius = 7.0,
+    this.radius = 100,
     this.elevation = 0,
-    this.height = _kTabHeight,
+    this.height = 46,
     this.center = false,
     this.onTap,
   }) : super(key: key) {
     assert(backgroundColor == null || decoration == null);
     assert(unselectedBackgroundColor == null || unselectedDecoration == null);
+
+    labelSpacing = 4.w;
+    height = _kTabHeight;
   }
 
   /// Typically a list of two or more [Tab] widgets.
@@ -119,7 +123,7 @@ class ButtonsTabBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// The spacing between the [Icon] and the [Text]. If only one of those is provided,
   /// no spacing is applied.
-  final double labelSpacing;
+  /*final*/ double labelSpacing;
 
   /// The value of the [BorderRadius.circular] applied to each button.
   final double radius;
@@ -132,7 +136,7 @@ class ButtonsTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// If no value is provided, the material height, 46.0, is used. If height is [null],
   /// the height is computed by summing the material height, 46, and the vertical values
   /// for [contentPadding] and [buttonMargin].
-  final double? height;
+  /*final*/ double? height;
 
   /// Center the tab buttons
   final bool center;
@@ -344,7 +348,7 @@ class _ButtonsTabBarState extends State<ButtonsTabBar>
         },
         style: ButtonStyle(
             elevation: MaterialStateProperty.all(widget.elevation),
-            minimumSize: MaterialStateProperty.all(const Size(40, 40)),
+            minimumSize: MaterialStateProperty.all(Size(40.w, 40.h)),
             padding: MaterialStateProperty.all(EdgeInsets.zero),
             textStyle: MaterialStateProperty.all(textStyle),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,

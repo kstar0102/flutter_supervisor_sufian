@@ -2,6 +2,7 @@ import 'package:alnabali_driver/src/features/trip/data/trip_info.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alnabali_driver/src/widgets/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TripBusLine extends StatefulWidget {
   final BusLineInfo info;
@@ -17,16 +18,16 @@ class TripBusLine extends StatefulWidget {
 
 class _TripBusLineState extends State<TripBusLine> {
   Widget _buildTimeLineRow() {
-    const dateTextStyle = TextStyle(
+    final dateTextStyle = TextStyle(
       fontFamily: 'Montserrat',
-      fontWeight: FontWeight.w700,
-      fontSize: 10,
+      fontWeight: FontWeight.w600,
+      fontSize: 26.sp,
       color: kColorSecondaryGrey,
     );
-    const timeTextStyle = TextStyle(
+    final timeTextStyle = TextStyle(
       fontFamily: 'Montserrat',
-      fontWeight: FontWeight.w500,
-      fontSize: 9,
+      fontWeight: FontWeight.w600,
+      fontSize: 22.sp,
       color: kColorPrimaryBlue,
     );
 
@@ -64,11 +65,6 @@ class _TripBusLineState extends State<TripBusLine> {
   }
 
   Widget _buildBusRow() {
-    final screenW = MediaQuery.of(context).size.width;
-    final busFromW = screenW * 0.13;
-    final busToW = screenW * 0.04;
-    final timerW = screenW * 0.022;
-
     return Container(
       decoration: const BoxDecoration(
         border: Border(
@@ -78,7 +74,7 @@ class _TripBusLineState extends State<TripBusLine> {
       child: Row(
         children: [
           Image(
-            width: busFromW,
+            width: 150.w,
             image: const AssetImage('assets/images/bus_from.png'),
           ),
           Expanded(
@@ -87,16 +83,16 @@ class _TripBusLineState extends State<TripBusLine> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Image(
-                  width: timerW,
+                  width: 25.w,
                   image: const AssetImage('assets/images/bus_time.png'),
                 ),
                 const SizedBox(width: 2),
                 Text(
                   widget.info.getDurTimeStr(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w500,
-                    fontSize: 8,
+                    fontSize: 22.sp,
                     color: kColorPrimaryBlue,
                   ),
                 ),
@@ -104,7 +100,7 @@ class _TripBusLineState extends State<TripBusLine> {
             ),
           ),
           Image(
-            width: busToW,
+            width: 50.w,
             image: const AssetImage('assets/images/bus_to.png'),
           ),
         ],
@@ -113,17 +109,17 @@ class _TripBusLineState extends State<TripBusLine> {
   }
 
   Widget _buildCourseRow() {
-    const courseTextStyle = TextStyle(
+    final courseTextStyle = TextStyle(
       fontFamily: 'Montserrat',
       fontWeight: FontWeight.w700,
-      fontSize: 10,
-      color: Color(0xFF4C4C4C),
+      fontSize: 26.sp,
+      color: const Color(0xFF4C4C4C),
     );
-    const cityTextStyle = TextStyle(
+    final cityTextStyle = TextStyle(
       fontFamily: 'Montserrat',
-      fontWeight: FontWeight.w500,
-      fontSize: 9,
-      color: Color(0xFFB3B3B3),
+      fontWeight: FontWeight.w600,
+      fontSize: 24.sp,
+      color: const Color(0xFFB3B3B3),
     );
 
     return Row(
@@ -167,15 +163,15 @@ class _TripBusLineState extends State<TripBusLine> {
           color: Colors.black.withOpacity(0.6),
           width: 1,
         ),
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(20.w)),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Column(
         children: [
           _buildTimeLineRow(),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           _buildBusRow(),
-          const SizedBox(height: 8),
+          SizedBox(height: 10.h),
           _buildCourseRow(),
         ],
       ),
