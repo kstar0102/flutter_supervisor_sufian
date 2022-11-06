@@ -52,24 +52,39 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
     return kTripTabTitles[status.index];
   }
 
+  // ? JX - i can't think better way than this...
+  List<Trip> _getFilteredTrips(List<Trip>? trips, TripStatus filter) {
+    if (trips == null) {
+      return [];
+    } else if (filter == TripStatus.all) {
+      return trips;
+    }
+
+    return trips.where((t) => t.status == filter).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     AsyncValue<void> state;
     List<Trip>? trips;
+    TripStatus filter;
     if (widget.kind == TripKind.today) {
       ref.listen<AsyncValue>(todayTripsListCtrProvider.select((state) => state),
           (_, state) => state.showAlertDialogOnError(context));
 
       state = ref.watch(todayTripsListCtrProvider);
       trips = ref.watch(todayTripsChangesProvider).value;
+      filter = ref.watch(todayTripsFilter);
     } else {
       ref.listen<AsyncValue>(pastTripsListCtrProvider.select((state) => state),
           (_, state) => state.showAlertDialogOnError(context));
 
       state = ref.watch(pastTripsListCtrProvider);
       trips = ref.watch(pastTripsChangesProvider).value;
+      filter = ref.watch(pastTripsFilter);
     }
-    print('build trips: $trips');
+    final filteredTrips = _getFilteredTrips(trips, filter);
+    print('filter=$filter, trips=${filteredTrips.length}');
 
     const kTodayFilters = [
       TripStatus.all,
@@ -104,6 +119,7 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
                   child: Image.asset('assets/images/home_icon2.png'),
                 ),
                 ButtonsTabBar(
+                  duration: 0,
                   backgroundColor: kColorPrimaryBlue,
                   unselectedBackgroundColor: Colors.transparent,
                   labelStyle: TextStyle(
@@ -132,11 +148,9 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
                     if (widget.kind == TripKind.today) {
                       ref.read(todayTripsFilter.state).state =
                           kTodayFilters[index];
-                      print('tab = ${kTodayFilters[index]}');
                     } else {
                       ref.read(pastTripsFilter.state).state =
                           kPastFilters[index];
-                      print('tab = ${kPastFilters[index]}');
                     }
                   },
                 ),
@@ -146,10 +160,10 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
               child: TabBarView(
                 children: List<Widget>.generate(filterTabs.length, (int index) {
                   return ListView.separated(
-                    itemCount: trips?.length ?? 0,
+                    itemCount: filteredTrips.length,
                     itemBuilder: (BuildContext context, int itemIdx) {
                       return TripCard(
-                        info: trips!.elementAt(itemIdx),
+                        info: filteredTrips[itemIdx],
                         onPressed: () {
                           context.pushNamed(AppRoute.tripDetail.name);
                         },

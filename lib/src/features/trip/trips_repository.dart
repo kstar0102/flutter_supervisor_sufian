@@ -26,17 +26,12 @@ abstract class TripsRepository {
 // * ---------------------------------------------------------------------------
 
 class TodayTripsRepository implements TripsRepository {
-  TodayTripsRepository({required this.ref});
-
-  final Ref ref;
+  TodayTripsRepository();
 
   final _trips = InMemoryStore<List<Trip>>([]);
 
   @override
-  Stream<List<Trip>> tripsChanges() {
-    print('--- tripsChanges() called');
-    return _trips.stream;
-  }
+  Stream<List<Trip>> tripsChanges() => _trips.stream;
 
   @override
   Future<void> doFetchTrips() async {
@@ -46,7 +41,6 @@ class TodayTripsRepository implements TripsRepository {
     final result = data['result'];
     if (result is List) {
       _trips.value = result.map((data) => Trip.fromMap(data)).toList();
-      print('fetched trips = ${_trips.value.length}');
     } else {
       throw UnimplementedError;
     }
@@ -54,7 +48,7 @@ class TodayTripsRepository implements TripsRepository {
 }
 
 final todayTripsRepoProvider = Provider<TripsRepository>((ref) {
-  return TodayTripsRepository(ref: ref);
+  return TodayTripsRepository();
 });
 
 final todayTripsChangesProvider = StreamProvider<List<Trip>>((ref) {
@@ -66,16 +60,12 @@ final todayTripsChangesProvider = StreamProvider<List<Trip>>((ref) {
 // * ---------------------------------------------------------------------------
 
 class PastTripsRepository implements TripsRepository {
-  PastTripsRepository({required this.ref});
-
-  final Ref ref;
+  PastTripsRepository();
 
   final _trips = InMemoryStore<List<Trip>>([]);
 
   @override
-  Stream<List<Trip>> tripsChanges() {
-    return _trips.stream;
-  }
+  Stream<List<Trip>> tripsChanges() => _trips.stream;
 
   @override
   Future<void> doFetchTrips() async {
@@ -85,7 +75,6 @@ class PastTripsRepository implements TripsRepository {
     final result = data['result'];
     if (result is List) {
       _trips.value = result.map((data) => Trip.fromMap(data)).toList();
-      print('fetched trips = ${_trips.value.length}');
     } else {
       throw UnimplementedError;
     }
@@ -93,7 +82,7 @@ class PastTripsRepository implements TripsRepository {
 }
 
 final pastTripsRepoProvider = Provider<TripsRepository>((ref) {
-  return PastTripsRepository(ref: ref);
+  return PastTripsRepository();
 });
 
 final pastTripsChangesProvider = StreamProvider<List<Trip>>((ref) {

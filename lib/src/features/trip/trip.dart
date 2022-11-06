@@ -116,9 +116,15 @@ class Trip {
   }
 
   factory Trip.fromMap(Map<String, dynamic> data) {
-    var status = TripStatus.pending;
-    var dataStatus = int.parse(data['status']);
-    if (dataStatus <= 6) status = TripStatus.values[dataStatus];
+    const kStatusMapper = {
+      '1': TripStatus.pending,
+      '2': TripStatus.accepted,
+      '3': TripStatus.rejected,
+      '8': TripStatus.canceled,
+      '4': TripStatus.started,
+      '6': TripStatus.finished,
+    };
+    var status = kStatusMapper[data['status']] ?? TripStatus.pending;
 
     return Trip(
       id: data['id'].toString(),

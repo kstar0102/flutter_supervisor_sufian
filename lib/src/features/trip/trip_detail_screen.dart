@@ -13,7 +13,7 @@ class TripDetailScreen extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  Trip info = Trip(
+  final info = Trip(
     id: '12345',
     status: TripStatus.accepted,
     clientName: 'client_name',

@@ -121,27 +121,7 @@ class DioClient {
     }
   }
 
-  // * POST '/daily-trip/today(last)'
-  static Future<dynamic> postDailyTrip(bool isToday) async {
-    final token = await _getToken();
-
-    var dio = Dio(_baseOptions);
-    dio.options.headers['X-CSRF-TOKEN'] = token;
-
-    try {
-      var subURL = '/daily-trip/today';
-      if (isToday == false) subURL = '/daily-trip/last';
-
-      final response = await dio.post(
-        subURL,
-        data: {'driver_name': 'all'},
-      );
-      return response.data;
-    } on DioError catch (e) {
-      print(e);
-    }
-  }
-
+  // * POST '/daily-trip/today'
   static Future<dynamic> postDailyTripToday() async {
     final token = await _getToken();
 
@@ -154,11 +134,12 @@ class DioClient {
         data: {'driver_name': 'all'},
       );
       return response.data;
-    } on DioError catch (e) {
-      print(e);
+    } on DioError {
+      rethrow;
     }
   }
 
+  // * POST '/daily-trip/last'
   static Future<dynamic> postDailyTripLast() async {
     final token = await _getToken();
 
@@ -171,8 +152,8 @@ class DioClient {
         data: {'driver_name': 'all'},
       );
       return response.data;
-    } on DioError catch (e) {
-      print(e);
+    } on DioError {
+      rethrow;
     }
   }
 }
