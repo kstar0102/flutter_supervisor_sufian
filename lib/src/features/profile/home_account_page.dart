@@ -1,3 +1,4 @@
+import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/profile/profile.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
@@ -22,26 +22,11 @@ class HomeAccountPage extends ConsumerStatefulWidget {
 }
 
 class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
-  var _profile = Profile(
-    username: 'unknown@email.com',
-    profileImage: 'assets/images/user_avatar.png',
-    nameEN: 'Unknown Driver',
-    phone: '123456789',
-    birthday: '1900-01-01',
-    address: 'Unknown Address',
-    workingHours: 0,
-    totalDistance: 0,
-    totalTrips: 0,
-  );
-
   @override
   void initState() {
     super.initState();
 
-    final controller = ref.read(homeAccountControllerProvider.notifier);
-    controller.doGetProfile().then((value) {
-      setState(() => _profile = value);
-    });
+    ref.read(homeAccountCtrProvider.notifier).doGetProfile();
   }
 
   Widget _buildSummaryInfo(int index, String value) {
@@ -92,11 +77,11 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-        homeAccountControllerProvider.select((state) => state),
+    ref.listen<AsyncValue>(homeAccountCtrProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
 
-    final state = ref.watch(homeAccountControllerProvider);
+    final state = ref.watch(homeAccountCtrProvider);
+    final profile = ref.watch(profileStateChangesProvider).value;
 
     final btnStyle = ButtonStyle(
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -147,12 +132,14 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         child: CircleAvatar(
                           radius: 165.h,
                           backgroundColor: Colors.transparent,
-                          backgroundImage: AssetImage(_profile.profileImage),
+                          backgroundImage: profile == null
+                              ? null
+                              : AssetImage(profile.profileImage),
                         ),
                       ),
                       Flexible(child: SizedBox(height: 20.h)),
                       Text(
-                        _profile.nameEN,
+                        profile?.nameEN ?? 'unknown'.hardcoded,
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w500,
@@ -165,15 +152,16 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          _buildSummaryInfo(0, '${_profile.workingHours}'),
-                          _buildSummaryInfo(1, '${_profile.totalDistance} KM'),
-                          _buildSummaryInfo(2, '${_profile.totalTrips}'),
+                          _buildSummaryInfo(0, '${profile?.workingHours ?? 0}'),
+                          _buildSummaryInfo(
+                              1, '${profile?.totalDistance ?? 0} KM'),
+                          _buildSummaryInfo(2, '${profile?.totalTrips ?? 0}'),
                         ],
                       ),
                       Flexible(child: SizedBox(height: 100.h)),
                       TextButton(
                         onPressed: () {
-                          context.goNamed(AppRoute.editProfile.name);
+                          context.pushNamed(AppRoute.editProfile.name);
                         },
                         style: btnStyle,
                         child: Container(
@@ -185,7 +173,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          context.goNamed(AppRoute.changePwd.name);
+                          context.pushNamed(AppRoute.changePwd.name);
                         },
                         style: btnStyle,
                         child: Container(
@@ -210,6 +198,10 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         onPressed: () {
                           showLogoutDialog(context).then((value) {
                             if (value != null && value == true) {
+                              ref
+                                  .read(homeAccountCtrProvider.notifier)
+                                  .doLogout();
+
                               context.goNamed(AppRoute.login.name);
                             }
                           });

@@ -9,7 +9,6 @@ import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/profile_textfield.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
-import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
@@ -30,11 +29,13 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   void _submit() {
     final controller = ref.read(changePasswordControllerProvider.notifier);
     controller.doChangePassword(_curr.text, _new1.text).then((value) {
-      _curr.clear();
-      _new1.clear();
-      _new2.clear();
+      if (value == true) {
+        _curr.clear();
+        _new1.clear();
+        _new2.clear();
 
-      showToastMessage(value);
+        showToastMessage('Changed password successfully.'.hardcoded);
+      }
     });
   }
 
@@ -138,8 +139,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         child: SizedBox(
           height: 150.h,
           child: IconButton(
-            onPressed: () => context.goNamed(AppRoute.home.name),
-            //iconSize: 89.h,
+            onPressed: () => context.pop(),
             icon: Image.asset('assets/images/btn_back.png'),
           ),
         ),

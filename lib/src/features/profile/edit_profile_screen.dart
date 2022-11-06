@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/features/profile/profile_textfield.dart';
-import 'package:alnabali_driver/src/routing/app_router.dart';
+import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
@@ -28,11 +28,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final _address = TextEditingController();
 
   @override
-  initState() {
+  void initState() {
     super.initState();
 
-    final profile =
-        ref.read(editProfileControllerProvider.notifier).getCurrProfile();
+    // edit controllers must be initialized only once!
+    var profile = ref.read(profileStateChangesProvider).value;
     if (profile != null) {
       _name.text = profile.nameEN;
       _phone.text = profile.phone;
@@ -46,7 +46,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     controller
         .doEditProfile(_name.text, _phone.text, _birthday.text, _address.text)
         .then((value) {
-      showToastMessage(value);
+      if (value == true) {
+        showToastMessage('Updated profile successfully.'.hardcoded);
+      }
     });
   }
 
@@ -55,7 +57,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     ref.listen<AsyncValue>(
         editProfileControllerProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
+
     final state = ref.watch(editProfileControllerProvider);
+    final profile = ref.watch(profileStateChangesProvider).value;
 
     final spacer = Flexible(child: SizedBox(height: 20.h));
 
@@ -101,13 +105,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           child: CircleAvatar(
                             radius: 165.h,
                             backgroundColor: Colors.transparent,
-                            backgroundImage: const AssetImage(
-                                'assets/images/user_avatar.png'),
+                            backgroundImage: profile != null
+                                ? AssetImage(profile.profileImage)
+                                : null,
                           ),
                         ),
                         Flexible(child: SizedBox(height: 30.h)),
                         Text(
-                          _name.text,
+                          profile?.nameEN ?? 'unknown'.hardcoded,
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w500,
@@ -168,8 +173,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         child: SizedBox(
           height: 150.h,
           child: IconButton(
-            onPressed: () => context.goNamed(AppRoute.home.name),
-            //iconSize: 89.h,
+            onPressed: () {
+              context.pop();
+            },
             icon: Image.asset('assets/images/btn_back.png'),
           ),
         ),

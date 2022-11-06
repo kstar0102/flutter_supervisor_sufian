@@ -6,16 +6,18 @@ import 'package:alnabali_driver/src/features/auth/auth_repository.dart';
 // * LoginController
 // * ---------------------------------------------------------------------------
 
-class LoginController extends StateNotifier<AsyncValue<String?>> {
-  LoginController({required this.authRepo}) : super(const AsyncData(''));
+class LoginController extends StateNotifier<AsyncValue<bool>> {
+  LoginController({required this.authRepo}) : super(const AsyncData(false));
 
   final AuthRepository authRepo;
 
-  Future<void> doLogin(String email, String password) async {
-    if (authRepo.uid != null) {
+  //bool isAuthenticated() => authRepo.uid
+
+  Future<bool> doLogin(String email, String password) async {
+    if (authRepo.uid != null && authRepo.uid!.isNotEmpty) {
       // already logined!
-      state = AsyncData(authRepo.uid);
-      return;
+      state = const AsyncData(true);
+      return true;
     }
 
     state = const AsyncValue.loading();
@@ -28,12 +30,13 @@ class LoginController extends StateNotifier<AsyncValue<String?>> {
     if (mounted) {
       state = newState;
     }
+
+    return newState.hasValue;
   }
 }
 
 final loginControllerProvider =
-    StateNotifierProvider.autoDispose<LoginController, AsyncValue<String?>>(
-        (ref) {
+    StateNotifierProvider.autoDispose<LoginController, AsyncValue<bool>>((ref) {
   return LoginController(authRepo: ref.watch(authRepositoryProvider));
 });
 

@@ -64,7 +64,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final controller = ref.read(loginControllerProvider.notifier);
       controller.doLogin(username, password).then(
         (value) {
-          context.goNamed(AppRoute.home.name);
+          // go home only if login success.
+          if (value == true) {
+            context.goNamed(AppRoute.home.name);
+          }
         },
       );
     }

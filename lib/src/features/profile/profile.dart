@@ -19,7 +19,7 @@ class Profile {
   final String address;
   final double workingHours;
   final double totalDistance;
-  final double totalTrips;
+  final int totalTrips;
 
   Profile copyWith(
     String nameVal,

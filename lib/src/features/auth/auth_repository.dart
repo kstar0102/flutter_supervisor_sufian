@@ -10,22 +10,21 @@ class AuthRepository {
 
   String? get uid => _uid;
 
-  Future<String?> doLogIn(String username, String password) async {
+  Future<bool> doLogIn(String username, String password) async {
     final data = await DioClient.postLogin(username, password);
+    developer.log('doLogin() returned: $data');
 
     var result = data['result'];
-    developer.log('doLogin() returned: $result');
-
     if (result == 'Login Successfully') {
       _uid = data['id'].toString();
-      return _uid;
+      return true;
     } else if (result == 'Invalid Driver') {
       throw const AppException.userNotFound();
     } else if (result == 'Invalid Password') {
       throw const AppException.wrongPassword();
     }
 
-    return null;
+    return false;
   }
 
   Future<bool> doSendMobile(String phone) async {
@@ -44,6 +43,10 @@ class AuthRepository {
     await Future.delayed(const Duration(seconds: 1));
 
     return true;
+  }
+
+  Future<void> doLogOut() async {
+    _uid = null;
   }
 }
 
