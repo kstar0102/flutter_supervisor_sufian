@@ -5,6 +5,11 @@ import 'package:intl/intl.dart';
 
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
+enum TripKind {
+  today,
+  past,
+}
+
 enum TripStatus {
   all,
   pending,
@@ -15,6 +20,7 @@ enum TripStatus {
   canceled,
 }
 
+@immutable
 class Trip {
   const Trip({
     required this.id,

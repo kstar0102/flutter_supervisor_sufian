@@ -1,8 +1,5 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/network/dio_client.dart';
 import 'package:alnabali_driver/src/utils/in_memory_store.dart';
@@ -11,93 +8,94 @@ import 'package:alnabali_driver/src/utils/in_memory_store.dart';
 // * TripsFilterProvider
 // * ---------------------------------------------------------------------------
 
-final todayTripsFilterProvider =
-    StateProvider<TripStatus>((ref) => TripStatus.all);
-
-final pastTripsFilterProvider =
-    StateProvider<TripStatus>((ref) => TripStatus.all);
+final todayTripsFilter = StateProvider<TripStatus>((ref) => TripStatus.all);
+final pastTripsFilter = StateProvider<TripStatus>((ref) => TripStatus.all);
 
 // * ---------------------------------------------------------------------------
 // * TripsRepository
 // * ---------------------------------------------------------------------------
 
-enum TripsRepoType {
-  today,
-  past,
+abstract class TripsRepository {
+  Stream<List<Trip>> tripsChanges();
+
+  Future<void> doFetchTrips();
 }
 
-class TripsRepository {
-  TripsRepository({
-    required this.repoType,
-    required this.filter,
-    required this.profileRepo,
-  });
+// * ---------------------------------------------------------------------------
+// * TodayTripsRepository
+// * ---------------------------------------------------------------------------
 
-  final TripsRepoType repoType;
-  final TripStatus filter;
-  final ProfileRepository profileRepo; // ! later, use for driver_name
+class TodayTripsRepository implements TripsRepository {
+  TodayTripsRepository({required this.ref});
 
-  final _tripsState = InMemoryStore<List<Trip>?>([]);
+  final Ref ref;
 
-  Stream<List<Trip>?> tripsStateChanges() {
-    return _tripsState.stream;
-    // return _tripsState.stream.map((tripsData) {
-    //   print('filter = $filter, trips=${tripsData?.length}');
-    //   if (tripsData != null) {
-    //     if (filter == TripStatus.all) {
-    //       return tripsData;
-    //     } else {
-    //       return tripsData.where((trip) => trip.status == filter).toList();
-    //     }
-    //   }
+  final _trips = InMemoryStore<List<Trip>>([]);
 
-    //   return [];
-    // });
+  @override
+  Stream<List<Trip>> tripsChanges() {
+    print('--- tripsChanges() called');
+    return _trips.stream;
   }
 
+  @override
   Future<void> doFetchTrips() async {
-    final data = await DioClient.postDailyTrip(repoType == TripsRepoType.today);
-    //developer.log('doFetchTrips() returned: $data'); // too long...
+    final data = await DioClient.postDailyTripToday();
+    //developer.log('doFetchTrips() returned: $data');
 
-    var result = data['result'];
+    final result = data['result'];
     if (result is List) {
-      developer.log('doFetchTrips() returned: ${result.length}');
-
-      try {
-        _tripsState.value = result.map((data) => Trip.fromMap(data)).toList();
-      } catch (e) {
-        //print(e);
-      }
+      _trips.value = result.map((data) => Trip.fromMap(data)).toList();
+      print('fetched trips = ${_trips.value.length}');
     } else {
       throw UnimplementedError;
     }
   }
 }
 
-// * ---------------------------------------------------------------------------
-// * TripsRepositoryProvider, TripsStateChangesProvider
-// * ---------------------------------------------------------------------------
-
 final todayTripsRepoProvider = Provider<TripsRepository>((ref) {
-  return TripsRepository(
-    repoType: TripsRepoType.today,
-    profileRepo: ref.watch(profileRepositoryProvider),
-    filter: ref.watch(todayTripsFilterProvider),
-  );
+  return TodayTripsRepository(ref: ref);
 });
 
-final todayTripsStateChangesProvider = StreamProvider<List<Trip>?>((ref) {
-  return ref.watch(todayTripsRepoProvider).tripsStateChanges();
+final todayTripsChangesProvider = StreamProvider<List<Trip>>((ref) {
+  return ref.watch(todayTripsRepoProvider).tripsChanges();
 });
+
+// * ---------------------------------------------------------------------------
+// * PastTripsRepository
+// * ---------------------------------------------------------------------------
+
+class PastTripsRepository implements TripsRepository {
+  PastTripsRepository({required this.ref});
+
+  final Ref ref;
+
+  final _trips = InMemoryStore<List<Trip>>([]);
+
+  @override
+  Stream<List<Trip>> tripsChanges() {
+    return _trips.stream;
+  }
+
+  @override
+  Future<void> doFetchTrips() async {
+    final data = await DioClient.postDailyTripLast();
+    //developer.log('doFetchTrips() returned: $data');
+
+    final result = data['result'];
+    if (result is List) {
+      _trips.value = result.map((data) => Trip.fromMap(data)).toList();
+      print('fetched trips = ${_trips.value.length}');
+    } else {
+      throw UnimplementedError;
+    }
+  }
+}
 
 final pastTripsRepoProvider = Provider<TripsRepository>((ref) {
-  return TripsRepository(
-    repoType: TripsRepoType.past,
-    profileRepo: ref.watch(profileRepositoryProvider),
-    filter: ref.watch(pastTripsFilterProvider),
-  );
+  return PastTripsRepository(ref: ref);
 });
 
-final pastTripsStateChangesProvider = StreamProvider<List<Trip>?>((ref) {
-  return ref.watch(pastTripsRepoProvider).tripsStateChanges();
+final pastTripsChangesProvider = StreamProvider<List<Trip>>((ref) {
+  return ref.watch(pastTripsRepoProvider).tripsChanges();
 });

@@ -1,9 +1,10 @@
+import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trips_list.dart';
+import 'package:alnabali_driver/src/features/trip/trips_list_view.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
 class HomeTripsPage extends StatefulWidget {
@@ -86,8 +87,8 @@ class _HomeTripsPageState extends State<HomeTripsPage>
                   child: TabBarView(
                     controller: _tabController,
                     children: const [
-                      TripsListView(listType: TripsListType.todayTrips),
-                      TripsListView(listType: TripsListType.pastTrips),
+                      TripsListView(kind: TripKind.today),
+                      TripsListView(kind: TripKind.past),
                     ],
                   ),
                 ),

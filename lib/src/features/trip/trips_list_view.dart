@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/features/trip/trip_card.dart';
-import 'package:alnabali_driver/src/features/trip/trips_list_controller.dart';
+import 'package:alnabali_driver/src/features/trip/trips_list_view_controller.dart';
 import 'package:alnabali_driver/src/features/trip/trips_repository.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
@@ -15,17 +15,12 @@ import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 import 'package:alnabali_driver/src/widgets/buttons_tabbar.dart';
 
-enum TripsListType {
-  todayTrips,
-  pastTrips,
-}
-
 class TripsListView extends ConsumerStatefulWidget {
-  final TripsListType listType;
+  final TripKind kind;
 
   const TripsListView({
     Key? key,
-    required this.listType,
+    required this.kind,
   }) : super(key: key);
 
   @override
@@ -37,7 +32,7 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
   void initState() {
     super.initState();
 
-    if (widget.listType == TripsListType.todayTrips) {
+    if (widget.kind == TripKind.today) {
       ref.read(todayTripsListCtrProvider.notifier).doFetchTrips();
     } else {
       ref.read(pastTripsListCtrProvider.notifier).doFetchTrips();
@@ -61,19 +56,20 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
   Widget build(BuildContext context) {
     AsyncValue<void> state;
     List<Trip>? trips;
-    if (widget.listType == TripsListType.todayTrips) {
+    if (widget.kind == TripKind.today) {
       ref.listen<AsyncValue>(todayTripsListCtrProvider.select((state) => state),
           (_, state) => state.showAlertDialogOnError(context));
 
       state = ref.watch(todayTripsListCtrProvider);
-      trips = ref.watch(todayTripsStateChangesProvider).value;
+      trips = ref.watch(todayTripsChangesProvider).value;
     } else {
       ref.listen<AsyncValue>(pastTripsListCtrProvider.select((state) => state),
           (_, state) => state.showAlertDialogOnError(context));
 
       state = ref.watch(pastTripsListCtrProvider);
-      trips = ref.watch(pastTripsStateChangesProvider).value;
+      trips = ref.watch(pastTripsChangesProvider).value;
     }
+    print('build trips: $trips');
 
     const kTodayFilters = [
       TripStatus.all,
@@ -90,15 +86,14 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
       TripStatus.finished,
       TripStatus.canceled,
     ];
-    var filters = widget.listType == TripsListType.todayTrips
-        ? kTodayFilters
-        : kPastFilters;
+    var filterTabs =
+        widget.kind == TripKind.today ? kTodayFilters : kPastFilters;
     const tabColor = Color(0xFFB3B3B3);
 
     return ProgressHUD(
       inAsyncCall: state.isLoading,
       child: DefaultTabController(
-        length: filters.length,
+        length: filterTabs.length,
         child: Column(
           children: [
             Row(
@@ -130,16 +125,18 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
                   height: 70.h,
                   buttonMargin: EdgeInsets.symmetric(horizontal: 4.w),
                   //contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
-                  tabs: filters
+                  tabs: filterTabs
                       .map((t) => Tab(text: _getTabTitleFromID(t)))
                       .toList(),
                   onTap: (index) {
-                    if (widget.listType == TripsListType.todayTrips) {
-                      ref.read(todayTripsFilterProvider.state).state =
+                    if (widget.kind == TripKind.today) {
+                      ref.read(todayTripsFilter.state).state =
                           kTodayFilters[index];
+                      print('tab = ${kTodayFilters[index]}');
                     } else {
-                      ref.read(pastTripsFilterProvider.state).state =
+                      ref.read(pastTripsFilter.state).state =
                           kPastFilters[index];
+                      print('tab = ${kPastFilters[index]}');
                     }
                   },
                 ),
@@ -147,7 +144,7 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
             ),
             Expanded(
               child: TabBarView(
-                children: List<Widget>.generate(filters.length, (int index) {
+                children: List<Widget>.generate(filterTabs.length, (int index) {
                   return ListView.separated(
                     itemCount: trips?.length ?? 0,
                     itemBuilder: (BuildContext context, int itemIdx) {

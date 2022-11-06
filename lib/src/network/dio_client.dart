@@ -141,4 +141,38 @@ class DioClient {
       print(e);
     }
   }
+
+  static Future<dynamic> postDailyTripToday() async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      final response = await dio.post(
+        '/daily-trip/today',
+        data: {'driver_name': 'all'},
+      );
+      return response.data;
+    } on DioError catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<dynamic> postDailyTripLast() async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      final response = await dio.post(
+        '/daily-trip/last',
+        data: {'driver_name': 'all'},
+      );
+      return response.data;
+    } on DioError catch (e) {
+      print(e);
+    }
+  }
 }
