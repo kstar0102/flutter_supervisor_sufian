@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class DioClient {
   static final _baseOptions = BaseOptions(
-    baseUrl: 'http://167.86.102.230/Alnabali/public/android/driver',
+    baseUrl: 'http://167.86.102.230/Alnabali/public/android',
     //connectTimeout: 10000, receiveTimeout: 10000,
     headers: {
       'Content-type': 'application/x-www-form-urlencoded',
@@ -23,7 +23,7 @@ class DioClient {
 
     var dio = Dio(_baseOptions);
     try {
-      final response = await dio.get('/token');
+      final response = await dio.get('/driver/token');
       _token = response.data['token'];
 
       return _token;
@@ -40,7 +40,7 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
       final response = await dio
-          .post('/login', data: {'email': email, 'password': password});
+          .post('/driver/login', data: {'email': email, 'password': password});
       return response.data;
     } on DioError {
       rethrow;
@@ -67,7 +67,7 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-      final response = await dio.get('/profile/$uid');
+      final response = await dio.get('/driver/profile/$uid');
       return response.data;
     } on DioError {
       rethrow;
@@ -88,7 +88,7 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
       final response = await dio.post(
-        '/profile_edit',
+        '/driver/profile_edit',
         data: {
           'id': uid,
           'name': name,
@@ -112,12 +112,33 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
       final response = await dio.post(
-        '/pwd/change',
+        '/driver/pwd/change',
         data: {'id': uid, 'current_pwd': currPwd, 'new_pwd': newPwd},
       );
       return response.data;
     } on DioError {
       rethrow;
+    }
+  }
+
+  // * POST '/daily-trip/today(last)'
+  static Future<dynamic> postDailyTrip(bool isToday) async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      var subURL = '/daily-trip/today';
+      if (isToday == false) subURL = '/daily-trip/last';
+
+      final response = await dio.post(
+        subURL,
+        data: {'driver_name': 'all'},
+      );
+      return response.data;
+    } on DioError catch (e) {
+      print(e);
     }
   }
 }

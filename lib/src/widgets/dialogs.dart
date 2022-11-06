@@ -55,7 +55,7 @@ Future<void> showOkayDialog(
   BuildContext context,
   String companyName,
   String tripName,
-  int tripNo,
+  String tripNo,
   bool isAccept,
 ) {
   return showDialog<void>(
@@ -135,7 +135,7 @@ Future<bool?> showAcceptFinishDialog(
   BuildContext context,
   String companyName,
   String tripName,
-  int tripNo,
+  String tripNo,
   bool isAccept,
 ) async {
   return showDialog<bool>(
@@ -144,9 +144,11 @@ Future<bool?> showAcceptFinishDialog(
     builder: (BuildContext context) {
       String title = '';
       if (isAccept) {
-        title = 'Are you sure you want to accept the trip # $tripNo ?';
+        title =
+            'Are you sure you want to accept the trip # $tripNo ?'.hardcoded;
       } else {
-        title = 'Are you sure you want to finish the trip # $tripNo ?';
+        title =
+            'Are you sure you want to finish the trip # $tripNo ?'.hardcoded;
       }
 
       return AlertDialog(
@@ -220,7 +222,7 @@ Future<String?> showRejectDialog(
   BuildContext context,
   String companyName,
   String tripName,
-  int tripNo,
+  String tripNo,
 ) async {
   return showDialog<String>(
     context: context,

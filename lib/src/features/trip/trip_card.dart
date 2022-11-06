@@ -4,18 +4,15 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip_info.dart';
+import 'package:alnabali_driver/src/features/trip/trip.dart';
+import 'package:alnabali_driver/src/features/trip/trip_busline.dart';
+//import 'package:alnabali_driver/src/features/trip/trip_info.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
-import 'package:alnabali_driver/src/widgets/trip_busline.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 
 class TripCard extends StatefulWidget {
-  final TripInfo info;
-  final VoidCallback onPressed;
-  final bool showDetail;
-
   const TripCard({
     Key? key,
     required this.info,
@@ -23,11 +20,19 @@ class TripCard extends StatefulWidget {
     this.showDetail = false,
   }) : super(key: key);
 
+  final Trip info;
+  final VoidCallback onPressed;
+  final bool showDetail;
+
   @override
   State<TripCard> createState() => _TripCardState();
 }
 
 class _TripCardState extends State<TripCard> {
+  String _getStatusImgPath(TripStatus status) {
+    return 'assets/images/trip_status${status.index}.png';
+  }
+
   Widget _buildCompanyRow() {
     final avatarRadius = 60.h;
 
@@ -42,7 +47,7 @@ class _TripCardState extends State<TripCard> {
             radius: avatarRadius,
             backgroundColor: Colors.transparent,
             backgroundImage:
-                AssetImage(widget.info.company.getCompanyImgPath()),
+                const AssetImage('assets/images/company_mcdonald\'s.png'),
           ),
         ),
         Expanded(
@@ -52,7 +57,7 @@ class _TripCardState extends State<TripCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.info.company.companyName,
+                  widget.info.clientName,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w700,
@@ -61,7 +66,7 @@ class _TripCardState extends State<TripCard> {
                   ),
                 ),
                 Text(
-                  widget.info.company.tripName,
+                  widget.info.tripName,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w500,
@@ -111,7 +116,7 @@ class _TripCardState extends State<TripCard> {
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  widget.info.passengers.toString(),
+                  widget.info.busSizeId.toString(),
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w700,
@@ -128,8 +133,10 @@ class _TripCardState extends State<TripCard> {
   }
 
   Widget _buildRejectResonRow() {
-    if (widget.info.status != TripStatus.rejected ||
-        widget.info.rejectReason.isEmpty) return const SizedBox();
+    if (widget.info.status !=
+        TripStatus.rejected /*|| widget.info.rejectReason.isEmpty*/) {
+      return const SizedBox();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +154,7 @@ class _TripCardState extends State<TripCard> {
           ),
         ),
         Text(
-          widget.info.rejectReason,
+          'TODO: reject reason info support...', //info.rejectReason,
           style: TextStyle(
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w400,
@@ -176,7 +183,7 @@ class _TripCardState extends State<TripCard> {
           ),
         ),
         Text(
-          widget.info.busLine.courseDetail,
+          widget.info.details,
           style: TextStyle(
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w500,
@@ -216,9 +223,9 @@ class _TripCardState extends State<TripCard> {
                 onPressed: () {
                   showAcceptFinishDialog(
                     context,
-                    widget.info.company.companyName,
-                    widget.info.company.tripName,
-                    widget.info.tripNo,
+                    widget.info.clientName,
+                    widget.info.tripName,
+                    widget.info.id,
                     widget.info.status == TripStatus.pending,
                   ).then((value) {
                     if (value!) {
@@ -226,18 +233,18 @@ class _TripCardState extends State<TripCard> {
                         // accepting action...
                         showOkayDialog(
                           context,
-                          widget.info.company.companyName,
-                          widget.info.company.tripName,
-                          widget.info.tripNo,
+                          widget.info.clientName,
+                          widget.info.tripName,
+                          widget.info.id,
                           true,
                         );
                       } else if (widget.info.status == TripStatus.started) {
                         // finishing action...
                         showOkayDialog(
                           context,
-                          widget.info.company.companyName,
-                          widget.info.company.tripName,
-                          widget.info.tripNo,
+                          widget.info.clientName,
+                          widget.info.tripName,
+                          widget.info.id,
                           false,
                         );
                       }
@@ -266,8 +273,12 @@ class _TripCardState extends State<TripCard> {
                 if (widget.info.status == TripStatus.started) {
                   // navigation to ?...
                 } else {
-                  showRejectDialog(context, widget.info.company.companyName,
-                      widget.info.company.tripName, widget.info.tripNo);
+                  showRejectDialog(
+                    context,
+                    widget.info.clientName,
+                    widget.info.tripName,
+                    widget.info.id,
+                  );
                 }
               },
               title: noTitle,
@@ -290,10 +301,10 @@ class _TripCardState extends State<TripCard> {
           children: [
             SizedBox(
               width: 410.w,
-              child: Image.asset(widget.info.getStatusImgPath()),
+              child: Image.asset(_getStatusImgPath(widget.info.status)),
             ),
             Text(
-              widget.info.getStatusStr(),
+              widget.info.getStatusTitle(),
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w400,
@@ -306,7 +317,7 @@ class _TripCardState extends State<TripCard> {
         Padding(
           padding: EdgeInsets.only(top: 2.h),
           child: Text(
-            widget.info.getTripNoStr(),
+            widget.info.getTripTitle(),
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w500,
@@ -321,7 +332,7 @@ class _TripCardState extends State<TripCard> {
             children: [
               _buildCompanyRow(),
               SizedBox(height: 8.h),
-              TripBusLine(info: widget.info.busLine),
+              TripBusLine(info: widget.info),
               widget.showDetail ? _buildDetailRow() : const SizedBox(),
               _buildButtonsRow(),
             ],

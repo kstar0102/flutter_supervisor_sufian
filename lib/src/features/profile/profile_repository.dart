@@ -11,7 +11,7 @@ import 'package:alnabali_driver/src/utils/in_memory_store.dart';
 class ProfileRepository {
   ProfileRepository({required this.authRepo});
 
-  AuthRepository authRepo;
+  final AuthRepository authRepo;
   final _profileState = InMemoryStore<Profile?>(null);
 
   Stream<Profile?> profileStateChanges() => _profileState.stream;

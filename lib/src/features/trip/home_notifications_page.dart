@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:alnabali_driver/src/features/trip/trip_info.dart';
-import 'package:alnabali_driver/src/widgets/notification_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:alnabali_driver/src/features/trip/notification_card.dart';
 
 class HomeNotificationsPage extends StatefulWidget {
   const HomeNotificationsPage({Key? key}) : super(key: key);
@@ -14,116 +15,7 @@ class _HomeNotificationsPageState extends State<HomeNotificationsPage> {
   @override
   Widget build(BuildContext context) {
     /// dummy codes for test
-    final dummyInfos = [
-      TripInfo(
-        status: TripStatus.started,
-        tripNo: 123455,
-        company: CompanyInfo(
-          companyName: 'MCDONALD\'S',
-          tripName: 'McDonald\'s Morning Trip',
-        ),
-        busNo: '32-145489',
-        passengers: 25,
-        busLine: BusLineInfo(
-          fromTime: DateTime(2022, 10, 8, 16, 0),
-          toTime: DateTime(2022, 10, 10, 16, 30),
-          courseName: 'KHALDA - ALNEYMAT ST.',
-          cityName: 'AMMAN',
-          courseDetail:
-              'AMMAN - ALSWEFIAH - ALNEYMAT ST.AMMAN ALSWEFIAH - AKBETNAT ST',
-        ),
-      ),
-      TripInfo(
-        status: TripStatus.pending,
-        tripNo: 123455,
-        company: CompanyInfo(
-          companyName: 'AMAZON',
-          tripName: 'Amazon Morning Trip',
-        ),
-        busNo: '32-145489',
-        passengers: 25,
-        busLine: BusLineInfo(
-          fromTime: DateTime(2022, 10, 8, 16, 0),
-          toTime: DateTime(2022, 10, 10, 16, 30),
-          courseName: 'KHALDA - ALNEYMAT ST.',
-          cityName: 'AMMAN',
-          courseDetail:
-              'AMMAN - ALSWEFIAH - ALNEYMAT ST.AMMAN ALSWEFIAH - AKBETNAT ST',
-        ),
-      ),
-      TripInfo(
-        status: TripStatus.accepted,
-        tripNo: 123455,
-        company: CompanyInfo(
-          companyName: 'MCDONALD\'S',
-          tripName: 'McDonald\'s Morning Trip',
-        ),
-        busNo: '32-145489',
-        passengers: 25,
-        busLine: BusLineInfo(
-          fromTime: DateTime(2022, 10, 8, 16, 0),
-          toTime: DateTime(2022, 10, 10, 16, 30),
-          courseName: 'KHALDA - ALNEYMAT ST.',
-          cityName: 'AMMAN',
-          courseDetail:
-              'AMMAN - ALSWEFIAH - ALNEYMAT ST.AMMAN ALSWEFIAH - AKBETNAT ST',
-        ),
-      ),
-      TripInfo(
-        status: TripStatus.rejected,
-        tripNo: 123455,
-        company: CompanyInfo(
-          companyName: 'AMAZON',
-          tripName: 'Amazon Morning Trip',
-        ),
-        busNo: '32-145489',
-        passengers: 25,
-        busLine: BusLineInfo(
-          fromTime: DateTime(2022, 10, 8, 16, 0),
-          toTime: DateTime(2022, 10, 10, 16, 30),
-          courseName: 'KHALDA - ALNEYMAT ST.',
-          cityName: 'AMMAN',
-          courseDetail:
-              'AMMAN - ALSWEFIAH - ALNEYMAT ST.AMMAN ALSWEFIAH - AKBETNAT ST',
-        ),
-      ),
-      TripInfo(
-        status: TripStatus.finished,
-        tripNo: 123455,
-        company: CompanyInfo(
-          companyName: 'MCDONALD\'S',
-          tripName: 'McDonald\'s Morning Trip',
-        ),
-        busNo: '32-145489',
-        passengers: 25,
-        busLine: BusLineInfo(
-          fromTime: DateTime(2022, 10, 8, 16, 0),
-          toTime: DateTime(2022, 10, 10, 16, 30),
-          courseName: 'KHALDA - ALNEYMAT ST.',
-          cityName: 'AMMAN',
-          courseDetail:
-              'AMMAN - ALSWEFIAH - ALNEYMAT ST.AMMAN ALSWEFIAH - AKBETNAT ST',
-        ),
-      ),
-      TripInfo(
-        status: TripStatus.canceled,
-        tripNo: 123455,
-        company: CompanyInfo(
-          companyName: 'AMAZON',
-          tripName: 'Amazon Morning Trip',
-        ),
-        busNo: '32-145489',
-        passengers: 25,
-        busLine: BusLineInfo(
-          fromTime: DateTime(2022, 10, 8, 16, 0),
-          toTime: DateTime(2022, 10, 10, 16, 30),
-          courseName: 'KHALDA - ALNEYMAT ST.',
-          cityName: 'AMMAN',
-          courseDetail:
-              'AMMAN - ALSWEFIAH - ALNEYMAT ST.AMMAN ALSWEFIAH - AKBETNAT ST',
-        ),
-      ),
-    ];
+    final dummyInfos = [];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -135,10 +27,10 @@ class _HomeNotificationsPageState extends State<HomeNotificationsPage> {
         ),
         Expanded(
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(36),
+                topLeft: Radius.circular(36.h),
               ),
             ),
             child: ListView.separated(

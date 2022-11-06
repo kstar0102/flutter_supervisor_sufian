@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip_info.dart';
+import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
 class NotificationCard extends StatefulWidget {
-  final TripInfo info;
+  final Trip info;
   final VoidCallback onPressed;
 
   const NotificationCard({
@@ -78,7 +78,7 @@ class _NotificationCardState extends State<NotificationCard> {
                             ),
                           ),
                           Text(
-                            widget.info.getTripNoStrShort(),
+                            widget.info.getTripTitleShort(),
                             style: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
@@ -95,7 +95,7 @@ class _NotificationCardState extends State<NotificationCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.info.company.tripName,
+                              widget.info.tripName,
                               style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w700,
@@ -104,7 +104,7 @@ class _NotificationCardState extends State<NotificationCard> {
                               ),
                             ),
                             Text(
-                              widget.info.getNotificationStr(),
+                              widget.info.getNotifyText(),
                               style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w500,
@@ -124,7 +124,7 @@ class _NotificationCardState extends State<NotificationCard> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h),
             child: Text(
-              widget.info.busLine.getFromTimeStr(),
+              widget.info.getStartTimeStr(),
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w600,

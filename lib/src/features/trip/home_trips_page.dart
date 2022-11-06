@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/home_trips_list.dart';
+import 'package:alnabali_driver/src/features/trip/trips_list.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
 class HomeTripsPage extends StatefulWidget {

@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip_info.dart';
+import 'package:alnabali_driver/src/features/trip/trip.dart';
 
 class TripBusLine extends StatefulWidget {
-  final BusLineInfo info;
-
   const TripBusLine({
     Key? key,
     required this.info,
   }) : super(key: key);
+
+  final Trip info;
 
   @override
   State<TripBusLine> createState() => _TripBusLineState();
@@ -38,11 +38,11 @@ class _TripBusLineState extends State<TripBusLine> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.info.getFromDateStr(),
+              widget.info.getStartDateStr(),
               style: dateTextStyle,
             ),
             Text(
-              widget.info.getFromTimeStr(),
+              widget.info.getStartTimeStr(),
               style: timeTextStyle,
             ),
           ],
@@ -52,11 +52,11 @@ class _TripBusLineState extends State<TripBusLine> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.info.getToDateStr(),
+              widget.info.getEndDateStr(),
               style: dateTextStyle,
             ),
             Text(
-              widget.info.getToTimeStr(),
+              widget.info.getEndTimeStr(),
               style: timeTextStyle,
             ),
           ],
@@ -89,7 +89,7 @@ class _TripBusLineState extends State<TripBusLine> {
                 ),
                 const SizedBox(width: 2),
                 Text(
-                  widget.info.getDurTimeStr(),
+                  widget.info.getDurationStr(),
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w500,
@@ -129,11 +129,11 @@ class _TripBusLineState extends State<TripBusLine> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.info.courseName,
+              widget.info.orgArea,
               style: courseTextStyle,
             ),
             Text(
-              widget.info.cityName,
+              widget.info.orgCity,
               style: cityTextStyle,
             ),
           ],
@@ -143,11 +143,11 @@ class _TripBusLineState extends State<TripBusLine> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.info.courseName,
+              widget.info.destArea,
               style: courseTextStyle,
             ),
             Text(
-              widget.info.cityName,
+              widget.info.destCity,
               style: cityTextStyle,
             ),
           ],

@@ -2,14 +2,32 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip_info.dart';
-import 'package:alnabali_driver/src/routing/app_router.dart';
-import 'package:alnabali_driver/src/widgets/trip_card.dart';
+import 'package:alnabali_driver/src/features/trip/trip.dart';
+import 'package:alnabali_driver/src/features/trip/trip_card.dart';
 
 class TripDetailScreen extends StatefulWidget {
-  const TripDetailScreen({Key? key}) : super(key: key);
+  TripDetailScreen({
+    Key? key,
+  }) : super(key: key);
+
+  Trip info = Trip(
+    id: '12345',
+    status: TripStatus.accepted,
+    clientName: 'client_name',
+    tripName: 'trip_name',
+    busNo: 'bus_no',
+    busSizeId: 10,
+    startDate: DateFormat('y-m-d h:mm a').parse('2022-02-02 2:20 AM'),
+    endDate: DateFormat('y-m-d h:mm a').parse('2022-02-02 9:20 AM'),
+    orgArea: 'origin_area',
+    orgCity: 'origin_city',
+    destArea: 'destination_area',
+    destCity: 'destination_city',
+    details: 'details',
+  );
 
   @override
   State<TripDetailScreen> createState() => _TripDetailScreenState();
@@ -18,26 +36,6 @@ class TripDetailScreen extends StatefulWidget {
 class _TripDetailScreenState extends State<TripDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final dummyInfo = TripInfo(
-      status: TripStatus.pending,
-      tripNo: 123455,
-      company: CompanyInfo(
-        companyName: 'MCDONALD\'S',
-        tripName: 'McDonald\'s Morning Trip',
-      ),
-      busNo: '32-145489',
-      passengers: 25,
-      busLine: BusLineInfo(
-        fromTime: DateTime(2022, 10, 8, 16, 0),
-        toTime: DateTime(2022, 10, 10, 16, 30),
-        courseName: 'KHALDA - ALNEYMAT ST.',
-        cityName: 'AMMAN',
-        courseDetail:
-            'AMMAN - ALSWEFIAH - ALNEYMAT ST.AMMAN ALSWEFIAH - AKBETNAT ST',
-      ),
-      rejectReason: 'I\'m sick today',
-    );
-
     return Scaffold(
       body: Container(
         decoration: kBgDecoration,
@@ -65,7 +63,7 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                       child: Image.asset('assets/images/trip_detail.png'),
                     ),
                     TripCard(
-                      info: dummyInfo,
+                      info: widget.info,
                       onPressed: () {},
                       showDetail: true,
                     ),
@@ -81,7 +79,7 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
         child: SizedBox(
           height: 150.h,
           child: IconButton(
-            onPressed: () => context.goNamed(AppRoute.home.name),
+            onPressed: () => context.pop(),
             //iconSize: 89.h,
             icon: Image.asset('assets/images/btn_back.png'),
           ),
