@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/features/notification/notif.dart';
@@ -19,7 +20,11 @@ class NotifRepository {
 
     final result = data['result'];
     if (result is List) {
-      _notifs = result.map((data) => Notif.fromMap(data)).toList();
+      try {
+        _notifs = result.map((data) => Notif.fromMap(data)).toList();
+      } catch (e) {
+        developer.log('doFetchNotifs() error=$e');
+      }
       return _notifs;
     } else {
       throw UnimplementedError;

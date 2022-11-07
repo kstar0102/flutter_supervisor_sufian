@@ -29,7 +29,11 @@ class ProfileRepository {
     final data = await DioClient.getProfile(authRepo.uid!);
     //developer.log('doGetProfile() returned: $data');
 
-    _profile = Profile.fromMap(data);
+    try {
+      _profile = Profile.fromMap(data);
+    } catch (e) {
+      developer.log('doGetProfile() error=$e');
+    }
 
     return _profile;
   }

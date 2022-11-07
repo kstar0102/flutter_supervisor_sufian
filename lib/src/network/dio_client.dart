@@ -183,7 +183,7 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
 
     try {
-      final response = await dio.post('/notification/today');
+      final response = await dio.get('/notification/today');
       return response.data;
     } on DioError catch (e) {
       developer.log('DioError: $e');

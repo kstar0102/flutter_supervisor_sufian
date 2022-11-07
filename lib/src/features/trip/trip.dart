@@ -124,3 +124,5 @@ class Trip {
         'details: $details)';
   }
 }
+
+typedef TripList = List<Trip>;

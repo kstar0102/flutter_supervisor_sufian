@@ -10,10 +10,16 @@ import 'package:alnabali_driver/src/widgets/app_icons_icons.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gnav.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gbutton.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final PageController _controller = PageController();
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,12 @@ class HomeScreen extends StatelessWidget {
             ),
             Expanded(
               child: PageView.builder(
-                onPageChanged: (page) {},
+                onPageChanged: (page) {
+                  setState(() {
+                    selectedIndex = page;
+                    //badge = badge + 1;
+                  });
+                },
                 controller: _controller,
                 itemCount: 3,
                 itemBuilder: (context, position) {
@@ -103,11 +114,11 @@ class HomeScreen extends StatelessWidget {
                   text: 'ACCOUNT',
                 )
               ],
-              // selectedIndex: selectedIndex,
+              selectedIndex: selectedIndex,
               onTabChange: (index) {
-                // setState(() {
-                //   selectedIndex = index;
-                // });
+                setState(() {
+                  selectedIndex = index;
+                });
                 _controller.jumpToPage(index);
               },
             ),

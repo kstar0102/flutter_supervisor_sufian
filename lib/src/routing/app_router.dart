@@ -76,7 +76,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
               fullscreenDialog: true,
-              child: HomeScreen(),
+              child: const HomeScreen(),
             ),
             routes: [
               GoRoute(

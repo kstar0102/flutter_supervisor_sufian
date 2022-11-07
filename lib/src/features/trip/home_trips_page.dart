@@ -79,7 +79,7 @@ class _HomeTripsPageState extends State<HomeTripsPage>
               controller: _tabController,
               children: const [
                 TripsListView(kind: TripKind.today),
-                SizedBox(), //TripsListView(kind: TripKind.past),
+                TripsListView(kind: TripKind.past),
               ],
             ),
           ),
