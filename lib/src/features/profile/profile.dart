@@ -21,6 +21,23 @@ class Profile {
   final double totalDistance;
   final int totalTrips;
 
+  factory Profile.fromMap(Map<String, dynamic> data) {
+    final driver = data['driver'];
+    return Profile(
+      username: driver['user_name'],
+      profileImage: driver['profile_image'] ?? 'assets/images/user_avatar.png',
+      nameEN: driver['name_en'],
+      phone: driver['phone'],
+      birthday: driver['age'],
+      address: driver['address'],
+      // ! following data must be from server...
+      workingHours: 10.2,
+      totalDistance: 30,
+      totalTrips: 20,
+    );
+  }
+
+  // used for profile editing.
   Profile copyWith(
     String nameVal,
     String phoneVal,

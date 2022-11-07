@@ -7,13 +7,12 @@ import 'package:go_router/go_router.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
-import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
-import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
+import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 
 class HomeAccountPage extends ConsumerStatefulWidget {
   const HomeAccountPage({Key? key}) : super(key: key);
@@ -27,7 +26,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
   void initState() {
     super.initState();
 
-    ref.read(homeAccountCtrProvider.notifier).doGetProfile();
+    ref.read(profileControllerProvider.notifier).doGetProfile();
   }
 
   Widget _buildSummaryInfo(int index, String value) {
@@ -78,13 +77,13 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(homeAccountCtrProvider.select((state) => state),
+    ref.listen<AsyncValue>(profileControllerProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
 
-    final state = ref.watch(homeAccountCtrProvider);
-    final profile = ref.watch(profileStateChangesProvider).value;
+    final state = ref.watch(profileControllerProvider);
+    final profile = state.value;
 
-    developer.log('HomeAccountPage::build() - state=$state');
+    developer.log('HomeAccountPage::build() - profile=${profile?.nameEN}');
 
     final btnStyle = ButtonStyle(
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -103,20 +102,16 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
 
     return ProgressHUD(
       inAsyncCall: state.isLoading,
+      opacity: 0,
       child: Column(
         //crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 50.h),
-            height: 192.h,
-            child: Image.asset('assets/images/home_icon.png'),
-          ),
           Expanded(
             child: Stack(
               alignment: AlignmentDirectional.topCenter,
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 20.h),
+                  margin: EdgeInsets.only(top: 140.h),
                   child: SizedBox.expand(
                     child: CustomPaint(painter: AccountBgPainter()),
                   ),
@@ -126,7 +121,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 20.h),
+                        margin: EdgeInsets.only(top: 140.h),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border:
@@ -163,9 +158,10 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                       ),
                       Flexible(child: SizedBox(height: 100.h)),
                       TextButton(
-                        onPressed: () {
-                          context.pushNamed(AppRoute.editProfile.name);
-                        },
+                        onPressed: state.isLoading
+                            ? null
+                            : () =>
+                                context.pushNamed(AppRoute.editProfile.name),
                         style: btnStyle,
                         child: Container(
                           alignment: Alignment.center,
@@ -175,9 +171,9 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          context.pushNamed(AppRoute.changePwd.name);
-                        },
+                        onPressed: state.isLoading
+                            ? null
+                            : () => context.pushNamed(AppRoute.changePwd.name),
                         style: btnStyle,
                         child: Container(
                           alignment: Alignment.center,
@@ -187,7 +183,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: state.isLoading ? null : () {},
                         style: btnStyle,
                         child: Container(
                           alignment: Alignment.center,
@@ -198,17 +194,20 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                       ),
                       Flexible(child: SizedBox(height: 40.h)),
                       TextButton(
-                        onPressed: () {
-                          showLogoutDialog(context).then((value) {
-                            if (value != null && value == true) {
-                              ref
-                                  .read(homeAccountCtrProvider.notifier)
-                                  .doLogout();
+                        onPressed: state.isLoading
+                            ? null
+                            : () {
+                                showLogoutDialog(context).then((value) {
+                                  if (value != null && value == true) {
+                                    ref
+                                        .read(
+                                            profileControllerProvider.notifier)
+                                        .doLogout();
 
-                              context.goNamed(AppRoute.login.name);
-                            }
-                          });
-                        },
+                                    context.goNamed(AppRoute.login.name);
+                                  }
+                                });
+                              },
                         style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(kColorPrimaryBlue),

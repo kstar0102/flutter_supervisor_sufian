@@ -27,7 +27,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   final _new2 = TextEditingController();
 
   void _submit() {
-    final controller = ref.read(changePasswordControllerProvider.notifier);
+    final controller = ref.read(profileControllerProvider.notifier);
     controller.doChangePassword(_curr.text, _new1.text).then((value) {
       if (value == true) {
         _curr.clear();
@@ -41,11 +41,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-        changePasswordControllerProvider.select((state) => state),
+    ref.listen<AsyncValue>(profileControllerProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
 
-    final state = ref.watch(changePasswordControllerProvider);
+    final state = ref.watch(profileControllerProvider);
 
     final spacer = Flexible(child: SizedBox(height: 20.h));
 

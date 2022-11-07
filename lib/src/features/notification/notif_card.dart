@@ -25,7 +25,7 @@ class NotifCard extends StatelessWidget {
     const textColor = Color(0xFF333333);
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 80.w, vertical: 6.h),
+      margin: EdgeInsets.symmetric(horizontal: 80.w, vertical: 4.h),
       child: Wrap(
         alignment: WrapAlignment.end,
         children: [

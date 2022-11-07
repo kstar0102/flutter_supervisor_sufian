@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/features/profile/profile_textfield.dart';
-import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
@@ -26,23 +25,27 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final _phone = TextEditingController();
   final _birthday = TextEditingController();
   final _address = TextEditingController();
+  String _avatarImg = 'assets/images/user_avatar.png';
+  String _nameEn = 'unknown'.hardcoded;
 
   @override
   void initState() {
     super.initState();
 
     // edit controllers must be initialized only once!
-    var profile = ref.read(profileStateChangesProvider).value;
+    var profile = ref.read(profileControllerProvider.notifier).currProfile;
     if (profile != null) {
       _name.text = profile.nameEN;
       _phone.text = profile.phone;
       _birthday.text = profile.birthday;
       _address.text = profile.address;
+      _avatarImg = profile.profileImage;
+      _nameEn = profile.nameEN;
     }
   }
 
   void _submit() {
-    final controller = ref.read(editProfileControllerProvider.notifier);
+    final controller = ref.read(profileControllerProvider.notifier);
     controller
         .doEditProfile(_name.text, _phone.text, _birthday.text, _address.text)
         .then((value) {
@@ -54,12 +57,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-        editProfileControllerProvider.select((state) => state),
+    ref.listen<AsyncValue>(profileControllerProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
 
-    final state = ref.watch(editProfileControllerProvider);
-    final profile = ref.watch(profileStateChangesProvider).value;
+    final state = ref.watch(profileControllerProvider);
+    final profile = state.value;
 
     final spacer = Flexible(child: SizedBox(height: 20.h));
 
@@ -105,14 +107,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           child: CircleAvatar(
                             radius: 165.h,
                             backgroundColor: Colors.transparent,
-                            backgroundImage: profile != null
-                                ? AssetImage(profile.profileImage)
-                                : null,
+                            backgroundImage: AssetImage(profile != null
+                                ? profile.profileImage
+                                : _avatarImg),
                           ),
                         ),
                         Flexible(child: SizedBox(height: 30.h)),
                         Text(
-                          profile?.nameEN ?? 'unknown'.hardcoded,
+                          profile != null ? profile.nameEN : _nameEn,
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w500,

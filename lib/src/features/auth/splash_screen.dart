@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _goAfterDelay(BuildContext context) {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 1), () {
       context.goNamed(AppRoute.login.name);
     });
   }
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: SizedBox.expand(
         child: GestureDetector(
           onTap: () {
-            context.goNamed(AppRoute.login.name);
+            //context.goNamed(AppRoute.login.name);
           },
           child: Container(
             decoration: const BoxDecoration(

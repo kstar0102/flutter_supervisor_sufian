@@ -10,17 +10,10 @@ import 'package:alnabali_driver/src/widgets/app_icons_icons.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gnav.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gbutton.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key}) : super(key: key);
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int selectedIndex = 0;
-  //int badge = 0;
-  PageController controller = PageController();
+  final PageController _controller = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,28 +22,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       extendBody: true,
-      body: SizedBox.expand(
-        child: Container(
-          decoration: kBgDecoration,
-          child: PageView.builder(
-            onPageChanged: (page) {
-              setState(() {
-                selectedIndex = page;
-                //badge = badge + 1;
-              });
-            },
-            controller: controller,
-            itemBuilder: (context, position) {
-              if (position == 0) {
-                return const HomeTripsPage();
-              } else if (position == 1) {
-                return const HomeNotificationsPage();
-              } else {
-                return const HomeAccountPage();
-              }
-            },
-            itemCount: 3,
-          ),
+      body: Container(
+        width: ScreenUtil().screenWidth,
+        height: ScreenUtil().screenHeight,
+        decoration: kBgDecoration,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 12.h),
+              height: 192.h,
+              child: Image.asset('assets/images/home_icon.png'),
+            ),
+            Expanded(
+              child: PageView.builder(
+                onPageChanged: (page) {},
+                controller: _controller,
+                itemCount: 3,
+                itemBuilder: (context, position) {
+                  if (position == 0) {
+                    return const HomeTripsPage();
+                  } else if (position == 1) {
+                    return const HomeNotificationsPage();
+                  } else {
+                    return const HomeAccountPage();
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -103,12 +103,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   text: 'ACCOUNT',
                 )
               ],
-              selectedIndex: selectedIndex,
+              // selectedIndex: selectedIndex,
               onTabChange: (index) {
-                setState(() {
-                  selectedIndex = index;
-                });
-                controller.jumpToPage(index);
+                // setState(() {
+                //   selectedIndex = index;
+                // });
+                _controller.jumpToPage(index);
               },
             ),
           ),

@@ -9,43 +9,15 @@ import 'package:alnabali_driver/src/features/notification/notif_card.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 
-class HomeNotificationsPage extends StatelessWidget {
-  const HomeNotificationsPage({Key? key}) : super(key: key);
+class HomeNotificationsPage extends ConsumerStatefulWidget {
+  const HomeNotificationsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 10.h),
-          height: 192.h,
-          child: Image.asset('assets/images/home_icon.png'),
-        ),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(90.w),
-              ),
-            ),
-            child: const NotifListView(),
-          ),
-        ),
-      ],
-    );
-  }
+  ConsumerState<HomeNotificationsPage> createState() =>
+      _HomeNotificationsPageState();
 }
 
-class NotifListView extends ConsumerStatefulWidget {
-  const NotifListView({super.key});
-
-  @override
-  ConsumerState<NotifListView> createState() => _NotifListViewState();
-}
-
-class _NotifListViewState extends ConsumerState<NotifListView> {
+class _HomeNotificationsPageState extends ConsumerState<HomeNotificationsPage> {
   @override
   void initState() {
     super.initState();
@@ -64,22 +36,30 @@ class _NotifListViewState extends ConsumerState<NotifListView> {
 
     developer.log('NotifListView::build() - state=${state.isLoading}');
 
-    return ProgressHUD(
-      inAsyncCall: state.isLoading,
-      child: notis != null && notis.isNotEmpty
-          ? ListView.separated(
-              padding: const EdgeInsets.only(top: 30),
-              itemCount: notis.length,
-              itemBuilder: (BuildContext context, int itemIdx) {
-                return NotifCard(
-                  info: notis[itemIdx],
-                  onPressed: () {},
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(),
-            )
-          : const SizedBox(),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(90.w),
+        ),
+      ),
+      child: ProgressHUD(
+        inAsyncCall: state.isLoading,
+        child: notis != null && notis.isNotEmpty
+            ? ListView.separated(
+                padding: EdgeInsets.only(top: 100.h),
+                itemCount: notis.length,
+                itemBuilder: (BuildContext context, int itemIdx) {
+                  return NotifCard(
+                    info: notis[itemIdx],
+                    onPressed: () {},
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(),
+              )
+            : const SizedBox(),
+      ),
     );
   }
 }

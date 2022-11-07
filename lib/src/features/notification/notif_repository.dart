@@ -9,6 +9,11 @@ class NotifRepository {
   NotifList _notifs = []; //InMemoryStore<NotifList>([]);
 
   Future<NotifList> doFetchNotifs() async {
+    if (_notifs.isNotEmpty) {
+      // notifications fetched already.
+      return _notifs;
+    }
+
     final data = await DioClient.postNotificationAll();
     //developer.log('doFetchNotifs() returned: $data');
 
