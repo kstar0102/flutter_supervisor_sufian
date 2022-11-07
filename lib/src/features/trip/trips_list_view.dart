@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -85,7 +86,8 @@ class _TripsListViewState extends ConsumerState<TripsListView> {
       filter = ref.watch(pastTripsFilter);
     }
     final filteredTrips = _getFilteredTrips(trips, filter);
-    print('filter=$filter, trips=${filteredTrips.length}');
+    developer.log(
+        'TripsListView::build() - filter=$filter, trips=${filteredTrips.length}');
 
     const kTodayFilters = [
       TripStatus.all,

@@ -14,9 +14,9 @@ const kStatusMapper = {
   1: TripStatus.pending,
   2: TripStatus.accepted,
   3: TripStatus.rejected,
-  8: TripStatus.canceled,
   4: TripStatus.started,
   6: TripStatus.finished,
+  8: TripStatus.canceled,
 };
 
 Color getStatusColor(TripStatus status) {

@@ -1,4 +1,4 @@
-import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
+import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
@@ -82,6 +83,8 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
 
     final state = ref.watch(homeAccountCtrProvider);
     final profile = ref.watch(profileStateChangesProvider).value;
+
+    developer.log('HomeAccountPage::build() - state=$state');
 
     final btnStyle = ButtonStyle(
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -31,7 +31,7 @@ class Notif {
   final String driverName;
   final TripStatus status;
 
-  String getNotifTitle() => '#$id';
+  String getNotifTitle() => '#$tripId';
   String getNotifyTimeText() => DateFormat('hh:mm a').format(notifyDate);
 
   factory Notif.fromMap(Map<String, dynamic> data) {
@@ -55,3 +55,5 @@ class Notif {
   String toString() => 'Notification(id: $id, tripId: $tripId, '
       'status: $status, message: $message, date: $notifyDate, driverName: $driverName)';
 }
+
+typedef NotifList = List<Notif>;

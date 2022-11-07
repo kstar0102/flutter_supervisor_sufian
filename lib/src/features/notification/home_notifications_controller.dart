@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/features/notification/notif_repository.dart';
+import 'package:alnabali_driver/src/features/notification/notif.dart';
 
-class HomeNotificationsController extends StateNotifier<AsyncValue<void>> {
+class HomeNotificationsController extends StateNotifier<AsyncValue<NotifList>> {
   HomeNotificationsController({required this.notifRepo})
-      : super(const AsyncData(null));
+      : super(const AsyncData([]));
 
   final NotifRepository notifRepo;
 
@@ -20,7 +21,7 @@ class HomeNotificationsController extends StateNotifier<AsyncValue<void>> {
 }
 
 final homeNotificationsCtrProvider = StateNotifierProvider.autoDispose<
-    HomeNotificationsController, AsyncValue<void>>((ref) {
+    HomeNotificationsController, AsyncValue<NotifList>>((ref) {
   return HomeNotificationsController(
       notifRepo: ref.watch(notificationRepositoryProvider));
 });

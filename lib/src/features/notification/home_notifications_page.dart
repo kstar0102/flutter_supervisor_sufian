@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/features/notification/home_notifications_controller.dart';
 import 'package:alnabali_driver/src/features/notification/notif_card.dart';
-import 'package:alnabali_driver/src/features/notification/notif_repository.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 
@@ -61,28 +60,26 @@ class _NotifListViewState extends ConsumerState<NotifListView> {
         (_, state) => state.showAlertDialogOnError(context));
 
     final state = ref.watch(homeNotificationsCtrProvider);
-    final notifications = ref.watch(notificationsProvider).value;
+    final notis = state.value;
 
-    developer.log('NotifListView::build() called!');
+    developer.log('NotifListView::build() - state=${state.isLoading}');
 
-    if (notifications != null && notifications.isNotEmpty) {
-      return ProgressHUD(
-        inAsyncCall: state.isLoading,
-        child: ListView.separated(
-          padding: const EdgeInsets.only(top: 30),
-          itemCount: notifications.length,
-          itemBuilder: (BuildContext context, int itemIdx) {
-            return NotifCard(
-              info: notifications[itemIdx],
-              onPressed: () {},
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) =>
-              const SizedBox(),
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
+    return ProgressHUD(
+      inAsyncCall: state.isLoading,
+      child: notis != null && notis.isNotEmpty
+          ? ListView.separated(
+              padding: const EdgeInsets.only(top: 30),
+              itemCount: notis.length,
+              itemBuilder: (BuildContext context, int itemIdx) {
+                return NotifCard(
+                  info: notis[itemIdx],
+                  onPressed: () {},
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(),
+            )
+          : const SizedBox(),
+    );
   }
 }
