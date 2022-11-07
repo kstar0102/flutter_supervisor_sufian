@@ -3,26 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip.dart';
+import 'package:alnabali_driver/src/features/notification/notif.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
-class NotificationCard extends StatefulWidget {
-  final Trip info;
-  final VoidCallback onPressed;
-
-  const NotificationCard({
+class NotifCard extends StatelessWidget {
+  const NotifCard({
     Key? key,
     required this.info,
     required this.onPressed,
   }) : super(key: key);
 
-  @override
-  State<NotificationCard> createState() => _NotificationCardState();
-}
+  final Notif info;
+  final VoidCallback onPressed;
 
-class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.circular(20.w);
@@ -64,7 +60,7 @@ class _NotificationCardState extends State<NotificationCard> {
                         children: [
                           CircleAvatar(
                             radius: 50.h,
-                            backgroundColor: widget.info.getStatusColor(),
+                            backgroundColor: getStatusColor(info.status),
                             child: Center(
                               child: Text(
                                 "TRIP".hardcoded,
@@ -78,12 +74,12 @@ class _NotificationCardState extends State<NotificationCard> {
                             ),
                           ),
                           Text(
-                            widget.info.getTripTitleShort(),
+                            info.getNotifTitle(),
                             style: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
                               fontSize: 28.sp,
-                              color: widget.info.getStatusColor(),
+                              color: getStatusColor(info.status),
                             ),
                           ),
                         ],
@@ -95,7 +91,7 @@ class _NotificationCardState extends State<NotificationCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.info.tripName,
+                              info.tripName,
                               style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w700,
@@ -104,7 +100,7 @@ class _NotificationCardState extends State<NotificationCard> {
                               ),
                             ),
                             Text(
-                              widget.info.getNotifyText(),
+                              info.message,
                               style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w500,
@@ -124,7 +120,7 @@ class _NotificationCardState extends State<NotificationCard> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h),
             child: Text(
-              widget.info.getStartTimeStr(),
+              info.getNotifyTimeText(),
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w600,

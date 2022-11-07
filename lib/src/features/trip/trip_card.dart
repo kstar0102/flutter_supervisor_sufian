@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/trip_busline.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
@@ -70,7 +71,7 @@ class _TripCardState extends State<TripCard> {
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w500,
                     fontSize: 26.sp,
-                    color: widget.info.getStatusColor(),
+                    color: getStatusColor(widget.info.status),
                   ),
                 ),
               ],
@@ -321,7 +322,7 @@ class _TripCardState extends State<TripCard> {
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w500,
               fontSize: 36.sp,
-              color: widget.info.getStatusColor(),
+              color: getStatusColor(widget.info.status),
             ),
           ),
         ),

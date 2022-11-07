@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/features/trip/trip_card.dart';
@@ -43,16 +44,16 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              height: 80,
+              margin: EdgeInsets.symmetric(vertical: 10.h),
+              height: 192.h,
               child: Image.asset('assets/images/home_icon.png'),
             ),
             Expanded(
               child: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(36),
+                    topLeft: Radius.circular(90.w),
                   ),
                 ),
                 child: Column(
@@ -74,15 +75,12 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
           ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20.h),
-        child: SizedBox(
-          height: 150.h,
-          child: IconButton(
-            onPressed: () => context.pop(),
-            //iconSize: 89.h,
-            icon: Image.asset('assets/images/btn_back.png'),
-          ),
+      floatingActionButton: SizedBox(
+        height: 150.h,
+        child: IconButton(
+          onPressed: () => context.pop(),
+          //iconSize: 89.h,
+          icon: Image.asset('assets/images/btn_back.png'),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,

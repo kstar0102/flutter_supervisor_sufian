@@ -3,21 +3,12 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
+import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
 enum TripKind {
   today,
   past,
-}
-
-enum TripStatus {
-  all,
-  pending,
-  accepted,
-  rejected,
-  started,
-  finished,
-  canceled,
 }
 
 @immutable
@@ -52,19 +43,6 @@ class Trip {
   final String destArea;
   final String destCity;
   final String details;
-
-  Color getStatusColor() {
-    const List<Color> kStatusColors = [
-      Colors.black,
-      Color(0xFFFBB03B),
-      Color(0xFFA67C52),
-      Color(0xFFED1C24),
-      Color(0xFF29ABE2),
-      Color(0xFF39B54A),
-      Color(0xFFFF00FF),
-    ];
-    return kStatusColors[status.index];
-  }
 
   String getStatusTitle() {
     const List<String> kStatusTitles = [
@@ -116,14 +94,6 @@ class Trip {
   }
 
   factory Trip.fromMap(Map<String, dynamic> data) {
-    const kStatusMapper = {
-      '1': TripStatus.pending,
-      '2': TripStatus.accepted,
-      '3': TripStatus.rejected,
-      '8': TripStatus.canceled,
-      '4': TripStatus.started,
-      '6': TripStatus.finished,
-    };
     var status = kStatusMapper[data['status']] ?? TripStatus.pending;
 
     return Trip(

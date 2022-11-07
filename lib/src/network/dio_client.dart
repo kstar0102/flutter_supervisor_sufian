@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
 
 class DioClient {
@@ -27,9 +28,11 @@ class DioClient {
       _token = response.data['token'];
 
       return _token;
-    } on DioError {
-      rethrow;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
     }
+
+    return ''; // error-prone...
   }
 
   // * POST: '/login'
@@ -42,8 +45,8 @@ class DioClient {
       final response = await dio
           .post('/driver/login', data: {'email': email, 'password': password});
       return response.data;
-    } on DioError {
-      rethrow;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
     }
   }
 
@@ -69,8 +72,8 @@ class DioClient {
     try {
       final response = await dio.get('/driver/profile/$uid');
       return response.data;
-    } on DioError {
-      rethrow;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
     }
   }
 
@@ -98,8 +101,8 @@ class DioClient {
         },
       );
       return response.data;
-    } on DioError {
-      rethrow;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
     }
   }
 
@@ -116,8 +119,8 @@ class DioClient {
         data: {'id': uid, 'current_pwd': currPwd, 'new_pwd': newPwd},
       );
       return response.data;
-    } on DioError {
-      rethrow;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
     }
   }
 
@@ -134,8 +137,8 @@ class DioClient {
         data: {'driver_name': 'all'},
       );
       return response.data;
-    } on DioError {
-      rethrow;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
     }
   }
 
@@ -152,8 +155,38 @@ class DioClient {
         data: {'driver_name': 'all'},
       );
       return response.data;
-    } on DioError {
-      rethrow;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
+    }
+  }
+
+  // * POST '/notification/all'
+  static Future<dynamic> postNotificationAll() async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      final response = await dio.get('/notification/all');
+      return response.data;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
+    }
+  }
+
+  // * POST '/notification/today'
+  static Future<dynamic> postNotificationToday() async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      final response = await dio.post('/notification/today');
+      return response.data;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
     }
   }
 }

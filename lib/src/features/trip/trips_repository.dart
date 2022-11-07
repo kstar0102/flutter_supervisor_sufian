@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/network/dio_client.dart';
 import 'package:alnabali_driver/src/utils/in_memory_store.dart';
