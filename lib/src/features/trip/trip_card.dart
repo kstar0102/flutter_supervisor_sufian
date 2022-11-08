@@ -12,16 +12,20 @@ import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 
+typedef TripCardCallback = void Function(String id, bool isYes, String? extra);
+
 class TripCard extends StatefulWidget {
   const TripCard({
     Key? key,
     required this.info,
     required this.onPressed,
+    required this.onYesNo,
     this.showDetail = false,
   }) : super(key: key);
 
   final Trip info;
   final VoidCallback onPressed;
+  final TripCardCallback onYesNo;
   final bool showDetail;
 
   @override
@@ -202,13 +206,15 @@ class _TripCardState extends State<TripCard> {
         widget.info.status == TripStatus.started) {
       final btnW = 280.w;
       final btnH = 84.h;
+
+      // as default, suppose status is pending
       String yesTitle = 'ACCEPT'.hardcoded;
       String noTitle = 'REJECT'.hardcoded;
-      if (widget.info.status == TripStatus.started) {
+      if (widget.info.status == TripStatus.accepted) {
+        yesTitle = 'START'.hardcoded;
+      } else if (widget.info.status == TripStatus.started) {
         yesTitle = 'FINISH'.hardcoded;
         noTitle = 'NAVIGATION'.hardcoded;
-      } else if (widget.info.status == TripStatus.accepted) {
-        yesTitle = 'START'.hardcoded;
       }
 
       return SizedBox(
@@ -221,33 +227,15 @@ class _TripCardState extends State<TripCard> {
               height: btnH,
               child: ElevatedButton(
                 onPressed: () {
-                  showAcceptFinishDialog(
+                  showConfirmDialog(
                     context,
                     widget.info.clientName,
                     widget.info.tripName,
                     widget.info.id,
-                    widget.info.status == TripStatus.pending,
+                    widget.info.status,
                   ).then((value) {
-                    if (value!) {
-                      if (widget.info.status == TripStatus.pending) {
-                        // accepting action...
-                        showOkayDialog(
-                          context,
-                          widget.info.clientName,
-                          widget.info.tripName,
-                          widget.info.id,
-                          true,
-                        );
-                      } else if (widget.info.status == TripStatus.started) {
-                        // finishing action...
-                        showOkayDialog(
-                          context,
-                          widget.info.clientName,
-                          widget.info.tripName,
-                          widget.info.id,
-                          false,
-                        );
-                      }
+                    if (value == true) {
+                      widget.onYesNo(widget.info.id, true, null);
                     }
                   });
                 },
@@ -271,14 +259,18 @@ class _TripCardState extends State<TripCard> {
               height: btnH,
               onPressed: () {
                 if (widget.info.status == TripStatus.started) {
-                  // navigation to ?...
+                  // ? navigation to where???
                 } else {
                   showRejectDialog(
                     context,
                     widget.info.clientName,
                     widget.info.tripName,
                     widget.info.id,
-                  );
+                  ).then((value) {
+                    if (value != null) {
+                      widget.onYesNo(widget.info.id, false, value);
+                    }
+                  });
                 }
               },
               title: noTitle,

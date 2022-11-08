@@ -11,12 +11,12 @@ enum TripStatus {
 }
 
 const kStatusMapper = {
-  1: TripStatus.pending,
-  2: TripStatus.accepted,
-  3: TripStatus.rejected,
-  4: TripStatus.started,
-  6: TripStatus.finished,
-  8: TripStatus.canceled,
+  '1': TripStatus.pending,
+  '2': TripStatus.accepted,
+  '3': TripStatus.rejected,
+  '4': TripStatus.started,
+  '6': TripStatus.finished,
+  '8': TripStatus.canceled,
 };
 
 Color getStatusColor(TripStatus status) {

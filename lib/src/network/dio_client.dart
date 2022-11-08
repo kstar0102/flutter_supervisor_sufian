@@ -160,6 +160,24 @@ class DioClient {
     }
   }
 
+  // * POST '/daily-trip/command'
+  static Future<dynamic> postDailyTripCommand(String id, String cmd) async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      final response = await dio.post(
+        '/daily-trip/command',
+        data: {'id': id, 'command': cmd},
+      );
+      return response.data;
+    } on DioError catch (e) {
+      developer.log('DioError: $e');
+    }
+  }
+
   // * POST '/notification/all'
   static Future<dynamic> postNotificationAll() async {
     final token = await _getToken();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
@@ -128,25 +129,27 @@ Future<void> showOkayDialog(
 }
 
 // * ---------------------------------------------------------------------------
-// * Trip Accept Dialog
+// * Trip Accept/Finish Confirm Dialog
 // * ---------------------------------------------------------------------------
 
-Future<bool?> showAcceptFinishDialog(
+Future<bool?> showConfirmDialog(
   BuildContext context,
   String companyName,
   String tripName,
   String tripNo,
-  bool isAccept,
+  TripStatus status,
 ) async {
   return showDialog<bool>(
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       String title = '';
-      if (isAccept) {
+      if (status == TripStatus.pending) {
         title =
             'Are you sure you want to accept the trip # $tripNo ?'.hardcoded;
-      } else {
+      } else if (status == TripStatus.accepted) {
+        title = 'Are you sure you want to start the trip # $tripNo ?'.hardcoded;
+      } else if (status == TripStatus.started) {
         title =
             'Are you sure you want to finish the trip # $tripNo ?'.hardcoded;
       }
@@ -224,9 +227,10 @@ Future<String?> showRejectDialog(
   String tripName,
   String tripNo,
 ) async {
+  final reasonCtr = TextEditingController();
   return showDialog<String>(
     context: context,
-    barrierDismissible: false, // user must tap button!
+    barrierDismissible: true, // user cancel dialog!
     builder: (BuildContext context) {
       return AlertDialog(
         shape: dialogShape,
@@ -244,7 +248,7 @@ Future<String?> showRejectDialog(
             SizedBox(
               width: 660.w,
               child: Text(
-                'You have rejected trip # $tripNo'.hardcoded,
+                'You are rejecting trip # $tripNo'.hardcoded,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -267,6 +271,7 @@ Future<String?> showRejectDialog(
             Padding(
               padding: EdgeInsets.symmetric(vertical: 6.h),
               child: TextField(
+                controller: reasonCtr,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: kColorAvatarBorder)),
@@ -293,14 +298,14 @@ Future<String?> showRejectDialog(
             height: btnH,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, reasonCtr.text);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: kColorPrimaryBlue,
                 shape: const StadiumBorder(),
               ),
               child: Text(
-                'OKAY'.hardcoded,
+                'REJECT'.hardcoded,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
@@ -308,6 +313,14 @@ Future<String?> showRejectDialog(
                 ),
               ),
             ),
+          ),
+          GradientButton(
+            width: btnW,
+            height: btnH,
+            onPressed: () {
+              Navigator.pop(context, null);
+            },
+            title: 'NO'.hardcoded,
           ),
         ],
       );

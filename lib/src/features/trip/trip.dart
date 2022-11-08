@@ -115,6 +115,24 @@ class Trip {
     );
   }
 
+  Trip copyWith(TripStatus newStatus) {
+    return Trip(
+      id: id,
+      status: newStatus,
+      clientName: clientName,
+      tripName: tripName,
+      busNo: busNo,
+      busSizeId: busSizeId,
+      startDate: startDate,
+      endDate: endDate,
+      orgArea: orgArea,
+      orgCity: orgCity,
+      destArea: destArea,
+      destCity: destCity,
+      details: details,
+    );
+  }
+
   @override
   String toString() {
     return 'Trip(id: $id, status: $status, client: $clientName, '

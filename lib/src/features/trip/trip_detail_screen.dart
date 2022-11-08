@@ -66,6 +66,7 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                     TripCard(
                       info: widget.info,
                       onPressed: () {},
+                      onYesNo: (id, isYes, extra) {},
                       showDetail: true,
                     ),
                   ],

@@ -190,17 +190,17 @@ class _TripsTabBodyState extends ConsumerState<TripsListViewBody> {
           (_, state) => state.showAlertDialogOnError(context));
 
       state = ref.watch(todayTripListCtrProvider);
-      if (state.isLoading == false) {
-        trips = ref.watch(todayFilteredTripsProvider).value;
-      }
+      //if (state.isLoading == false) {
+      trips = ref.watch(todayFilteredTripsProvider).value;
+      //}
     } else {
       ref.listen<AsyncValue>(pastTripListCtrProvider.select((state) => state),
           (_, state) => state.showAlertDialogOnError(context));
 
       state = ref.watch(pastTripListCtrProvider);
-      if (state.isLoading == false) {
-        trips = ref.watch(pastFilteredTripsProvider).value;
-      }
+      //if (state.isLoading == false) {
+      trips = ref.watch(pastFilteredTripsProvider).value;
+      //}
     }
 
     developer
@@ -216,6 +216,17 @@ class _TripsTabBodyState extends ConsumerState<TripsListViewBody> {
             info: trips!.elementAt(itemIdx),
             onPressed: () {
               context.pushNamed(AppRoute.tripDetail.name);
+            },
+            onYesNo: (id, isYes, extra) {
+              if (widget.kind == TripKind.today) {
+                ref
+                    .read(todayTripListCtrProvider.notifier)
+                    .doChangeTrip(id, isYes, extra);
+              } else {
+                ref
+                    .read(pastTripListCtrProvider.notifier)
+                    .doChangeTrip(id, isYes, extra);
+              }
             },
           );
         },

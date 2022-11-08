@@ -16,20 +16,34 @@ final pastTripsFilter = StateProvider<TripStatus>((ref) => TripStatus.all);
 // * TripsListController
 // * ---------------------------------------------------------------------------
 
-class TripsListController extends StateNotifier<AsyncValue<void>> {
+class TripsListController extends StateNotifier<AsyncValue<bool>> {
   TripsListController({
     required this.tripRepo,
-  }) : super(const AsyncData(null));
+  }) : super(const AsyncData(false));
 
   final TripRepository tripRepo;
 
-  Future<void> doFetchTrips() async {
+  Future<bool?> doFetchTrips() async {
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => tripRepo.doFetchTrips());
 
     if (mounted) {
       state = newState;
     }
+
+    return newState.value;
+  }
+
+  Future<bool?> doChangeTrip(String tripId, bool isYes, String? extra) async {
+    state = const AsyncValue.loading();
+    final newState = await AsyncValue.guard(
+        () => tripRepo.doChangeTrip(tripId, isYes, extra));
+
+    if (mounted) {
+      state = newState;
+    }
+
+    return newState.value;
   }
 }
 
