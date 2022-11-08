@@ -34,10 +34,11 @@ class TripsListController extends StateNotifier<AsyncValue<bool>> {
     return newState.value;
   }
 
-  Future<bool?> doChangeTrip(String tripId, bool isYes, String? extra) async {
+  Future<bool?> doChangeTrip(
+      Trip info, TripStatus targetStatus, String? extra) async {
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(
-        () => tripRepo.doChangeTrip(tripId, isYes, extra));
+        () => tripRepo.doChangeTrip(info, targetStatus, extra));
 
     if (mounted) {
       state = newState;

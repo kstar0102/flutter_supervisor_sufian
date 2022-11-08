@@ -56,56 +56,39 @@ class TripRepository {
     }
   }
 
-  Future<bool> doChangeTrip(String tripId, bool isYes, String? extra) async {
+  Future<bool> doChangeTrip(
+      Trip target, TripStatus targetStatus, String? extra) async {
     // search target trip from list.
-    final searched = _trips.value.where((t) => t.id == tripId).toList();
+    final searched = _trips.value.where((t) => t.id == target.id).toList();
     if (searched.isEmpty) {
       return false;
     }
 
     // decide command to execute for this trip.
-    final targetTrip = searched.first;
     String command;
-    TripStatus status = TripStatus.all;
-    if (targetTrip.status == TripStatus.pending) {
-      if (isYes == true) {
-        command = 'accept';
-        status = TripStatus.accepted;
-      } else {
-        command = 'reject';
-        status = TripStatus.rejected;
-      }
-    } else if (targetTrip.status == TripStatus.accepted) {
-      if (isYes == true) {
-        command = 'start';
-        status = TripStatus.started;
-      } else {
-        command = 'reject';
-        status = TripStatus.rejected;
-      }
-    } else if (targetTrip.status == TripStatus.started) {
-      if (isYes == true) {
-        command = 'finish';
-        status = TripStatus.finished;
-      } else {
-        command = 'navigation'; // ? is command?
-      }
+    if (targetStatus == TripStatus.accepted) {
+      command = 'accept';
+    } else if (targetStatus == TripStatus.rejected) {
+      command = 'reject';
+    } else if (targetStatus == TripStatus.started) {
+      command = 'start';
+    } else if (targetStatus == TripStatus.finished) {
+      command = 'finish';
+    } else if (targetStatus == TripStatus.canceled) {
+      command = 'cancel';
     } else {
-      // no commands for this status.
       return false;
     }
 
-    final data = await DioClient.postDailyTripCommand(targetTrip.id, command);
+    final data = await DioClient.postDailyTripCommand(target.id, command);
     developer.log('doChangeTrip() returned: $data');
-
-    assert(status != TripStatus.all);
 
     final result = data['result'];
     if (result == 'Changed to $command') {
       // update target trip's status
-      var index = _trips.value.indexOf(targetTrip);
+      var index = _trips.value.indexOf(searched.first);
       var trips = _trips.value;
-      trips[index] = targetTrip.copyWith(status);
+      trips[index] = searched.first.copyWith(targetStatus);
       _trips.value = trips;
 
       return true;

@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,8 @@ import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 
-typedef TripCardCallback = void Function(String id, bool isYes, String? extra);
+typedef TripCardCallback = void Function(
+    Trip info, TripStatus targetStatus, String? extra);
 
 class TripCard extends StatefulWidget {
   const TripCard({
@@ -235,7 +237,18 @@ class _TripCardState extends State<TripCard> {
                     widget.info.status,
                   ).then((value) {
                     if (value == true) {
-                      widget.onYesNo(widget.info.id, true, null);
+                      TripStatus targetStatus = TripStatus.all;
+                      if (widget.info.status == TripStatus.pending) {
+                        targetStatus = TripStatus.accepted;
+                      } else if (widget.info.status == TripStatus.accepted) {
+                        targetStatus = TripStatus.started;
+                      } else if (widget.info.status == TripStatus.started) {
+                        targetStatus = TripStatus.finished;
+                      } else {
+                        developer.log('TripCard: unknown state change...');
+                        return;
+                      }
+                      widget.onYesNo(widget.info, targetStatus, null);
                     }
                   });
                 },
@@ -268,7 +281,7 @@ class _TripCardState extends State<TripCard> {
                     widget.info.id,
                   ).then((value) {
                     if (value != null) {
-                      widget.onYesNo(widget.info.id, false, value);
+                      widget.onYesNo(widget.info, TripStatus.rejected, value);
                     }
                   });
                 }

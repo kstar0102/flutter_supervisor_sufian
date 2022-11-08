@@ -13,8 +13,9 @@ import 'package:alnabali_driver/src/features/trip/trips_list_controller.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
-import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 import 'package:alnabali_driver/src/widgets/buttons_tabbar.dart';
+import 'package:alnabali_driver/src/widgets/dialogs.dart';
+import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 
 const kTodayFilters = [
   TripStatus.all,
@@ -217,15 +218,23 @@ class _TripsTabBodyState extends ConsumerState<TripsListViewBody> {
             onPressed: () {
               context.pushNamed(AppRoute.tripDetail.name);
             },
-            onYesNo: (id, isYes, extra) {
+            onYesNo: (info, targetStatus, extra) {
+              successCallback(value) {
+                if (value == true) {
+                  showOkayDialog(context, info, targetStatus);
+                }
+              }
+
               if (widget.kind == TripKind.today) {
                 ref
                     .read(todayTripListCtrProvider.notifier)
-                    .doChangeTrip(id, isYes, extra);
+                    .doChangeTrip(info, targetStatus, extra)
+                    .then(successCallback);
               } else {
                 ref
                     .read(pastTripListCtrProvider.notifier)
-                    .doChangeTrip(id, isYes, extra);
+                    .doChangeTrip(info, targetStatus, extra)
+                    .then(successCallback);
               }
             },
           );

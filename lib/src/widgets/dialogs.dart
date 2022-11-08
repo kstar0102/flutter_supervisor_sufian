@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
+import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 
@@ -53,27 +54,28 @@ Widget _buildDialogTitle(String companyName, String tripName) {
 // * ---------------------------------------------------------------------------
 
 Future<void> showOkayDialog(
-  BuildContext context,
-  String companyName,
-  String tripName,
-  String tripNo,
-  bool isAccept,
-) {
+    BuildContext context, Trip info, TripStatus okStatus) {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       String title = '';
-      if (isAccept) {
-        title = 'You have accepted trip # $tripNo'.hardcoded;
-      } else {
-        title = 'You have finished trip # $tripNo'.hardcoded;
+      if (okStatus == TripStatus.accepted) {
+        title = 'You have accepted trip # ${info.id}'.hardcoded;
+      } else if (okStatus == TripStatus.rejected) {
+        title = 'You have rejected trip # ${info.id}'.hardcoded;
+      } else if (okStatus == TripStatus.started) {
+        title = 'You have started trip # ${info.id}'.hardcoded;
+      } else if (okStatus == TripStatus.finished) {
+        title = 'You have finished trip # ${info.id}'.hardcoded;
+      } else if (okStatus == TripStatus.canceled) {
+        title = 'You have canceled trip # ${info.id}'.hardcoded;
       }
 
       return AlertDialog(
         shape: dialogShape,
         titlePadding: titlePadding,
-        title: _buildDialogTitle(companyName, tripName),
+        title: _buildDialogTitle(info.clientName, info.tripName),
         contentPadding: contentPadding,
         content: Column(
           mainAxisSize: MainAxisSize.min,
