@@ -1,14 +1,12 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/trip_busline.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
-import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
@@ -353,7 +351,7 @@ class _TripCardState extends State<TripCard> {
       onTap: () {
         if (widget.showDetail) return;
 
-        context.goNamed(AppRoute.tripDetail.name);
+        widget.onPressed();
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 60.w),

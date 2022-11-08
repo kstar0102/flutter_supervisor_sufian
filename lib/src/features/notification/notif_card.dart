@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/notification/notif.dart';
-import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
 class NotifCard extends StatelessWidget {
@@ -44,9 +42,7 @@ class NotifCard extends StatelessWidget {
               borderRadius: borderRadius,
               child: InkWell(
                 borderRadius: borderRadius,
-                onTap: () {
-                  context.goNamed(AppRoute.tripDetail.name);
-                },
+                onTap: null, //onPressed,
                 //splashColor: kColorPrimaryBlue.withOpacity(0.1),
                 //splashFactory: InkSplash.splashFactory,
                 child: Container(
