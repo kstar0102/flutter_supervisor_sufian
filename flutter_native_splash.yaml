@@ -1,0 +1,6 @@
+flutter_native_splash:
+  background_image: assets/images/splash.png
+  #image: assets/images/icon.png
+  #android_gravity: top
+  #ios_content_mode: top
+  android_disable_fullscreen: true

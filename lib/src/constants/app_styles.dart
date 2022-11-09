@@ -17,7 +17,7 @@ const Color kColorAvatarBorder = Color(0xFFADB4BA);
 
 const kBgDecoration = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('assets/images/bg_normal.jpg'),
+    image: AssetImage('assets/images/bg_normal.png'),
     fit: BoxFit.cover,
   ),
 );

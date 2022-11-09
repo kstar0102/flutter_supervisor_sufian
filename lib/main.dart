@@ -8,5 +8,8 @@ import 'package:alnabali_driver/src/app.dart';
 void main() {
   setPathUrlStrategy();
 
+  //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   runApp(const ProviderScope(child: AlnabaliDriverApp()));
 }
