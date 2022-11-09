@@ -62,8 +62,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // if (_emailValidator.isValid(username) &&
     //     _passwordValidator.isValid(password)) {
     final controller = ref.read(loginControllerProvider.notifier);
-    //controller.doLogin(username, password).then(
-    controller.doLogin('driver1@gmail.com', '123123').then(
+    controller.doLogin(username, password).then(
+      //controller.doLogin('driver1@gmail.com', '123123').then(
       (value) {
         // go home only if login success.
         if (value == true) {
