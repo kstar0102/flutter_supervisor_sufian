@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/features/trip/trip_card.dart';
+import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/features/trip/trips_list_controller.dart';
-import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/buttons_tabbar.dart';
@@ -133,9 +131,11 @@ class _TripsListViewState extends ConsumerState<TripsListView>
                   .toList(),
               onTap: (index) {
                 if (widget.kind == TripKind.today) {
-                  ref.read(todayTripsFilter.state).state = kTodayFilters[index];
+                  ref.read(todayFilterProvider.state).state =
+                      kTodayFilters[index];
                 } else {
-                  ref.read(pastTripsFilter.state).state = kPastFilters[index];
+                  ref.read(pastFilterProvider.state).state =
+                      kPastFilters[index];
                 }
               },
             ),
@@ -176,9 +176,9 @@ class _TripsTabBodyState extends ConsumerState<TripsListViewBody> {
     super.initState();
 
     if (widget.kind == TripKind.today) {
-      ref.read(todayTripListCtrProvider.notifier).doFetchTrips();
+      ref.read(todayTripsListCtrProvider.notifier).doFetchTrips();
     } else {
-      ref.read(pastTripListCtrProvider.notifier).doFetchTrips();
+      ref.read(pastTripsListCtrProvider.notifier).doFetchTrips();
     }
   }
 
@@ -186,22 +186,19 @@ class _TripsTabBodyState extends ConsumerState<TripsListViewBody> {
   Widget build(BuildContext context) {
     AsyncValue<void> state;
     TripList? trips;
+
     if (widget.kind == TripKind.today) {
-      ref.listen<AsyncValue>(todayTripListCtrProvider.select((state) => state),
+      ref.listen<AsyncValue>(todayTripsListCtrProvider.select((state) => state),
           (_, state) => state.showAlertDialogOnError(context));
 
-      state = ref.watch(todayTripListCtrProvider);
-      //if (state.isLoading == false) {
+      state = ref.watch(todayTripsListCtrProvider);
       trips = ref.watch(todayFilteredTripsProvider).value;
-      //}
     } else {
-      ref.listen<AsyncValue>(pastTripListCtrProvider.select((state) => state),
+      ref.listen<AsyncValue>(pastTripsListCtrProvider.select((state) => state),
           (_, state) => state.showAlertDialogOnError(context));
 
-      state = ref.watch(pastTripListCtrProvider);
-      //if (state.isLoading == false) {
+      state = ref.watch(pastTripsListCtrProvider);
       trips = ref.watch(pastFilteredTripsProvider).value;
-      //}
     }
 
     developer
@@ -215,9 +212,6 @@ class _TripsTabBodyState extends ConsumerState<TripsListViewBody> {
         itemBuilder: (BuildContext context, int itemIdx) {
           return TripCard(
             info: trips!.elementAt(itemIdx),
-            onPressed: () {
-              context.pushNamed(AppRoute.tripDetail.name);
-            },
             onYesNo: (info, targetStatus, extra) {
               successCallback(value) {
                 if (value == true) {
@@ -227,12 +221,12 @@ class _TripsTabBodyState extends ConsumerState<TripsListViewBody> {
 
               if (widget.kind == TripKind.today) {
                 ref
-                    .read(todayTripListCtrProvider.notifier)
+                    .read(todayTripsListCtrProvider.notifier)
                     .doChangeTrip(info, targetStatus, extra)
                     .then(successCallback);
               } else {
                 ref
-                    .read(pastTripListCtrProvider.notifier)
+                    .read(pastTripsListCtrProvider.notifier)
                     .doChangeTrip(info, targetStatus, extra)
                     .then(successCallback);
               }

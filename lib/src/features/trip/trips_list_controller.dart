@@ -6,11 +6,12 @@ import 'package:alnabali_driver/src/features/trip/trip_repository.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 
 // * ---------------------------------------------------------------------------
-// * TripsFilterProvider
+// * TripsFilterProviders
 // * ---------------------------------------------------------------------------
 
-final todayTripsFilter = StateProvider<TripStatus>((ref) => TripStatus.all);
-final pastTripsFilter = StateProvider<TripStatus>((ref) => TripStatus.all);
+final tripsKindProvider = StateProvider<TripKind>((ref) => TripKind.today);
+final todayFilterProvider = StateProvider<TripStatus>((ref) => TripStatus.all);
+final pastFilterProvider = StateProvider<TripStatus>((ref) => TripStatus.all);
 
 // * ---------------------------------------------------------------------------
 // * TripsListController
@@ -46,20 +47,24 @@ class TripsListController extends StateNotifier<AsyncValue<bool>> {
 
     return newState.value;
   }
+
+  Trip? getTripInfo(String tripId) {
+    return tripRepo.getTripInfo(tripId);
+  }
 }
 
 // * ---------------------------------------------------------------------------
 // * TripsListControllerProviders
 // * ---------------------------------------------------------------------------
 
-final todayTripListCtrProvider =
-    StateNotifierProvider.autoDispose<TripsListController, AsyncValue<void>>(
+final todayTripsListCtrProvider =
+    StateNotifierProvider.autoDispose<TripsListController, AsyncValue<bool>>(
         (ref) {
   return TripsListController(tripRepo: ref.watch(todayTripsRepoProvider));
 });
 
-final pastTripListCtrProvider =
-    StateNotifierProvider.autoDispose<TripsListController, AsyncValue<void>>(
+final pastTripsListCtrProvider =
+    StateNotifierProvider.autoDispose<TripsListController, AsyncValue<bool>>(
         (ref) {
   return TripsListController(tripRepo: ref.watch(pastTripsRepoProvider));
 });
@@ -69,13 +74,13 @@ final pastTripListCtrProvider =
 // * ---------------------------------------------------------------------------
 
 final todayFilteredTripsProvider = StreamProvider.autoDispose<TripList>((ref) {
-  final filter = ref.watch(todayTripsFilter);
+  final filter = ref.watch(todayFilterProvider);
   developer.log('today filter=$filter');
   return ref.watch(todayTripsRepoProvider).watchFilterTrips(filter);
 });
 
 final pastFilteredTripsProvider = StreamProvider.autoDispose<TripList>((ref) {
-  final filter = ref.watch(pastTripsFilter);
+  final filter = ref.watch(pastFilterProvider);
   developer.log('past filter=$filter');
   return ref.watch(pastTripsRepoProvider).watchFilterTrips(filter);
 });

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+enum TripKind {
+  today,
+  past,
+}
+
 enum TripStatus {
   all,
   pending,

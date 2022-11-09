@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip.dart';
+import 'package:alnabali_driver/src/features/trip/trips_list_controller.dart';
 import 'package:alnabali_driver/src/features/trip/trips_list_view.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
-class HomeTripsPage extends StatefulWidget {
+class HomeTripsPage extends ConsumerStatefulWidget {
   const HomeTripsPage({Key? key}) : super(key: key);
 
   @override
-  State<HomeTripsPage> createState() => _HomeTripsPageState();
+  ConsumerState<HomeTripsPage> createState() => _HomeTripsPageState();
 }
 
-class _HomeTripsPageState extends State<HomeTripsPage>
+class _HomeTripsPageState extends ConsumerState<HomeTripsPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -72,6 +74,10 @@ class _HomeTripsPageState extends State<HomeTripsPage>
                 Tab(text: 'TODAY TRIPS'.hardcoded),
                 Tab(text: 'PAST TRIPS'.hardcoded),
               ],
+              onTap: (index) {
+                ref.read(tripsKindProvider.state).state =
+                    TripKind.values[index];
+              },
             ),
           ),
           Flexible(

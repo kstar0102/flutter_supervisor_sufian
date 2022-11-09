@@ -6,11 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
-enum TripKind {
-  today,
-  past,
-}
-
 @immutable
 class Trip {
   const Trip({

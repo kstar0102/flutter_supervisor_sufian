@@ -14,8 +14,14 @@ class TripRepository {
   TripRepository({required this.repoType});
 
   final TripKind repoType;
-
   final _trips = InMemoryStore<TripList>([]);
+
+  Trip? getTripInfo(String tripId) {
+    final searched = _trips.value.where((t) => t.id == tripId).toList();
+    if (searched.isEmpty) return null;
+
+    return searched.first;
+  }
 
   Stream<TripList> watchFilterTrips(TripStatus filter) {
     return _trips.stream.map((tripsData) {
