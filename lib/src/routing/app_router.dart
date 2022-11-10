@@ -7,6 +7,7 @@ import 'package:alnabali_driver/src/features/auth/forget_mobile_screen.dart';
 import 'package:alnabali_driver/src/features/auth/forget_otp_screen.dart';
 import 'package:alnabali_driver/src/features/auth/forget_pwd_screen.dart';
 import 'package:alnabali_driver/src/features/auth/login_screen.dart';
+import 'package:alnabali_driver/src/features/navigation/navigation_screen.dart';
 import 'package:alnabali_driver/src/features/profile/change_password_screen.dart';
 import 'package:alnabali_driver/src/features/profile/edit_profile_screen.dart';
 import 'package:alnabali_driver/src/features/trip/home_screen.dart';
@@ -19,6 +20,7 @@ enum AppRoute {
   forgetPwd,
   home,
   tripDetail,
+  navigation,
   editProfile,
   changePwd,
 }
@@ -77,6 +79,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           fullscreenDialog: true,
           child: TripDetailScreen(tripId: state.params['tripId']!),
+        ),
+      ),
+      GoRoute(
+        path: '/navigation',
+        name: AppRoute.navigation.name,
+        pageBuilder: (context, state) => MaterialPage(
+          key: state.pageKey,
+          fullscreenDialog: true,
+          child: const NavigationScreen(),
         ),
       ),
       GoRoute(

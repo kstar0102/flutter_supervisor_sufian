@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // button types used in login course.
 enum LoginButtonType { logIn, send, verify, reset }
@@ -45,67 +44,67 @@ class _LoginButtonState extends State<LoginButton> {
         btnTitle = 'UNKNOWN'.hardcoded;
     }
 
-    // return Stack(
-    //   alignment: Alignment.center,
-    //   children: [
-    //     Container(
-    //       width: btnW,
-    //       decoration: BoxDecoration(
-    //         color: Colors.transparent,
-    //         borderRadius: const BorderRadius.all(Radius.circular(50)),
-    //         boxShadow: [
-    //           BoxShadow(
-    //             color: Colors.black.withOpacity(0.2),
-    //             spreadRadius: 1,
-    //             blurRadius: 1,
-    //             offset: const Offset(0, 2),
-    //           ),
-    //         ],
-    //       ),
-    //       child: Image.asset('assets/images/btn_login.png'),
-    //     ),
-    //     Positioned.fill(
-    //       child: TextButton(
-    //         style: TextButton.styleFrom(
-    //           shape: const StadiumBorder(),
-    //           foregroundColor: const Color(0xFF0055A6),
-    //           textStyle: const TextStyle(
-    //             fontFamily: 'Montserrat',
-    //             fontWeight: FontWeight.w700,
-    //             fontSize: 16,
-    //           ),
-    //         ),
-    //         onPressed: widget.onPressed,
-    //         child: Text(btnTitle),
-    //       ),
-    //     ),
-    //   ],
-    // );
     return Stack(
+      alignment: Alignment.center,
       children: [
-        SizedBox(
-          width: 771.w,
-          height: 128.h,
+        Container(
+          width: kTextfieldW - 40.w,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
           child: Image.asset('assets/images/btn_login.png'),
         ),
         Positioned.fill(
-          child: widget.isLoading
-              ? const SizedBox(
-                  child: Center(child: CircularProgressIndicator()))
-              : TextButton(
-                  onPressed: widget.onPressed,
-                  child: Text(
-                    btnTitle,
-                    style: const TextStyle(
-                      color: kColorPrimaryBlue,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+          child: TextButton(
+            style: TextButton.styleFrom(
+              shape: const StadiumBorder(),
+              foregroundColor: const Color(0xFF0055A6),
+              textStyle: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w700,
+                fontSize: 46.sp,
+              ),
+            ),
+            onPressed: widget.onPressed,
+            child: Text(btnTitle),
+          ),
         ),
       ],
     );
+    // return Stack(
+    //   children: [
+    //     SizedBox(
+    //       width: kTextfieldW,
+    //       height: kTextfieldH,
+    //       child: Image.asset('assets/images/btn_login.png'),
+    //     ),
+    //     Positioned.fill(
+    //       child: widget.isLoading
+    //           ? const SizedBox(
+    //               child: Center(child: CircularProgressIndicator()))
+    //           : TextButton(
+    //               onPressed: widget.onPressed,
+    //               child: Text(
+    //                 btnTitle,
+    //                 style: const TextStyle(
+    //                   color: kColorPrimaryBlue,
+    //                   fontFamily: 'Montserrat',
+    //                   fontWeight: FontWeight.w700,
+    //                   fontSize: 16,
+    //                 ),
+    //               ),
+    //             ),
+    //     ),
+    //   ],
+    // );
   }
 }

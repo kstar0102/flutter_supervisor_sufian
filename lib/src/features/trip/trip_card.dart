@@ -270,7 +270,7 @@ class _TripCardState extends State<TripCard> {
               height: btnH,
               onPressed: () {
                 if (widget.info.status == TripStatus.started) {
-                  // ? navigation to where???
+                  context.pushNamed(AppRoute.navigation.name);
                 } else {
                   showRejectDialog(
                     context,

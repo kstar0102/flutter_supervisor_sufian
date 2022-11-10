@@ -7,10 +7,12 @@ import 'package:go_router/go_router.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/auth/auth_controllers.dart';
+import 'package:alnabali_driver/src/features/auth/login_validators.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/utils/string_validators.dart';
+import 'package:alnabali_driver/src/widgets/dialogs.dart';
 import 'package:alnabali_driver/src/widgets/login_button.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 
@@ -21,65 +23,52 @@ class LoginScreen extends ConsumerStatefulWidget {
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen>
+    with EmailAndPasswordValidators {
   final _node = FocusScopeNode();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _emailValidator = EmailSubmitRegexValidator();
-  final _passwordValidator = NonEmptyStringValidator();
 
   String get username => _usernameController.text;
   String get password => _passwordController.text;
 
   @override
   void dispose() {
-    _node.dispose();
-
     // TextEditingControllers should be always disposed.
+    _node.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
 
     super.dispose();
   }
 
-  // String? _emailErrorText(String email) {
-  //   final bool showErrorText = !_emailValidator.isValid(email);
-  //   final String errorText = email.isEmpty
-  //       ? 'Email can\'t be empty'.hardcoded
-  //       : 'Invalid email'.hardcoded;
-  //   return showErrorText ? errorText : null;
-  // }
-
-  // String? _passwordErrorText(String password) {
-  //   final bool showErrorText = !_passwordValidator.isValid(password);
-  //   final String errorText = password.isEmpty
-  //       ? 'Password can\'t be empty'.hardcoded
-  //       : 'Password is too short'.hardcoded;
-  //   return showErrorText ? errorText : null;
-  // }
-
   void _submit() {
-    // if (_emailValidator.isValid(username) &&
-    //     _passwordValidator.isValid(password)) {
-    final controller = ref.read(loginControllerProvider.notifier);
-    controller.doLogin(username, password).then(
-      //controller.doLogin('driver1@gmail.com', '123123').then(
-      (value) {
-        // go home only if login success.
-        if (value == true) {
-          context.goNamed(AppRoute.home.name);
-        }
-      },
-    );
-    // }
+    // only submit if validation passes
+    if (emailSubmitValidator.isValid(username) &&
+        passwordSignInSubmitValidator.isValid(password)) {
+      final controller = ref.read(loginControllerProvider.notifier);
+      controller.doLogin(username, password).then(
+        //controller.doLogin('driver1@gmail.com', '123123').then(
+        (value) {
+          // go home only if login success.
+          if (value == true) {
+            context.goNamed(AppRoute.home.name);
+          }
+        },
+      );
+    } else {
+      showToastMessage('Please input email and password correctly.');
+    }
   }
 
   void _emailEditingComplete() {
-    _node.nextFocus();
+    if (canSubmitEmail(username)) {
+      _node.nextFocus();
+    }
   }
 
   void _passwordEditingComplete() {
-    if (!_emailValidator.isValid(username)) {
+    if (!canSubmitEmail(username)) {
       _node.previousFocus();
       return;
     }
@@ -124,7 +113,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       height: kTextfieldH,
                       child: TextField(
                         controller: _usernameController,
-                        //validator: (username) => state.emailErrorText(username ?? ''),
+                        //validator: (username) => emailErrorText(username ?? ''),
                         autocorrect: false,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.emailAddress,
@@ -159,7 +148,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: TextField(
                         controller: _passwordController,
                         keyboardType: TextInputType.visiblePassword,
-                        //validator: (pwd) => state.passwordErrorText(pwd ?? ''),
+                        //validator: (pwd) => passwordErrorText(pwd ?? ''),
                         obscureText: true,
                         autocorrect: false,
                         textInputAction: TextInputAction.done,
