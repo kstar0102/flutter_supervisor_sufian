@@ -116,7 +116,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
           child: Column(
             children: [
               Container(
-                width: double.infinity,
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: 140.h),
                 child: Text(
@@ -139,95 +138,99 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                         child: CustomPaint(painter: AccountBgPainter()),
                       ),
                     ),
-                    FocusScope(
-                      node: _node,
-                      child: Column(
-                        //mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(child: SizedBox(height: 160.h)),
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: kColorAvatarBorder, width: 1.0),
-                            ),
-                            child: CircleAvatar(
-                              radius: 165.h,
-                              backgroundColor: Colors.transparent,
-                              backgroundImage: AssetImage(profile != null
-                                  ? profile.profileImage
-                                  : _avatarImg),
-                            ),
-                          ),
-                          Flexible(child: SizedBox(height: 30.h)),
-                          Text(
-                            profile != null ? profile.nameEN : _nameEn,
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 42.sp,
-                              color: kColorPrimaryBlue,
-                            ),
-                          ),
-                          Flexible(child: SizedBox(height: 160.h)),
-                          ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.name,
-                            controller: _name,
-                            onEditComplete: () {
-                              if (usernameErrorText(_name.text) == null) {
-                                _node.nextFocus();
-                              }
-                            },
-                          ),
-                          spacer,
-                          ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.phone,
-                            controller: _phone,
-                            onEditComplete: () {
-                              if (phoneErrorText(_phone.text) == null) {
-                                _node.nextFocus();
-                              }
-                            },
-                          ),
-                          spacer,
-                          ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.dateOfBirth,
-                            controller: _birthday,
-                            onEditComplete: () {
-                              if (birthErrorText(_birthday.text) == null) {
-                                _node.nextFocus();
-                              }
-                            },
-                          ),
-                          spacer,
-                          ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.address,
-                            controller: _address,
-                            onEditComplete: () {
-                              _submit();
-                            },
-                          ),
-                          Flexible(child: SizedBox(height: 140.h)),
-                          SizedBox(
-                            width: 700.w,
-                            height: 120.h,
-                            child: ElevatedButton(
-                              onPressed: _submit,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: kColorPrimaryBlue,
-                                shape: const StadiumBorder(),
-                              ),
-                              child: Text(
-                                'SAVE'.hardcoded,
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 42.sp,
+                    SizedBox.expand(
+                      child: FocusScope(
+                        node: _node,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(child: SizedBox(height: 160.h)),
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: kColorAvatarBorder, width: 1.0),
+                                ),
+                                child: CircleAvatar(
+                                  radius: 165.h,
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: AssetImage(profile != null
+                                      ? profile.profileImage
+                                      : _avatarImg),
                                 ),
                               ),
-                            ),
+                              Flexible(child: SizedBox(height: 30.h)),
+                              Text(
+                                profile != null ? profile.nameEN : _nameEn,
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 42.sp,
+                                  color: kColorPrimaryBlue,
+                                ),
+                              ),
+                              Flexible(child: SizedBox(height: 160.h)),
+                              ProfileTextField(
+                                txtFieldType: ProfileTextFieldType.name,
+                                controller: _name,
+                                onEditComplete: () {
+                                  if (usernameErrorText(_name.text) == null) {
+                                    _node.nextFocus();
+                                  }
+                                },
+                              ),
+                              spacer,
+                              ProfileTextField(
+                                txtFieldType: ProfileTextFieldType.phone,
+                                controller: _phone,
+                                onEditComplete: () {
+                                  if (phoneErrorText(_phone.text) == null) {
+                                    _node.nextFocus();
+                                  }
+                                },
+                              ),
+                              spacer,
+                              ProfileTextField(
+                                txtFieldType: ProfileTextFieldType.dateOfBirth,
+                                controller: _birthday,
+                                onEditComplete: () {
+                                  if (birthErrorText(_birthday.text) == null) {
+                                    _node.nextFocus();
+                                  }
+                                },
+                              ),
+                              spacer,
+                              ProfileTextField(
+                                txtFieldType: ProfileTextFieldType.address,
+                                controller: _address,
+                                onEditComplete: () {
+                                  _submit();
+                                },
+                              ),
+                              Flexible(child: SizedBox(height: 140.h)),
+                              SizedBox(
+                                width: 700.w,
+                                height: 120.h,
+                                child: ElevatedButton(
+                                  onPressed: _submit,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: kColorPrimaryBlue,
+                                    shape: const StadiumBorder(),
+                                  ),
+                                  child: Text(
+                                    'SAVE'.hardcoded,
+                                    style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 42.sp,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ],

@@ -99,7 +99,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         ),
       ),
       floatingActionButton: SizedBox(
-        height: 150.h,
+        height: 138.h,
         child: IconButton(
           onPressed: () => context.pop(),
           //iconSize: 89.h,
