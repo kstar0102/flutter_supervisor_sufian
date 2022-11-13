@@ -1,5 +1,6 @@
-import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
+
+import 'package:alnabali_driver/src/network/dio_exception.dart';
 
 class DioClient {
   static final _baseOptions = BaseOptions(
@@ -29,10 +30,9 @@ class DioClient {
 
       return _token;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
-
-    return ''; // error-prone...
   }
 
   // * POST: '/login'
@@ -46,7 +46,8 @@ class DioClient {
           .post('/driver/login', data: {'email': email, 'password': password});
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -73,7 +74,8 @@ class DioClient {
       final response = await dio.get('/driver/profile/$uid');
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -102,7 +104,8 @@ class DioClient {
       );
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -120,7 +123,8 @@ class DioClient {
       );
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -138,7 +142,8 @@ class DioClient {
       );
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -156,7 +161,8 @@ class DioClient {
       );
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -174,7 +180,8 @@ class DioClient {
       );
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -189,7 +196,8 @@ class DioClient {
       final response = await dio.get('/notification/all');
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -204,7 +212,8 @@ class DioClient {
       final response = await dio.get('/notification/today');
       return response.data;
     } on DioError catch (e) {
-      developer.log('DioError: $e');
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 }
