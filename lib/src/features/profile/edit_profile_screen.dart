@@ -1,3 +1,4 @@
+import 'package:alnabali_driver/src/features/profile/edit_profile_validators.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,11 +21,14 @@ class EditProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
+    with EidtProfileValidators {
+  final _node = FocusScopeNode();
   final _name = TextEditingController();
   final _phone = TextEditingController();
   final _birthday = TextEditingController();
   final _address = TextEditingController();
+
   String _avatarImg = 'assets/images/user_avatar.png';
   String _nameEn = 'unknown'.hardcoded;
 
@@ -33,7 +37,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     super.initState();
 
     // edit controllers must be initialized only once!
-    var profile = ref.read(profileControllerProvider.notifier).currProfile;
+    var profile = ref.read(editProfileCtrProvider.notifier).currProfile;
     if (profile != null) {
       _name.text = profile.nameEN;
       _phone.text = profile.phone;
@@ -44,11 +48,50 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    // TextEditingControllers should be always disposed.
+    _node.dispose();
+    _name.dispose();
+    _phone.dispose();
+    _birthday.dispose();
+    _address.dispose();
+
+    super.dispose();
+  }
+
   void _submit() {
-    final controller = ref.read(profileControllerProvider.notifier);
-    controller
-        .doEditProfile(_name.text, _phone.text, _birthday.text, _address.text)
-        .then((value) {
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    final name = _name.text;
+    final phone = _phone.text;
+    final birth = _birthday.text;
+    final address = _address.text;
+    String? inputError;
+
+    inputError = usernameErrorText(name);
+    if (inputError != null) {
+      showToastMessage(inputError);
+      return;
+    }
+    inputError = phoneErrorText(phone);
+    if (inputError != null) {
+      showToastMessage(inputError);
+      return;
+    }
+    inputError = birthErrorText(birth);
+    if (inputError != null) {
+      showToastMessage(inputError);
+      return;
+    }
+    inputError = addressErrorText(address);
+    if (inputError != null) {
+      showToastMessage(inputError);
+      return;
+    }
+
+    final controller = ref.read(editProfileCtrProvider.notifier);
+    controller.doEditProfile(name, phone, birth, address).then((value) {
       if (value == true) {
         showToastMessage('Updated profile successfully.'.hardcoded);
       }
@@ -57,10 +100,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(profileControllerProvider.select((state) => state),
+    ref.listen<AsyncValue>(editProfileCtrProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
 
-    final state = ref.watch(profileControllerProvider);
+    final state = ref.watch(editProfileCtrProvider);
     final profile = state.value;
 
     final spacer = Flexible(child: SizedBox(height: 20.h));
@@ -73,8 +116,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           child: Column(
             children: [
               Container(
+                width: double.infinity,
                 alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(vertical: 150.h),
+                margin: EdgeInsets.only(top: 140.h),
                 child: Text(
                   'EDIT PROFILE'.hardcoded,
                   style: TextStyle(
@@ -90,78 +134,101 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   alignment: AlignmentDirectional.topCenter,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 40.h),
+                      margin: EdgeInsets.only(top: 140.h),
                       child: SizedBox.expand(
                         child: CustomPaint(painter: AccountBgPainter()),
                       ),
                     ),
-                    Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 40.h),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                                color: kColorAvatarBorder, width: 1.0),
-                          ),
-                          child: CircleAvatar(
-                            radius: 165.h,
-                            backgroundColor: Colors.transparent,
-                            backgroundImage: AssetImage(profile != null
-                                ? profile.profileImage
-                                : _avatarImg),
-                          ),
-                        ),
-                        Flexible(child: SizedBox(height: 30.h)),
-                        Text(
-                          profile != null ? profile.nameEN : _nameEn,
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 42.sp,
-                            color: kColorPrimaryBlue,
-                          ),
-                        ),
-                        Flexible(child: SizedBox(height: 100.h)),
-                        ProfileTextField(
-                          txtFieldType: ProfileTextFieldType.name,
-                          controller: _name,
-                        ),
-                        spacer,
-                        ProfileTextField(
-                          txtFieldType: ProfileTextFieldType.phone,
-                          controller: _phone,
-                        ),
-                        spacer,
-                        ProfileTextField(
-                          txtFieldType: ProfileTextFieldType.dateOfBirth,
-                          controller: _birthday,
-                        ),
-                        spacer,
-                        ProfileTextField(
-                          txtFieldType: ProfileTextFieldType.address,
-                          controller: _address,
-                        ),
-                        Flexible(child: SizedBox(height: 140.h)),
-                        SizedBox(
-                          width: 685.w,
-                          child: ElevatedButton(
-                            onPressed: _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: kColorPrimaryBlue,
-                              shape: const StadiumBorder(),
+                    FocusScope(
+                      node: _node,
+                      child: Column(
+                        //mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(child: SizedBox(height: 160.h)),
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: kColorAvatarBorder, width: 1.0),
                             ),
-                            child: Text(
-                              'SAVE'.hardcoded,
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 42.sp,
+                            child: CircleAvatar(
+                              radius: 165.h,
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: AssetImage(profile != null
+                                  ? profile.profileImage
+                                  : _avatarImg),
+                            ),
+                          ),
+                          Flexible(child: SizedBox(height: 30.h)),
+                          Text(
+                            profile != null ? profile.nameEN : _nameEn,
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 42.sp,
+                              color: kColorPrimaryBlue,
+                            ),
+                          ),
+                          Flexible(child: SizedBox(height: 160.h)),
+                          ProfileTextField(
+                            txtFieldType: ProfileTextFieldType.name,
+                            controller: _name,
+                            onEditComplete: () {
+                              if (usernameErrorText(_name.text) == null) {
+                                _node.nextFocus();
+                              }
+                            },
+                          ),
+                          spacer,
+                          ProfileTextField(
+                            txtFieldType: ProfileTextFieldType.phone,
+                            controller: _phone,
+                            onEditComplete: () {
+                              if (phoneErrorText(_phone.text) == null) {
+                                _node.nextFocus();
+                              }
+                            },
+                          ),
+                          spacer,
+                          ProfileTextField(
+                            txtFieldType: ProfileTextFieldType.dateOfBirth,
+                            controller: _birthday,
+                            onEditComplete: () {
+                              if (birthErrorText(_birthday.text) == null) {
+                                _node.nextFocus();
+                              }
+                            },
+                          ),
+                          spacer,
+                          ProfileTextField(
+                            txtFieldType: ProfileTextFieldType.address,
+                            controller: _address,
+                            onEditComplete: () {
+                              _submit();
+                            },
+                          ),
+                          Flexible(child: SizedBox(height: 140.h)),
+                          SizedBox(
+                            width: 700.w,
+                            height: 120.h,
+                            child: ElevatedButton(
+                              onPressed: _submit,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: kColorPrimaryBlue,
+                                shape: const StadiumBorder(),
+                              ),
+                              child: Text(
+                                'SAVE'.hardcoded,
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 42.sp,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -171,9 +238,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20.h),
+        padding: EdgeInsets.symmetric(vertical: 30.h),
         child: SizedBox(
-          height: 150.h,
+          height: 138.h,
           child: IconButton(
             onPressed: () {
               context.pop();

@@ -167,7 +167,7 @@ class _ForgetOTPScreenState extends ConsumerState<ForgetOTPScreen> {
       floatingActionButton: Padding(
         padding: EdgeInsets.symmetric(vertical: 20.h),
         child: SizedBox(
-          height: 150.h,
+          height: 138.h,
           child: IconButton(
             onPressed: () => context.goNamed(AppRoute.forgetMobile.name),
             //iconSize: 89.h,

@@ -4,14 +4,14 @@ import 'package:alnabali_driver/src/features/profile/profile.dart';
 import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
 
 // * ---------------------------------------------------------------------------
-// * Used in HomAccountPage, EditProfileScreen, ChangePwdScreen.
+// * HomeAccountController
 // * ---------------------------------------------------------------------------
 
-class ProfileController extends StateNotifier<AsyncValue<Profile?>> {
-  ProfileController({required this.profileRepo}) : super(const AsyncData(null));
+class HomeAccountController extends StateNotifier<AsyncValue<Profile?>> {
+  HomeAccountController({required this.profileRepo})
+      : super(const AsyncData(null));
 
   final ProfileRepository profileRepo;
-
   Profile? get currProfile => profileRepo.currProfile;
 
   Future<void> doGetProfile() async {
@@ -23,18 +23,27 @@ class ProfileController extends StateNotifier<AsyncValue<Profile?>> {
     }
   }
 
-  Future<bool> doEditProfile(
-      String name, String phone, String birthday, String address) async {
-    state = const AsyncValue.loading();
-    final newState = await AsyncValue.guard(
-        () => profileRepo.doEditProfile(name, phone, birthday, address));
-
-    if (mounted) {
-      state = newState;
-    }
-
-    return newState.hasValue;
+  Future<void> doLogout() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => profileRepo.doLogout());
   }
+}
+
+final homeAccountCtrProvider = StateNotifierProvider.autoDispose<
+    HomeAccountController, AsyncValue<Profile?>>((ref) {
+  return HomeAccountController(
+      profileRepo: ref.watch(profileRepositoryProvider));
+});
+
+// * ---------------------------------------------------------------------------
+// * ChangePasswordController
+// * ---------------------------------------------------------------------------
+
+class ChangePasswordController extends StateNotifier<AsyncValue<Profile?>> {
+  ChangePasswordController({required this.profileRepo})
+      : super(const AsyncData(null));
+
+  final ProfileRepository profileRepo;
 
   Future<bool> doChangePassword(String currPwd, String newPwd) async {
     state = const AsyncValue.loading();
@@ -48,15 +57,41 @@ class ProfileController extends StateNotifier<AsyncValue<Profile?>> {
 
     return newState.hasValue;
   }
+}
 
-  Future<void> doLogout() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => profileRepo.doLogout());
+final changePwdCtrProvider = StateNotifierProvider.autoDispose<
+    ChangePasswordController, AsyncValue<Profile?>>((ref) {
+  return ChangePasswordController(
+      profileRepo: ref.watch(profileRepositoryProvider));
+});
+
+// * ---------------------------------------------------------------------------
+// * EditProfileController
+// * ---------------------------------------------------------------------------
+
+class EditProfileController extends StateNotifier<AsyncValue<Profile?>> {
+  EditProfileController({required this.profileRepo})
+      : super(const AsyncData(null));
+
+  final ProfileRepository profileRepo;
+  Profile? get currProfile => profileRepo.currProfile;
+
+  Future<bool> doEditProfile(
+      String name, String phone, String birthday, String address) async {
+    state = const AsyncValue.loading();
+    final newState = await AsyncValue.guard(
+        () => profileRepo.doEditProfile(name, phone, birthday, address));
+
+    if (mounted) {
+      state = newState;
+    }
+
+    return newState.hasValue;
   }
 }
 
-final profileControllerProvider =
-    StateNotifierProvider.autoDispose<ProfileController, AsyncValue<Profile?>>(
-        (ref) {
-  return ProfileController(profileRepo: ref.watch(profileRepositoryProvider));
+final editProfileCtrProvider = StateNotifierProvider.autoDispose<
+    EditProfileController, AsyncValue<Profile?>>((ref) {
+  return EditProfileController(
+      profileRepo: ref.watch(profileRepositoryProvider));
 });

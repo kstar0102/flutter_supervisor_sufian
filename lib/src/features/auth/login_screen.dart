@@ -43,22 +43,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   void _submit() {
-    // only submit if validation passes
-    if (emailSubmitValidator.isValid(username) &&
-        passwordSignInSubmitValidator.isValid(password)) {
-      final controller = ref.read(loginControllerProvider.notifier);
-      controller.doLogin(username, password).then(
-        //controller.doLogin('driver1@gmail.com', '123123').then(
-        (value) {
-          // go home only if login success.
-          if (value == true) {
-            context.goNamed(AppRoute.home.name);
-          }
-        },
-      );
-    } else {
-      showToastMessage('Please input email and password correctly.');
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    // check username textfield's validation.
+    final emailError = emailErrorText(username);
+    if (emailError != null) {
+      showToastMessage(emailError);
+      return;
     }
+    // check password textfield's validation.
+    final pwdError = passwordErrorText(password);
+    if (pwdError != null) {
+      showToastMessage(pwdError);
+      return;
+    }
+
+    // try to login with input data.
+    final controller = ref.read(loginControllerProvider.notifier);
+    controller.doLogin(username, password).then(
+      //controller.doLogin('driver1@gmail.com', '123123').then(
+      (value) {
+        // go home only if login success.
+        if (value == true) {
+          context.goNamed(AppRoute.home.name);
+        }
+      },
+    );
   }
 
   void _emailEditingComplete() {
@@ -74,8 +84,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     }
 
     // i can't understand why this called multiple...
-    if (ref.watch(loginControllerProvider).isLoading) return;
-
+    //if (ref.watch(loginControllerProvider).isLoading) return;
     _submit();
   }
 

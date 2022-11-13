@@ -54,6 +54,17 @@ class EmailSubmitRegexValidator extends RegexValidator {
   EmailSubmitRegexValidator() : super(regexSource: '^\\S+@\\S+\\.\\S+\$');
 }
 
+class PhoneRegexValidator extends RegexValidator {
+  PhoneRegexValidator() : super(regexSource: '^[0-9]{7}\$');
+}
+
+class DateRegexValidator extends RegexValidator {
+  DateRegexValidator()
+      : super(
+            regexSource:
+                '^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])\$');
+}
+
 class NonEmptyStringValidator extends StringValidator {
   @override
   bool isValid(String value) {

@@ -11,6 +11,7 @@ import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
 import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:alnabali_driver/src/utils/string_validators.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
@@ -22,13 +23,52 @@ class ChangePasswordScreen extends ConsumerStatefulWidget {
 }
 
 class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
+  final _node = FocusScopeNode();
   final _curr = TextEditingController();
   final _new1 = TextEditingController();
   final _new2 = TextEditingController();
 
+  final StringValidator pwdEmptyValidator = NonEmptyStringValidator();
+
+  @override
+  void dispose() {
+    // TextEditingControllers should be always disposed.
+    _node.dispose();
+    _curr.dispose();
+    _new1.dispose();
+    _new2.dispose();
+
+    super.dispose();
+  }
+
   void _submit() {
-    final controller = ref.read(profileControllerProvider.notifier);
-    controller.doChangePassword(_curr.text, _new1.text).then((value) {
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    final String currPwd = _curr.text;
+    final String new1Pwd = _new1.text;
+    final String new2Pwd = _new2.text;
+
+    // check validations.
+    if (!pwdEmptyValidator.isValid(currPwd)) {
+      showToastMessage('Current password can\'t be empty.'.hardcoded);
+      return;
+    }
+    if (!pwdEmptyValidator.isValid(new1Pwd)) {
+      showToastMessage('Please input new password.'.hardcoded);
+      return;
+    }
+    if (!pwdEmptyValidator.isValid(new2Pwd)) {
+      showToastMessage('Please input confirm new password.'.hardcoded);
+      return;
+    }
+    if (new1Pwd != new2Pwd) {
+      showToastMessage('New passwords do not match.'.hardcoded);
+      return;
+    }
+
+    // try to change password.
+    final controller = ref.read(changePwdCtrProvider.notifier);
+    controller.doChangePassword(currPwd, new1Pwd).then((value) {
       if (value == true) {
         _curr.clear();
         _new1.clear();
@@ -41,12 +81,12 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(profileControllerProvider.select((state) => state),
+    ref.listen<AsyncValue>(changePwdCtrProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
 
-    final state = ref.watch(profileControllerProvider);
+    final state = ref.watch(changePwdCtrProvider);
 
-    final spacer = Flexible(child: SizedBox(height: 20.h));
+    final spacer = Flexible(child: SizedBox(height: 30.h));
 
     return Scaffold(
       body: SizedBox.expand(
@@ -55,7 +95,6 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
           child: Container(
             decoration: kBgDecoration,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   alignment: Alignment.center,
@@ -80,50 +119,70 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                           child: CustomPaint(painter: AccountBgPainter()),
                         ),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 192.h,
-                            margin: EdgeInsets.only(top: 130.h),
-                            child: Image.asset('assets/images/home_icon.png'),
-                          ),
-                          Flexible(child: SizedBox(height: 500.h)),
-                          ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.currPassword,
-                            controller: _curr,
-                          ),
-                          spacer,
-                          ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.newPassword,
-                            controller: _new1,
-                          ),
-                          spacer,
-                          ProfileTextField(
-                            txtFieldType: ProfileTextFieldType.confirmPassword,
-                            controller: _new2,
-                          ),
-                          Flexible(child: SizedBox(height: 140.h)),
-                          SizedBox(
-                            width: 680.w,
-                            child: ElevatedButton(
-                              onPressed: _submit,
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                backgroundColor: kColorPrimaryBlue,
-                                shape: const StadiumBorder(),
-                              ),
-                              child: Text(
-                                'SAVE'.hardcoded,
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 42.sp,
+                      FocusScope(
+                        node: _node,
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 192.h,
+                              margin: EdgeInsets.only(top: 150.h),
+                              child: Image.asset('assets/images/home_icon.png'),
+                            ),
+                            Flexible(flex: 2, child: SizedBox(height: 420.h)),
+                            ProfileTextField(
+                              txtFieldType: ProfileTextFieldType.currPassword,
+                              controller: _curr,
+                              onEditComplete: () {
+                                if (pwdEmptyValidator.isValid(_curr.text)) {
+                                  _node.nextFocus();
+                                }
+                              },
+                            ),
+                            spacer,
+                            ProfileTextField(
+                              txtFieldType: ProfileTextFieldType.newPassword,
+                              controller: _new1,
+                              onEditComplete: () {
+                                if (pwdEmptyValidator.isValid(_new1.text)) {
+                                  _node.nextFocus();
+                                }
+                              },
+                            ),
+                            spacer,
+                            ProfileTextField(
+                              txtFieldType:
+                                  ProfileTextFieldType.confirmPassword,
+                              controller: _new2,
+                              onEditComplete: () {
+                                if (pwdEmptyValidator.isValid(_new2.text)) {
+                                  _submit();
+                                }
+                              },
+                            ),
+                            Flexible(child: SizedBox(height: 220.h)),
+                            SizedBox(
+                              width: 700.w,
+                              height: 120.h,
+                              child: ElevatedButton(
+                                onPressed: _submit,
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  backgroundColor: kColorPrimaryBlue,
+                                  shape: const StadiumBorder(),
+                                ),
+                                child: Text(
+                                  'SAVE'.hardcoded,
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 42.sp,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          //const Expanded(child: SizedBox(height: double.infinity)),
-                        ],
+                            //const Expanded(child: SizedBox(height: double.infinity)),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -136,7 +195,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       floatingActionButton: Padding(
         padding: EdgeInsets.symmetric(vertical: 20.h),
         child: SizedBox(
-          height: 150.h,
+          height: 138.h,
           child: IconButton(
             onPressed: () => context.pop(),
             icon: Image.asset('assets/images/btn_back.png'),

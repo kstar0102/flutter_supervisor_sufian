@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 
 // text field types used in profile screen.
 enum ProfileTextFieldType {
@@ -21,10 +22,12 @@ class ProfileTextField extends StatefulWidget {
     Key? key,
     required this.txtFieldType,
     required this.controller,
+    this.onEditComplete,
   }) : super(key: key);
 
   final ProfileTextFieldType txtFieldType;
   final TextEditingController controller;
+  final VoidCallback? onEditComplete;
 
   @override
   State<ProfileTextField> createState() => _ProfileTextFieldState();
@@ -37,40 +40,43 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
     String prefixText = '';
     bool isObscureText = false;
     TextInputType inputType = TextInputType.text;
+    TextInputAction inputAction = TextInputAction.next;
     List<TextInputFormatter> formatters = <TextInputFormatter>[
       FilteringTextInputFormatter.deny('\n')
     ];
     if (widget.txtFieldType == ProfileTextFieldType.name) {
-      guideText = 'Name';
+      guideText = 'Name'.hardcoded;
       inputType = TextInputType.name;
     } else if (widget.txtFieldType == ProfileTextFieldType.phone) {
-      guideText = 'Phone';
+      guideText = 'Phone'.hardcoded;
       prefixText = '+962';
       inputType = TextInputType.phone;
       formatters.add(FilteringTextInputFormatter.digitsOnly);
     } else if (widget.txtFieldType == ProfileTextFieldType.dateOfBirth) {
-      guideText = 'Date of Birth';
+      guideText = 'Date of Birth'.hardcoded;
       inputType = TextInputType.datetime;
       formatters.add(FilteringTextInputFormatter.digitsOnly);
     } else if (widget.txtFieldType == ProfileTextFieldType.address) {
-      guideText = 'Address';
+      guideText = 'Address'.hardcoded;
       inputType = TextInputType.streetAddress;
+      inputAction = TextInputAction.done;
     } else if (widget.txtFieldType == ProfileTextFieldType.currPassword) {
-      guideText = 'Current Password';
+      guideText = 'Current Password'.hardcoded;
       isObscureText = true;
       inputType = TextInputType.visiblePassword;
     } else if (widget.txtFieldType == ProfileTextFieldType.newPassword) {
-      guideText = 'New Password';
+      guideText = 'New Password'.hardcoded;
       isObscureText = true;
       inputType = TextInputType.visiblePassword;
     } else if (widget.txtFieldType == ProfileTextFieldType.confirmPassword) {
-      guideText = 'Confirm New Password';
+      guideText = 'Confirm New Password'.hardcoded;
       isObscureText = true;
       inputType = TextInputType.visiblePassword;
+      inputAction = TextInputAction.done;
     }
 
     final fieldW = 700.w;
-    final fieldH = 130.h;
+    final fieldH = 120.h;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +118,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
               Expanded(
                 child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
+                      EdgeInsets.symmetric(horizontal: 14.w, vertical: 25.h),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius:
@@ -120,15 +126,17 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
                   ),
                   child: TextField(
                     controller: widget.controller,
+                    onEditingComplete: widget.onEditComplete,
                     obscureText: isObscureText,
                     keyboardType: inputType,
+                    textInputAction: inputAction,
                     inputFormatters: formatters,
                     cursorColor: kColorSecondaryGrey,
                     decoration: const InputDecoration(border: InputBorder.none),
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w500,
-                      fontSize: 48.sp,
+                      fontSize: 36.sp,
                       color: kColorSecondaryGrey,
                     ),
                   ),

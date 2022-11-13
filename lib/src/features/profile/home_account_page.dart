@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +27,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
   void initState() {
     super.initState();
 
-    ref.read(profileControllerProvider.notifier).doGetProfile();
+    ref.read(homeAccountCtrProvider.notifier).doGetProfile();
   }
 
   Widget _buildSummaryInfo(int index, String value) {
@@ -77,11 +78,11 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(profileControllerProvider.select((state) => state),
+    ref.listen<AsyncValue>(homeAccountCtrProvider.select((state) => state),
         (_, state) => state.showAlertDialogOnError(context));
 
-    final state = ref.watch(profileControllerProvider);
-    final profile = state.value;
+    final state = ref.watch(homeAccountCtrProvider);
+    final profile = ref.watch(profileStateChangesProvider).value;
 
     developer.log('HomeAccountPage::build() - profile=${profile?.nameEN}');
 
@@ -95,10 +96,11 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
     final btnTextStyle = TextStyle(
       fontFamily: 'Montserrat',
       fontWeight: FontWeight.w500,
-      fontSize: 40.sp,
+      fontSize: 44.sp,
       color: kColorPrimaryBlue,
     );
-    final btnW = 600.w;
+    final btnW = 620.w;
+    final btnH = 80.h;
 
     return ProgressHUD(
       inAsyncCall: state.isLoading,
@@ -156,7 +158,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                           _buildSummaryInfo(2, '${profile?.totalTrips ?? 0}'),
                         ],
                       ),
-                      Flexible(child: SizedBox(height: 100.h)),
+                      Flexible(child: SizedBox(height: 160.h)),
                       TextButton(
                         onPressed: state.isLoading
                             ? null
@@ -166,10 +168,12 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         child: Container(
                           alignment: Alignment.center,
                           width: btnW,
+                          height: btnH,
                           child: Text('Edit Profile'.hardcoded,
                               style: btnTextStyle),
                         ),
                       ),
+                      Flexible(child: SizedBox(height: 20.h)),
                       TextButton(
                         onPressed: state.isLoading
                             ? null
@@ -178,21 +182,24 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         child: Container(
                           alignment: Alignment.center,
                           width: btnW,
-                          child: Text('Reset Password'.hardcoded,
+                          height: btnH,
+                          child: Text('Change Password'.hardcoded,
                               style: btnTextStyle),
                         ),
                       ),
+                      Flexible(child: SizedBox(height: 20.h)),
                       TextButton(
                         onPressed: state.isLoading ? null : () {},
                         style: btnStyle,
                         child: Container(
                           alignment: Alignment.center,
                           width: btnW,
+                          height: btnH,
                           child: Text('Call App Supervisor'.hardcoded,
                               style: btnTextStyle),
                         ),
                       ),
-                      Flexible(child: SizedBox(height: 40.h)),
+                      Flexible(child: SizedBox(height: 100.h)),
                       TextButton(
                         onPressed: state.isLoading
                             ? null
@@ -200,8 +207,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                                 showLogoutDialog(context).then((value) {
                                   if (value != null && value == true) {
                                     ref
-                                        .read(
-                                            profileControllerProvider.notifier)
+                                        .read(homeAccountCtrProvider.notifier)
                                         .doLogout();
 
                                     context.goNamed(AppRoute.login.name);
@@ -222,11 +228,12 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         child: Container(
                           alignment: Alignment.center,
                           width: btnW,
+                          height: btnH,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                margin: EdgeInsets.only(right: 30.w),
+                                margin: EdgeInsets.only(right: 40.w),
                                 height: 53.h,
                                 child: Image.asset(
                                     'assets/images/user_icon_logout.png'),
@@ -236,7 +243,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 40.sp,
+                                  fontSize: 44.sp,
                                   color: Colors.white,
                                 ),
                               ),
@@ -244,13 +251,13 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                           ),
                         ),
                       ),
-                      Flexible(child: SizedBox(height: 40.h)),
+                      Flexible(child: SizedBox(height: 60.h)),
                       Text(
                         'App Version 0100.0'.hardcoded,
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w500,
-                          fontSize: 34.sp,
+                          fontSize: 36.sp,
                           color: kColorPrimaryBlue,
                         ),
                       ),

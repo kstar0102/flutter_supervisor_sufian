@@ -12,9 +12,9 @@ class ProfileRepository {
   ProfileRepository({required this.authRepo});
 
   final AuthRepository authRepo;
-  Profile? _profile;
+  //Profile? _profile;
 
-  Profile? get currProfile => _profile;
+  Profile? get currProfile => _profileState.value;
 
   final _profileState = InMemoryStore<Profile?>(null);
   Stream<Profile?> profileStateChanges() => _profileState.stream;
@@ -22,20 +22,20 @@ class ProfileRepository {
   // * -------------------------------------------------------------------------
 
   Future<Profile?> doGetProfile() async {
-    if (_profile != null) {
-      return _profile; // profile fetched already.
+    if (_profileState.value != null) {
+      return _profileState.value; // profile fetched already.
     }
 
     final data = await DioClient.getProfile(authRepo.uid!);
     //developer.log('doGetProfile() returned: $data');
 
     try {
-      _profile = Profile.fromMap(data);
+      _profileState.value = Profile.fromMap(data);
     } catch (e) {
       developer.log('doGetProfile() error=$e');
     }
 
-    return _profile;
+    return _profileState.value;
   }
 
   // * -------------------------------------------------------------------------
@@ -46,7 +46,7 @@ class ProfileRepository {
 
     var result = data['result'];
     if (result == 'Changed successfully') {
-      return _profile;
+      return _profileState.value;
     } else if (result == 'Invalid Driver') {
       throw const AppException.userNotFound();
     } else if (result == 'Invalid Password') {
@@ -67,8 +67,9 @@ class ProfileRepository {
     var result = data['result'];
     if (result == 'Update successfully') {
       // update local profile data.
-      _profile = _profile?.copyWith(name, phone, birthday, address);
-      return _profile;
+      _profileState.value =
+          _profileState.value?.copyWith(name, phone, birthday, address);
+      return _profileState.value;
     } else if (result == 'Invalid Driver') {
       throw const AppException.userNotFound();
     }
@@ -80,7 +81,7 @@ class ProfileRepository {
 
   Future<Profile?> doLogout() async {
     // clear profile and uid, later we may need to notify server...
-    _profile = null;
+    _profileState.value = null;
     authRepo.doLogOut();
 
     return null;
