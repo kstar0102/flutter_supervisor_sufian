@@ -45,6 +45,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   void _submit() {
     FocusManager.instance.primaryFocus?.unfocus();
 
+    // * test code for auto-login...
+    // final testCtr = ref.read(loginControllerProvider.notifier);
+    // testCtr.doLogin('driver1@gmail.com', '123123').then(
+    //   (value) {
+    //     // go home only if login success.
+    //     if (value == true) {
+    //       context.goNamed(AppRoute.home.name);
+    //     }
+    //   },
+    // );
+
     // check username textfield's validation.
     final emailError = emailErrorText(username);
     if (emailError != null) {
@@ -61,7 +72,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     // try to login with input data.
     final controller = ref.read(loginControllerProvider.notifier);
     controller.doLogin(username, password).then(
-      //controller.doLogin('driver1@gmail.com', '123123').then(
       (value) {
         // go home only if login success.
         if (value == true) {

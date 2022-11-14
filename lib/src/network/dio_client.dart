@@ -185,7 +185,7 @@ class DioClient {
     }
   }
 
-  // * POST '/notification/all'
+  // * GET '/notification/all'
   static Future<dynamic> postNotificationAll() async {
     final token = await _getToken();
 
@@ -201,7 +201,7 @@ class DioClient {
     }
   }
 
-  // * POST '/notification/today'
+  // * GET '/notification/today'
   static Future<dynamic> postNotificationToday() async {
     final token = await _getToken();
 
@@ -210,6 +210,30 @@ class DioClient {
 
     try {
       final response = await dio.get('/notification/today');
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
+  // * POST '/driver-location/update'
+  static Future<dynamic> postDriverLocUpdate(
+      String id, double lat, double lon) async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      final response = await dio.post(
+        '/driver-location/update',
+        data: {
+          'driver_id': id,
+          'latigude': lat,
+          'longitude': lon,
+        },
+      );
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();

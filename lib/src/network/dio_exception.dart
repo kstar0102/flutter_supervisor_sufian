@@ -1,18 +1,20 @@
 import 'package:dio/dio.dart';
 
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+
 class DioExceptions implements Exception {
   late String message;
 
   DioExceptions.fromDioError(DioError dioError) {
     switch (dioError.type) {
       case DioErrorType.cancel:
-        message = "Request to API server was cancelled";
+        message = "Request to API server was cancelled".hardcoded;
         break;
       case DioErrorType.connectTimeout:
-        message = "Connection timeout with API server";
+        message = "Connection timeout with API server".hardcoded;
         break;
       case DioErrorType.receiveTimeout:
-        message = "Receive timeout in connection with API server";
+        message = "Receive timeout in connection with API server".hardcoded;
         break;
       case DioErrorType.response:
         message = _handleError(
@@ -21,17 +23,17 @@ class DioExceptions implements Exception {
         );
         break;
       case DioErrorType.sendTimeout:
-        message = "Send timeout in connection with API server";
+        message = "Send timeout in connection with API server".hardcoded;
         break;
       case DioErrorType.other:
         if (dioError.message.contains("SocketException")) {
-          message = 'No Internet';
+          message = 'No Internet'.hardcoded;
           break;
         }
-        message = "Unexpected error occurred";
+        message = "Unexpected error occurred".hardcoded;
         break;
       default:
-        message = "Something went wrong";
+        message = "Something went wrong".hardcoded;
         break;
     }
   }
@@ -39,19 +41,19 @@ class DioExceptions implements Exception {
   String _handleError(int? statusCode, dynamic error) {
     switch (statusCode) {
       case 400:
-        return 'Bad request';
+        return 'Bad request'.hardcoded;
       case 401:
-        return 'Unauthorized';
+        return 'Unauthorized'.hardcoded;
       case 403:
-        return 'Forbidden';
+        return 'Forbidden'.hardcoded;
       case 404:
         return error['message'];
       case 500:
-        return 'Internal server error';
+        return 'Internal server error'.hardcoded;
       case 502:
-        return 'Bad gateway';
+        return 'Bad gateway'.hardcoded;
       default:
-        return 'Oops something went wrong';
+        return 'Oops, something went wrong'.hardcoded;
     }
   }
 
