@@ -55,15 +55,25 @@ class _TripsListViewState extends ConsumerState<TripsListView>
   void initState() {
     super.initState();
 
-    int length = kTodayFilters.length;
-    if (widget.kind == TripKind.past) length = kPastFilters.length;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.kind == TripKind.today) {
+        ref.read(todayFilterProvider.state).state = kTodayFilters[0];
+      } else {
+        ref.read(pastFilterProvider.state).state = kPastFilters[0];
+      }
+    });
 
+    int length = 0;
+    if (widget.kind == TripKind.today) {
+      length = kTodayFilters.length;
+    } else {
+      length = kPastFilters.length;
+    }
     _tabCtrler = TabController(length: length, vsync: this);
     // _tabCtrler.addListener(() {
     //   if (_tabCtrler.previousIndex != _tabCtrler.index &&
     //       !_tabCtrler.indexIsChanging) {
-    //     setState(() {}); // * rebuild body according to tab change.
-    //   }
+    //     //setState(() {}); // * rebuild body according to tab change.
     // });
   }
 
