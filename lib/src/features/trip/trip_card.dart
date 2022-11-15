@@ -38,8 +38,6 @@ class _TripCardState extends State<TripCard> {
   }
 
   Widget _buildCompanyRow() {
-    final avatarRadius = 60.h;
-
     return Row(
       children: [
         Container(
@@ -48,7 +46,7 @@ class _TripCardState extends State<TripCard> {
             border: Border.all(color: kColorAvatarBorder, width: 1.0),
           ),
           child: CircleAvatar(
-            radius: avatarRadius,
+            radius: 60.h,
             backgroundColor: Colors.transparent,
             backgroundImage:
                 const AssetImage('assets/images/company_mcdonald\'s.png'),
@@ -270,7 +268,10 @@ class _TripCardState extends State<TripCard> {
               height: btnH,
               onPressed: () {
                 if (widget.info.status == TripStatus.started) {
-                  context.pushNamed(AppRoute.navigation.name);
+                  context.replaceNamed(
+                    AppRoute.navigation.name,
+                    params: {'tripId': widget.info.id},
+                  );
                 } else {
                   showRejectDialog(
                     context,

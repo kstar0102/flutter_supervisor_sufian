@@ -128,28 +128,16 @@ class _TripBusLineState extends State<TripBusLine> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.info.orgArea,
-              style: courseTextStyle,
-            ),
-            Text(
-              widget.info.orgCity,
-              style: cityTextStyle,
-            ),
+            Text(widget.info.orgArea, style: courseTextStyle),
+            Text(widget.info.orgCity, style: cityTextStyle),
           ],
         ),
         const Expanded(child: SizedBox()),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.info.destArea,
-              style: courseTextStyle,
-            ),
-            Text(
-              widget.info.destCity,
-              style: cityTextStyle,
-            ),
+            Text(widget.info.destArea, style: courseTextStyle),
+            Text(widget.info.destCity, style: cityTextStyle),
           ],
         ),
       ],
@@ -168,6 +156,7 @@ class _TripBusLineState extends State<TripBusLine> {
       ),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           _buildTimeLineRow(),
           SizedBox(height: 10.h),

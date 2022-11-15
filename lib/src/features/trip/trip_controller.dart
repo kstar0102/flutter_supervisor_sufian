@@ -3,24 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
-import 'package:alnabali_driver/src/features/trip/trip_repository.dart';
+import 'package:alnabali_driver/src/features/trip/trips_repository.dart';
 
 class TripController extends StateNotifier<AsyncValue<bool>> {
   TripController({
-    required this.tripRepo,
+    required this.tripsRepo,
   }) : super(const AsyncData(false));
 
-  final TripRepository tripRepo;
+  final TripsRepository tripsRepo;
 
   Trip? getTripInfo(String tripId) {
-    return tripRepo.getTripInfo(tripId);
+    return tripsRepo.getTripInfo(tripId);
   }
 
   Future<bool?> doChangeTrip(
       Trip info, TripStatus targetStatus, String? extra) async {
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(
-        () => tripRepo.doChangeTrip(info, targetStatus, extra));
+        () => tripsRepo.doChangeTrip(info, targetStatus, extra));
 
     if (mounted) {
       state = newState;
@@ -28,14 +28,22 @@ class TripController extends StateNotifier<AsyncValue<bool>> {
 
     return newState.value;
   }
+
+  // * update location request must be done at behind. (silently)
+  Future<bool> doUpdateLocation(double lat, double lon) async {
+    final newState =
+        await AsyncValue.guard(() => tripsRepo.doUpdateLocation(lat, lon));
+
+    return newState.hasValue;
+  }
 }
 
 final tripControllerProvider =
     StateNotifierProvider.autoDispose<TripController, AsyncValue<void>>((ref) {
   final tripKind = ref.watch(tripsKindProvider.state).state;
   if (tripKind == TripKind.today) {
-    return TripController(tripRepo: ref.watch(todayTripsRepoProvider));
+    return TripController(tripsRepo: ref.watch(todayTripsRepoProvider));
   } else {
-    return TripController(tripRepo: ref.watch(pastTripsRepoProvider));
+    return TripController(tripsRepo: ref.watch(pastTripsRepoProvider));
   }
 });

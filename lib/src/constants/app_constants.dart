@@ -15,6 +15,12 @@ enum TripStatus {
   canceled,
 }
 
+enum BusPos {
+  unknown,
+  origin,
+  destination,
+}
+
 const kStatusMapper = {
   '1': TripStatus.pending,
   '2': TripStatus.accepted,

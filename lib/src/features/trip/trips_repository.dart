@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
+import 'package:alnabali_driver/src/features/auth/auth_repository.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/network/dio_client.dart';
 import 'package:alnabali_driver/src/utils/in_memory_store.dart';
@@ -10,8 +11,13 @@ import 'package:alnabali_driver/src/utils/in_memory_store.dart';
 // * TripRepository
 // * ---------------------------------------------------------------------------
 
-class TripRepository {
-  TripRepository({required this.repoType});
+class TripsRepository {
+  TripsRepository({
+    required this.authRepo,
+    required this.repoType,
+  });
+
+  final AuthRepository authRepo;
 
   final TripKind repoType;
   final _trips = InMemoryStore<TripList>([]);
@@ -102,16 +108,37 @@ class TripRepository {
 
     return false;
   }
+
+  Future<bool> doUpdateLocation(double lat, double lon) async {
+    final data = await DioClient.postDriverLocUpdate(authRepo.uid!, lat, lon);
+    developer.log('doUpdateLocation() returned: $data');
+
+    var result = data['result'];
+    if (result == 'success') {
+      //developer.log('Updated driver location to server.');
+      return true;
+    } else {
+      //developer.log('Failed to updated driver location to server.');
+    }
+
+    return false;
+  }
 }
 
 // * ---------------------------------------------------------------------------
 // * TripRepositoryProviders
 // * ---------------------------------------------------------------------------
 
-final todayTripsRepoProvider = Provider<TripRepository>((ref) {
-  return TripRepository(repoType: TripKind.today);
+final todayTripsRepoProvider = Provider<TripsRepository>((ref) {
+  return TripsRepository(
+    authRepo: ref.watch(authRepositoryProvider),
+    repoType: TripKind.today,
+  );
 });
 
-final pastTripsRepoProvider = Provider<TripRepository>((ref) {
-  return TripRepository(repoType: TripKind.past);
+final pastTripsRepoProvider = Provider<TripsRepository>((ref) {
+  return TripsRepository(
+    authRepo: ref.watch(authRepositoryProvider),
+    repoType: TripKind.past,
+  );
 });

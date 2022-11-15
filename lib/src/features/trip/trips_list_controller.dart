@@ -2,7 +2,7 @@ import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
-import 'package:alnabali_driver/src/features/trip/trip_repository.dart';
+import 'package:alnabali_driver/src/features/trip/trips_repository.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 
 // * ---------------------------------------------------------------------------
@@ -19,14 +19,14 @@ final pastFilterProvider = StateProvider<TripStatus>((ref) => TripStatus.all);
 
 class TripsListController extends StateNotifier<AsyncValue<bool>> {
   TripsListController({
-    required this.tripRepo,
+    required this.tripsRepo,
   }) : super(const AsyncData(false));
 
-  final TripRepository tripRepo;
+  final TripsRepository tripsRepo;
 
   Future<bool?> doFetchTrips() async {
     state = const AsyncValue.loading();
-    final newState = await AsyncValue.guard(() => tripRepo.doFetchTrips());
+    final newState = await AsyncValue.guard(() => tripsRepo.doFetchTrips());
 
     if (mounted) {
       state = newState;
@@ -39,7 +39,7 @@ class TripsListController extends StateNotifier<AsyncValue<bool>> {
       Trip info, TripStatus targetStatus, String? extra) async {
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(
-        () => tripRepo.doChangeTrip(info, targetStatus, extra));
+        () => tripsRepo.doChangeTrip(info, targetStatus, extra));
 
     if (mounted) {
       state = newState;
@@ -49,7 +49,7 @@ class TripsListController extends StateNotifier<AsyncValue<bool>> {
   }
 
   Trip? getTripInfo(String tripId) {
-    return tripRepo.getTripInfo(tripId);
+    return tripsRepo.getTripInfo(tripId);
   }
 }
 
@@ -60,13 +60,13 @@ class TripsListController extends StateNotifier<AsyncValue<bool>> {
 final todayTripsListCtrProvider =
     StateNotifierProvider.autoDispose<TripsListController, AsyncValue<bool>>(
         (ref) {
-  return TripsListController(tripRepo: ref.watch(todayTripsRepoProvider));
+  return TripsListController(tripsRepo: ref.watch(todayTripsRepoProvider));
 });
 
 final pastTripsListCtrProvider =
     StateNotifierProvider.autoDispose<TripsListController, AsyncValue<bool>>(
         (ref) {
-  return TripsListController(tripRepo: ref.watch(pastTripsRepoProvider));
+  return TripsListController(tripsRepo: ref.watch(pastTripsRepoProvider));
 });
 
 // * ---------------------------------------------------------------------------

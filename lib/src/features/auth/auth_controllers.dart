@@ -33,21 +33,6 @@ class LoginController extends StateNotifier<AsyncValue<bool>> {
 
     return newState.hasValue;
   }
-
-  Future<bool> doUpdateLocation(double lat, double lon) async {
-    state = const AsyncValue.loading();
-
-    final newState =
-        await AsyncValue.guard(() => authRepo.doUpdateLocation(lat, lon));
-
-    // Check if the controller is mounted before setting the state to prevent:
-    // Bad state: Tried to use Controller after `dispose` was called.
-    if (mounted) {
-      state = newState;
-    }
-
-    return newState.hasValue;
-  }
 }
 
 final loginControllerProvider =

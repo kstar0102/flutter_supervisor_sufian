@@ -48,21 +48,6 @@ class AuthRepository {
   Future<void> doLogOut() async {
     _uid = null;
   }
-
-  Future<bool> doUpdateLocation(double lat, double lon) async {
-    final data = await DioClient.postDriverLocUpdate(_uid!, lat, lon);
-    developer.log('doUpdateLocation() returned: $data');
-
-    var result = data['result'];
-    if (result == 'success') {
-      //developer.log('Updated driver location to server.');
-      return true;
-    } else {
-      //developer.log('Failed to updated driver location to server.');
-    }
-
-    return false;
-  }
 }
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
