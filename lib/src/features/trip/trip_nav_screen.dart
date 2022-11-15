@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -33,13 +34,14 @@ class TripNavScreen extends ConsumerStatefulWidget {
 class _NavigationScreenState extends ConsumerState<TripNavScreen> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  late Trip info;
+  late Trip trip;
 
   LatLng orgLocation = const LatLng(37.4220656, -122.0840897);
   LatLng destLocation = const LatLng(37.4116103, -122.0713127);
+  LocationData? currLocation;
 
-  List<LatLng> polylineCoordinates = [];
-  LocationData? currentLocation;
+  //List<LatLng> polylineCoordinates = [];
+  final Set<Polyline> _polylines = <Polyline>{};
 
   BitmapDescriptor originIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
@@ -47,30 +49,74 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
 
   Timer? _updateTimer;
 
-  Color _getPolyLineColor() {
-    if (info.status == TripStatus.accepted) {
-      return const Color(0xFFF7921D);
-    } else if (info.status == TripStatus.started) {
-      return const Color(0xFF1768D3);
-    }
-    return const Color(0xFF7B61FF);
-  }
+  Future<Polyline> _getRoutePolyline({
+    required LatLng start,
+    required LatLng finish,
+    required Color color,
+    required String id,
+    int width = 6,
+    bool isDash = false,
+  }) async {
+    // Generates every polyline between start and finish
+    final polylinePoints = PolylinePoints();
+    // Holds each polyline coordinate as Lat and Lng pairs
+    final List<LatLng> polylineCoordinates = [];
+    final startPoint = PointLatLng(start.latitude, start.longitude);
+    final finishPoint = PointLatLng(finish.latitude, finish.longitude);
 
-  void _getPolyPoints() async {
-    PolylinePoints polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      'AIzaSyAVPD5PbpuYRB2m6OzcC3NtgNTh7Q0B-QA', // Your Google Map Key
-      PointLatLng(orgLocation.latitude, orgLocation.longitude),
-      PointLatLng(destLocation.latitude, destLocation.longitude),
+    final result = await polylinePoints.getRouteBetweenCoordinates(
+      'AIzaSyAVPD5PbpuYRB2m6OzcC3NtgNTh7Q0B-QA',
+      startPoint,
+      finishPoint,
     );
     if (result.points.isNotEmpty) {
+      // loop through all PointLatLng points and convert them
+      // to a list of LatLng, required by the Polyline
       for (var point in result.points) {
         polylineCoordinates.add(
           LatLng(point.latitude, point.longitude),
         );
       }
-      setState(() {});
     }
+    final polyline = Polyline(
+      polylineId: PolylineId(id),
+      color: color,
+      points: polylineCoordinates,
+      width: width,
+      patterns: isDash ? [PatternItem.dash(100.w), PatternItem.gap(100.w)] : [],
+    );
+    return polyline;
+  }
+
+  Future<void> _getBusPolyline() async {
+    final firsPolyline = await _getRoutePolyline(
+      start: orgLocation,
+      finish: destLocation,
+      color: getStatusColor(trip.status),
+      id: 'busLine',
+    );
+    _polylines.add(firsPolyline);
+  }
+
+  Future<void> _getAcceptPolyline() async {
+    if (currLocation == null) return;
+
+    if (trip.status == TripStatus.accepted) {
+      final secondPolyline = await _getRoutePolyline(
+        start: LatLng(currLocation!.latitude!, currLocation!.longitude!),
+        finish: orgLocation,
+        color: Colors.blue,
+        id: 'acceptLine',
+        width: 4,
+        isDash: true,
+      );
+
+      _polylines.removeWhere(
+          (element) => element.polylineId == const PolylineId('acceptLine'));
+      _polylines.add(secondPolyline);
+    }
+
+    //setState(() => _polylines = polylines);
   }
 
   void _getCurrentLocation() async {
@@ -82,7 +128,7 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
         }
         //currentLocation = location;
         setState(() {
-          currentLocation = location;
+          currLocation = location;
         });
       },
     );
@@ -107,7 +153,8 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
           ),
         );
         setState(() {
-          currentLocation = newLoc;
+          currLocation = newLoc;
+          _getAcceptPolyline();
           //developer.log('onLocation = $currentLocation');
         });
       },
@@ -145,19 +192,19 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
   void initState() {
     super.initState();
 
-    info =
+    trip =
         ref.read(tripControllerProvider.notifier).getTripInfo(widget.tripId)!;
 
-    _getPolyPoints();
+    _getBusPolyline();
     _getCurrentLocation();
     _setCustomMarkerIcon();
 
     _updateTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       //developer.log('Location Update: ${timer.tick}');
-      if (currentLocation != null) {
+      if (currLocation != null) {
         final tripCtr = ref.read(tripControllerProvider.notifier);
         tripCtr.doUpdateLocation(
-            currentLocation!.latitude!, currentLocation!.longitude!);
+            currLocation!.latitude!, currLocation!.longitude!);
       }
     });
   }
@@ -169,6 +216,70 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
         cos((lat2 - lat1) * p) / 2 +
         cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
+  }
+
+  void _onCurrMarkerTap() {
+    double dist = 0;
+    if (trip.status == TripStatus.accepted) {
+      dist = _calcDistance(
+        currLocation!.latitude!,
+        currLocation!.longitude!,
+        orgLocation.latitude,
+        orgLocation.longitude,
+      );
+      if (dist > 0.2) {
+        showNavStatusDialog(context, trip, false);
+        return;
+      }
+    } else if (trip.status == TripStatus.started) {
+      dist = _calcDistance(
+        currLocation!.latitude!,
+        currLocation!.longitude!,
+        destLocation.latitude,
+        destLocation.longitude,
+      );
+      if (dist > 0.2) {
+        showNavStatusDialog(context, trip, true);
+        return;
+      }
+    }
+
+    showNavDialog(
+      context,
+      trip,
+      (targetStatus, extra) {
+        // ? this code duplicated with TripsListView...
+        successCallback(value) {
+          if (value == true) {
+            showOkayDialog(
+              context,
+              trip,
+              targetStatus,
+            ).then(
+              (value) {
+                if (targetStatus == TripStatus.rejected ||
+                    targetStatus == TripStatus.finished) {
+                  context.pop(); // go back.
+                }
+              },
+            );
+          }
+
+          // * rebuild screen for trip update.
+          setState(() {
+            trip = ref
+                .read(tripControllerProvider.notifier)
+                .getTripInfo(widget.tripId)!;
+            developer.log('TRIP CHANGE $trip');
+          });
+        }
+
+        ref
+            .read(tripControllerProvider.notifier)
+            .doChangeTrip(trip, targetStatus, extra)
+            .then(successCallback);
+      },
+    );
   }
 
   @override
@@ -207,14 +318,14 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
               ),
             ),
             Expanded(
-              child: currentLocation == null
+              child: currLocation == null
                   ? const Center(child: CircularProgressIndicator())
                   : ProgressHUD(
                       inAsyncCall: state.isLoading,
                       child: GoogleMap(
                         initialCameraPosition: CameraPosition(
-                          target: LatLng(currentLocation!.latitude!,
-                              currentLocation!.longitude!),
+                          target: LatLng(currLocation!.latitude!,
+                              currLocation!.longitude!),
                           zoom: 13.5,
                         ),
                         mapToolbarEnabled: false,
@@ -232,83 +343,21 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
                           Marker(
                             markerId: const MarkerId("currentLocation"),
                             anchor: const Offset(0.5, 0.5),
-                            position: LatLng(currentLocation!.latitude!,
-                                currentLocation!.longitude!),
+                            position: LatLng(currLocation!.latitude!,
+                                currLocation!.longitude!),
                             icon: currentLocationIcon,
-                            onTap: () {
-                              double dist = 0;
-                              if (info.status == TripStatus.accepted) {
-                                dist = _calcDistance(
-                                  currentLocation!.latitude!,
-                                  currentLocation!.longitude!,
-                                  orgLocation.latitude,
-                                  orgLocation.longitude,
-                                );
-                                if (dist > 0.2) {
-                                  showNavStatusDialog(context, info, false);
-                                  return;
-                                }
-                              } else if (info.status == TripStatus.started) {
-                                dist = _calcDistance(
-                                  currentLocation!.latitude!,
-                                  currentLocation!.longitude!,
-                                  destLocation.latitude,
-                                  destLocation.longitude,
-                                );
-                                if (dist > 0.2) {
-                                  showNavStatusDialog(context, info, true);
-                                  return;
-                                }
-                              }
-
-                              showNavDialog(
-                                context,
-                                info,
-                                (info, targetStatus, extra) {
-                                  // ? this code duplicated with TripsListView...
-                                  successCallback(value) {
-                                    if (value == true) {
-                                      showOkayDialog(
-                                        context,
-                                        info,
-                                        targetStatus,
-                                      ).then(
-                                        (value) {
-                                          if (targetStatus ==
-                                                  TripStatus.rejected ||
-                                              targetStatus ==
-                                                  TripStatus.finished) {
-                                            context.pop(); // go back.
-                                          }
-                                        },
-                                      );
-                                    }
-
-                                    // * rebuild screen for card update.
-                                    setState(() {
-                                      info = ref
-                                          .read(tripControllerProvider.notifier)
-                                          .getTripInfo(widget.tripId)!;
-                                    });
-                                  }
-
-                                  ref
-                                      .read(tripControllerProvider.notifier)
-                                      .doChangeTrip(info, targetStatus, extra)
-                                      .then(successCallback);
-                                },
-                              );
-                            },
+                            onTap: _onCurrMarkerTap,
                           ),
                         },
-                        polylines: {
-                          Polyline(
-                            polylineId: const PolylineId("route"),
-                            points: polylineCoordinates,
-                            color: getStatusColor(info.status),
-                            width: 6,
-                          ),
-                        },
+                        polylines: _polylines,
+                        // {
+                        //   Polyline(
+                        //     polylineId: const PolylineId("route"),
+                        //     points: polylineCoordinates,
+                        //     color: getStatusColor(info.status),
+                        //     width: 6,
+                        //   ),
+                        // },
                         onMapCreated: (mapController) {
                           _controller.complete(mapController);
                         },

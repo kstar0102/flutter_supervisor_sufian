@@ -113,7 +113,7 @@ Widget _buildDistTimeRow(double dist, double time) {
 }
 
 typedef NavDialogCallback = void Function(
-    Trip info, TripStatus targetStatus, String? extra);
+    TripStatus targetStatus, String? extra);
 
 Future<void> showNavDialog(
     BuildContext context, Trip info, NavDialogCallback onYesNo) {
@@ -242,7 +242,7 @@ Future<void> showNavDialog(
                 info.id,
               ).then((value) {
                 if (value != null) {
-                  onYesNo(info, TripStatus.rejected, value);
+                  onYesNo(TripStatus.rejected, value);
                 }
               });
             },
@@ -285,7 +285,7 @@ Future<void> showNavDialog(
                       developer.log('TripCard: unknown state change...');
                       return;
                     }
-                    onYesNo(info, targetStatus, null);
+                    onYesNo(targetStatus, null);
                   }
                 });
               },

@@ -20,7 +20,7 @@ enum AppRoute {
   forgetPwd,
   home,
   tripDetail,
-  navigation,
+  tripNavigation,
   editProfile,
   changePwd,
 }
@@ -83,7 +83,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/navigation/:tripId',
-        name: AppRoute.navigation.name,
+        name: AppRoute.tripNavigation.name,
         pageBuilder: (context, state) => MaterialPage(
           key: state.pageKey,
           fullscreenDialog: true,

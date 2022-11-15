@@ -150,17 +150,17 @@ class _TripCardState extends State<TripCard> {
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w600,
-              fontSize: 12.sp,
+              fontSize: 32.sp,
               color: kColorPrimaryBlue,
             ),
           ),
         ),
         Text(
-          'TODO: reject reason info support...', //info.rejectReason,
+          'reject reason...', // TODO: info.rejectReason,
           style: TextStyle(
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w400,
-            fontSize: 12.sp,
+            fontSize: 30.sp,
             color: kColorSecondaryGrey,
           ),
         ),
@@ -189,7 +189,7 @@ class _TripCardState extends State<TripCard> {
           style: TextStyle(
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w500,
-            fontSize: 28.sp,
+            fontSize: 30.sp,
             color: kColorPrimaryGrey,
           ),
         ),
@@ -269,7 +269,7 @@ class _TripCardState extends State<TripCard> {
               onPressed: () {
                 if (widget.info.status == TripStatus.started) {
                   context.replaceNamed(
-                    AppRoute.navigation.name,
+                    AppRoute.tripNavigation.name,
                     params: {'tripId': widget.info.id},
                   );
                 } else {
@@ -350,12 +350,22 @@ class _TripCardState extends State<TripCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.showDetail) return;
-
-        context.pushNamed(
-          AppRoute.tripDetail.name,
-          params: {'tripId': widget.info.id},
-        );
+        if (widget.showDetail) {
+          // here is in trip-detail-screen.
+          if (widget.info.status == TripStatus.accepted ||
+              widget.info.status == TripStatus.started) {
+            context.replaceNamed(
+              AppRoute.tripNavigation.name,
+              params: {'tripId': widget.info.id},
+            );
+          }
+        } else {
+          // here is in trip-list-view.
+          context.pushNamed(
+            AppRoute.tripDetail.name,
+            params: {'tripId': widget.info.id},
+          );
+        }
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 60.w),
