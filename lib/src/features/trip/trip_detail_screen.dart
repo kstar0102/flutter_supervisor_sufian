@@ -1,4 +1,4 @@
-import 'package:alnabali_driver/src/features/trip/track_card.dart';
+import 'package:alnabali_driver/src/features/trip/transaction_view.dart';
 import 'package:alnabali_driver/src/features/trip/trip_card.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
@@ -62,34 +62,14 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen>
                       color: Colors.white,
                     ),
                   ),
-                  // Text(
-                  //   '${AppLocalizations.of(context).trip} # ${info.id}',
-                  //   style: TextStyle(
-                  //     fontFamily: 'Montserrat',
-                  //     fontWeight: FontWeight.w500,
-                  //     fontSize: 44.sp,
-                  //     color: Colors.white,
-                  //   ),
-                  // ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 30.h,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: const AssetImage(
-                            'assets/images/company_mcdonald\'s.png'),
-                      ),
-                      Text(
-                        ' # ${info.id}',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 44.sp,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    '${AppLocalizations.of(context).trip} # ${info.id}',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 44.sp,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),
@@ -186,11 +166,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen>
                                 ),
                               ],
                             ),
-                            Column(
-                              children: [
-                                TrackCard(info: info),
-                              ],
-                            ),
+                            TransactionView(tripId: widget.tripId),
                           ],
                         ),
                       ),

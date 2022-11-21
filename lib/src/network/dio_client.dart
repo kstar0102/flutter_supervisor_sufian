@@ -241,4 +241,22 @@ class DioClient {
       throw errorMessage;
     }
   }
+
+  // * GET '/transaction/trip_id'
+  static Future<dynamic> getTransaction(String tripId) async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      final response = await dio.get(
+        '/transaction/$tripId',
+      );
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
 }

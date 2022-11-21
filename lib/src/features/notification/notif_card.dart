@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/notification/notif.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotifCard extends StatelessWidget {
   const NotifCard({
@@ -54,20 +53,26 @@ class NotifCard extends StatelessWidget {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          // CircleAvatar(
+                          //   radius: 50.h,
+                          //   backgroundColor: getStatusColor(info.status),
+                          //   child: Center(
+                          //     child: Text(
+                          //       AppLocalizations.of(context).trip,
+                          //       style: TextStyle(
+                          //         fontFamily: 'Montserrat',
+                          //         fontWeight: FontWeight.w400,
+                          //         fontSize: 28.sp,
+                          //         color: Colors.white,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           CircleAvatar(
                             radius: 50.h,
-                            backgroundColor: getStatusColor(info.status),
-                            child: Center(
-                              child: Text(
-                                AppLocalizations.of(context).trip,
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 28.sp,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: NetworkImage(
+                                getClientImageURL(info.clientName)),
                           ),
                           Text(
                             info.getNotifTitle(),
@@ -96,7 +101,7 @@ class NotifCard extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              info.message,
+                              getNotifyText(info.status, context),
                               style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w500,

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @immutable
 class Trip {
@@ -53,25 +52,6 @@ class Trip {
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
 
     return '${duration.inHours}:$twoDigitMinutes Min';
-  }
-
-  String getNotifyText(BuildContext context) {
-    switch (status) {
-      case TripStatus.pending:
-        return AppLocalizations.of(context).newPendingTrip;
-      case TripStatus.accepted:
-        return AppLocalizations.of(context).tripHasBeenAccepted;
-      case TripStatus.rejected:
-        return AppLocalizations.of(context).tripHasBeenRejected;
-      case TripStatus.started:
-        return AppLocalizations.of(context).tripHasBeenStarted;
-      case TripStatus.finished:
-        return AppLocalizations.of(context).tripHasBeenFinished;
-      case TripStatus.canceled:
-        return AppLocalizations.of(context).tripHasBeenCanceled;
-      default:
-        return AppLocalizations.of(context).unknownStatus;
-    }
   }
 
   factory Trip.fromMap(Map<String, dynamic> data) {

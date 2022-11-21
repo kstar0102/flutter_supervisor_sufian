@@ -1,3 +1,4 @@
+import 'package:alnabali_driver/src/features/trip/transaction.dart';
 import 'package:alnabali_driver/src/features/trip/trips_list_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -45,5 +46,42 @@ final tripControllerProvider =
     return TripController(tripsRepo: ref.watch(todayTripsRepoProvider));
   } else {
     return TripController(tripsRepo: ref.watch(pastTripsRepoProvider));
+  }
+});
+
+// * ---------------------------------------------------------------------------
+
+class TransListController extends StateNotifier<AsyncValue<TransactionList>> {
+  TransListController({
+    required this.tripsRepo,
+  }) : super(const AsyncData([]));
+
+  final TripsRepository tripsRepo;
+
+  Future<TransactionList?> doFetchTransaction(String tripId) async {
+    state = const AsyncValue.loading();
+
+    final newState =
+        await AsyncValue.guard(() => tripsRepo.doFetchTransaction(tripId));
+
+    if (mounted) {
+      state = newState;
+    }
+
+    if (newState.hasError) {
+      return [];
+    } else {
+      return newState.value;
+    }
+  }
+}
+
+final transCtrProvider = StateNotifierProvider.autoDispose<TransListController,
+    AsyncValue<TransactionList>>((ref) {
+  final tripKind = ref.watch(tripsKindProvider.state).state;
+  if (tripKind == TripKind.today) {
+    return TransListController(tripsRepo: ref.watch(todayTripsRepoProvider));
+  } else {
+    return TransListController(tripsRepo: ref.watch(pastTripsRepoProvider));
   }
 });

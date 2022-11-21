@@ -47,7 +47,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
     // * test code for auto-login...
     // final testCtr = ref.read(loginControllerProvider.notifier);
-    // testCtr.doLogin('Driver', '111111').then(
+    // testCtr.doLogin('driver1@gmail.com', '111111').then(
     //   (value) {
     //     // go home only if login success.
     //     if (value == true) {

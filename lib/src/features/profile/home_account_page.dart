@@ -139,7 +139,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage>
                         ),
                         child: CircleAvatar(
                           radius: 165.h,
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: Colors.white,
                           backgroundImage: profile == null
                               ? null
                               : AssetImage(profile.profileImage),

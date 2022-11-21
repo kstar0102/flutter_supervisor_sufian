@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'package:alnabali_driver/src/features/trip/transaction.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
@@ -21,6 +22,7 @@ class TripsRepository {
 
   final TripKind repoType;
   final _trips = InMemoryStore<TripList>([]);
+  final _transactions = InMemoryStore<TransactionList>([]);
 
   Trip? getTripInfo(String tripId) {
     final searched = _trips.value.where((t) => t.id == tripId).toList();
@@ -123,6 +125,25 @@ class TripsRepository {
     }
 
     return false;
+  }
+
+  Future<TransactionList> doFetchTransaction(String tripId) async {
+    final data = await DioClient.getTransaction(tripId);
+    developer.log('doFetchTransaction() returned: $data');
+
+    var result = data['result'];
+    if (result is List) {
+      try {
+        final transs = result.map((data) => Transaction.fromMap(data)).toList();
+        developer.log('fetched transactions: ${transs.length}');
+        return transs;
+      } catch (e) {
+        developer.log('doFetchTransaction() error=$e');
+        return [];
+      }
+    } else {
+      throw UnimplementedError;
+    }
   }
 }
 

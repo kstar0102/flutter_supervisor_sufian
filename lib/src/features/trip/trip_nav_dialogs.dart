@@ -325,7 +325,8 @@ Future<void> showNavStatusDialog(
                 radius: 60.h,
                 backgroundColor: Colors.transparent,
                 backgroundImage:
-                    const AssetImage('assets/images/company_mcdonald\'s.png'),
+                    //const AssetImage('assets/images/company_mcdonald\'s.png'),
+                    NetworkImage(getClientImageURL(info.clientName)),
               ),
             ),
             Padding(

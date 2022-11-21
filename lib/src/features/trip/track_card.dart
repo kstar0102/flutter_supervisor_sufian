@@ -1,6 +1,6 @@
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip.dart';
+import 'package:alnabali_driver/src/features/trip/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +11,7 @@ class TrackCard extends StatefulWidget {
     required this.info,
   }) : super(key: key);
 
-  final Trip info;
+  final TransactionList info;
 
   @override
   State<TrackCard> createState() => _TrackCardState();
@@ -21,6 +21,7 @@ class _TrackCardState extends State<TrackCard> {
   Widget buildTrackRow(
     BuildContext context,
     TripStatus st,
+    String stTime,
     Color clr,
     bool isLast,
   ) {
@@ -83,7 +84,7 @@ class _TrackCardState extends State<TrackCard> {
         Container(
           margin: EdgeInsets.only(top: 26.h),
           child: Text(
-            '01:00 AM',
+            stTime,
             style: TextStyle(
               color: kColorPrimaryBlue,
               fontFamily: 'Montserrat',
@@ -97,22 +98,21 @@ class _TrackCardState extends State<TrackCard> {
   }
 
   Widget buildTracks(BuildContext context) {
-    const dummyHistory = [
-      TripStatus.pending,
-      TripStatus.accepted,
-      TripStatus.started,
-      TripStatus.finished,
-    ];
+    TripStatus lastStatus = TripStatus.all;
+    if (widget.info.isNotEmpty) {
+      lastStatus = widget.info.last.newStatus;
+    }
+    final trackColor = getStatusColor(lastStatus);
 
-    final trackColor = getStatusColor(dummyHistory.last);
     List<Widget> widgetList = [];
     int i = 1;
-    for (final st in dummyHistory) {
+    for (final t in widget.info) {
       widgetList.add(buildTrackRow(
         context,
-        st,
+        t.newStatus,
+        t.getUpdateTimeStr(),
         trackColor,
-        i == dummyHistory.length,
+        i == widget.info.length,
       ));
       i++;
     }

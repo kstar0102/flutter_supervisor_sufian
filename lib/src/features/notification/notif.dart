@@ -44,8 +44,8 @@ class Notif {
       clientName: data['client_name'],
       orgName: data['origin_name'],
       destName: data['destination_name'],
-      message: data['message'],
-      notifyDate: DateFormat('y-m-dd').parse('${data['notification_date']}'),
+      message: data['message'] ?? '',
+      notifyDate: DateFormat('y-m-dd').parse('${data['updated_at']}'),
       driverName: data['driver_name'].toString(),
       status: status,
     );

@@ -57,6 +57,25 @@ String getTabTitleFromID(TripStatus status, BuildContext context) {
   return kTripTabTitles[status.index];
 }
 
+String getNotifyText(TripStatus status, BuildContext context) {
+  switch (status) {
+    case TripStatus.pending:
+      return AppLocalizations.of(context).newPendingTrip;
+    case TripStatus.accepted:
+      return AppLocalizations.of(context).tripHasBeenAccepted;
+    case TripStatus.rejected:
+      return AppLocalizations.of(context).tripHasBeenRejected;
+    case TripStatus.started:
+      return AppLocalizations.of(context).tripHasBeenStarted;
+    case TripStatus.finished:
+      return AppLocalizations.of(context).tripHasBeenFinished;
+    case TripStatus.canceled:
+      return AppLocalizations.of(context).tripHasBeenCanceled;
+    default:
+      return AppLocalizations.of(context).unknownStatus;
+  }
+}
+
 String getTrackExplain(TripStatus status, BuildContext context) {
   final kTripTabTitles = [
     '',
@@ -68,4 +87,8 @@ String getTrackExplain(TripStatus status, BuildContext context) {
     AppLocalizations.of(context).trackCanceled,
   ];
   return kTripTabTitles[status.index];
+}
+
+String getClientImageURL(String clientName) {
+  return 'https://via.placeholder.com/150';
 }
