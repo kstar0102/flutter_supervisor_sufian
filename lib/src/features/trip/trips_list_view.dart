@@ -10,7 +10,6 @@ import 'package:alnabali_driver/src/features/trip/trip_card.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/features/trip/trips_list_controller.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/buttons_tabbar.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
@@ -83,19 +82,6 @@ class _TripsListViewState extends ConsumerState<TripsListView>
     super.dispose();
   }
 
-  String _getTabTitleFromID(TripStatus status) {
-    final kTripTabTitles = [
-      'All'.hardcoded,
-      'Pending'.hardcoded,
-      'Accepted'.hardcoded,
-      'Rejected'.hardcoded,
-      'Started'.hardcoded,
-      'Finished'.hardcoded,
-      'Canceled'.hardcoded,
-    ];
-    return kTripTabTitles[status.index];
-  }
-
   @override
   Widget build(BuildContext context) {
     var filterTabs =
@@ -137,7 +123,7 @@ class _TripsListViewState extends ConsumerState<TripsListView>
               buttonMargin: EdgeInsets.symmetric(horizontal: 4.w),
               //contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
               tabs: filterTabs
-                  .map((t) => Tab(text: _getTabTitleFromID(t)))
+                  .map((t) => Tab(text: getTabTitleFromID(t, context)))
                   .toList(),
               onTap: (index) {
                 if (widget.kind == TripKind.today) {

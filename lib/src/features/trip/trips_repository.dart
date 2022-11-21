@@ -109,8 +109,9 @@ class TripsRepository {
     return false;
   }
 
-  Future<bool> doUpdateLocation(double lat, double lon) async {
-    final data = await DioClient.postDriverLocUpdate(authRepo.uid!, lat, lon);
+  Future<bool> doUpdateLocation(double lat, double lon, String tripId) async {
+    final data =
+        await DioClient.postDriverLocUpdate(authRepo.uid!, lat, lon, tripId);
     developer.log('doUpdateLocation() returned: $data');
 
     var result = data['result'];

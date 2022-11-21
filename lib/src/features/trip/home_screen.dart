@@ -9,6 +9,7 @@ import 'package:alnabali_driver/src/features/trip/home_trips_page.dart';
 import 'package:alnabali_driver/src/widgets/app_icons_icons.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gnav.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gbutton.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -91,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   iconSize: 80.sp,
                   padding: padding,
                   icon: AppIcons.nav1,
-                  text: 'TRIPS',
+                  text: AppLocalizations.of(context).trips,
                 ),
                 GButton(
                   gap: gap,
@@ -101,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   iconSize: 80.sp,
                   padding: padding,
                   icon: AppIcons.nav2,
-                  text: 'NOTIFICATION',
+                  text: AppLocalizations.of(context).notification,
                 ),
                 GButton(
                   gap: gap,
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   iconSize: 80.sp,
                   padding: padding,
                   icon: AppIcons.nav3,
-                  text: 'ACCOUNT',
+                  text: AppLocalizations.of(context).account,
                 )
               ],
               selectedIndex: selectedIndex,

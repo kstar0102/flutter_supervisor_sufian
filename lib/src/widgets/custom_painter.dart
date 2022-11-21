@@ -9,7 +9,7 @@ class AccountBgPainter extends CustomPainter {
 
     var path = Path();
     path.moveTo(0, 0);
-    path.quadraticBezierTo(size.width * 0.5, size.height * 0.25, size.width, 0);
+    path.quadraticBezierTo(size.width * 0.5, size.height * 0.2, size.width, 0);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
 

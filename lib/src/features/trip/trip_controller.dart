@@ -30,9 +30,9 @@ class TripController extends StateNotifier<AsyncValue<bool>> {
   }
 
   // * update location request must be done at behind. (silently)
-  Future<bool> doUpdateLocation(double lat, double lon) async {
-    final newState =
-        await AsyncValue.guard(() => tripsRepo.doUpdateLocation(lat, lon));
+  Future<bool> doUpdateLocation(double lat, double lon, String tripId) async {
+    final newState = await AsyncValue.guard(
+        () => tripsRepo.doUpdateLocation(lat, lon, tripId));
 
     return newState.hasValue;
   }

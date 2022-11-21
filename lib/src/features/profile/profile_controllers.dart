@@ -35,6 +35,8 @@ final homeAccountCtrProvider = StateNotifierProvider.autoDispose<
       profileRepo: ref.watch(profileRepositoryProvider));
 });
 
+final langCodeProvider = StateProvider<String>((ref) => 'en');
+
 // * ---------------------------------------------------------------------------
 // * ChangePasswordController
 // * ---------------------------------------------------------------------------

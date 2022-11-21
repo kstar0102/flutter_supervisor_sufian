@@ -10,11 +10,11 @@ import 'package:alnabali_driver/src/features/auth/auth_controllers.dart';
 import 'package:alnabali_driver/src/features/auth/login_validators.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/utils/string_validators.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 import 'package:alnabali_driver/src/widgets/login_button.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -46,24 +46,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     FocusManager.instance.primaryFocus?.unfocus();
 
     // * test code for auto-login...
-    final testCtr = ref.read(loginControllerProvider.notifier);
-    testCtr.doLogin('driver1@gmail.com', '123123').then(
-      (value) {
-        // go home only if login success.
-        if (value == true) {
-          context.goNamed(AppRoute.home.name);
-        }
-      },
-    );
+    // final testCtr = ref.read(loginControllerProvider.notifier);
+    // testCtr.doLogin('Driver', '111111').then(
+    //   (value) {
+    //     // go home only if login success.
+    //     if (value == true) {
+    //       context.goNamed(AppRoute.home.name);
+    //     }
+    //   },
+    // );
 
     // check username textfield's validation.
-    final emailError = emailErrorText(username);
+    final emailError = emailErrorText(username, context);
     if (emailError != null) {
       showToastMessage(emailError);
       return;
     }
     // check password textfield's validation.
-    final pwdError = passwordErrorText(password);
+    final pwdError = passwordErrorText(password, context);
     if (pwdError != null) {
       showToastMessage(pwdError);
       return;
@@ -123,7 +123,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       child: Image.asset("assets/images/login_icon.png"),
                     ),
                     Text(
-                      "LOGIN".hardcoded,
+                      AppLocalizations.of(context).login,
                       style: kTitleTextStyle,
                     ),
                     Flexible(flex: 1, child: SizedBox(height: 250.h)),
@@ -145,7 +145,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         decoration: InputDecoration(
                           label: Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Text('USERNAME'.hardcoded),
+                            child: Text(AppLocalizations.of(context).username),
                           ),
                           labelStyle: kLabelStyle,
                           errorStyle: kErrorStyle,
@@ -176,7 +176,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         decoration: InputDecoration(
                           label: Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Text('PASSWORD'.hardcoded),
+                            child: Text(AppLocalizations.of(context).pwd),
                           ),
                           labelStyle: kLabelStyle,
                           errorStyle: kErrorStyle,
@@ -201,7 +201,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       onPressed: () =>
                           context.goNamed(AppRoute.forgetMobile.name),
                       child: Text(
-                        "FORGET PASSWORD".hardcoded,
+                        AppLocalizations.of(context).forgetPwd,
                         style: TextStyle(
                           shadows: [
                             Shadow(

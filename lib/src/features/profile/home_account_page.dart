@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:alnabali_driver/src/features/profile/profile_repository.dart';
+import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,10 +11,10 @@ import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeAccountPage extends ConsumerStatefulWidget {
   const HomeAccountPage({Key? key}) : super(key: key);
@@ -22,26 +23,33 @@ class HomeAccountPage extends ConsumerStatefulWidget {
   ConsumerState<HomeAccountPage> createState() => _HomeAccountPageState();
 }
 
-class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
+class _HomeAccountPageState extends ConsumerState<HomeAccountPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
 
+    _tabController = TabController(length: 2, vsync: this);
+    final curr = ref.read(langCodeProvider);
+    _tabController.index = curr == 'en' ? 0 : 1;
+
     ref.read(homeAccountCtrProvider.notifier).doGetProfile();
   }
 
-  Widget _buildSummaryInfo(int index, String value) {
+  Widget _buildSummaryInfo(int index, String value, BuildContext context) {
     double iconHeight;
     String greyText;
     if (index == 0) {
       iconHeight = 77.h;
-      greyText = 'Working Hours';
+      greyText = AppLocalizations.of(context).workingHours;
     } else if (index == 1) {
       iconHeight = 57.h;
-      greyText = 'Total Distance';
+      greyText = AppLocalizations.of(context).totalDistance;
     } else {
       iconHeight = 89.h;
-      greyText = 'Total Trips';
+      greyText = AppLocalizations.of(context).totalTrips;
     }
 
     return Container(
@@ -113,7 +121,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
               alignment: AlignmentDirectional.topCenter,
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 140.h),
+                  margin: EdgeInsets.only(top: 120.h),
                   child: SizedBox.expand(
                     child: CustomPaint(painter: AccountBgPainter()),
                   ),
@@ -123,7 +131,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 140.h),
+                        margin: EdgeInsets.only(top: 100.h),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border:
@@ -139,7 +147,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                       ),
                       Flexible(child: SizedBox(height: 20.h)),
                       Text(
-                        profile?.nameEN ?? 'unknown'.hardcoded,
+                        profile?.nameEN ?? AppLocalizations.of(context).unknown,
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w500,
@@ -152,13 +160,57 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          _buildSummaryInfo(0, '${profile?.workingHours ?? 0}'),
                           _buildSummaryInfo(
-                              1, '${profile?.totalDistance ?? 0} KM'),
-                          _buildSummaryInfo(2, '${profile?.totalTrips ?? 0}'),
+                              0, '${profile?.workingHours ?? 0}', context),
+                          _buildSummaryInfo(
+                              1, '${profile?.totalDistance ?? 0} KM', context),
+                          _buildSummaryInfo(
+                              2, '${profile?.totalTrips ?? 0}', context),
                         ],
                       ),
-                      Flexible(child: SizedBox(height: 160.h)),
+                      Container(
+                        height: 100.h,
+                        margin: EdgeInsets.only(
+                          left: 250.w,
+                          right: 250.w,
+                          top: 46.h,
+                          bottom: 120.h,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              kColorPrimaryBlue,
+                              Color(0xFF0083A6),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: TabBar(
+                          controller: _tabController,
+                          indicator: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            color: kColorPrimaryBlue,
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.white,
+                          labelStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 36.sp,
+                          ),
+                          tabs: [
+                            Tab(text: 'English'.hardcoded),
+                            Tab(text: 'عربى'.hardcoded),
+                          ],
+                          onTap: (index) {
+                            ref.read(langCodeProvider.state).state =
+                                index == 0 ? 'en' : 'ar';
+                          },
+                        ),
+                      ),
                       TextButton(
                         onPressed: state.isLoading
                             ? null
@@ -169,7 +221,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                           alignment: Alignment.center,
                           width: btnW,
                           height: btnH,
-                          child: Text('Edit Profile'.hardcoded,
+                          child: Text(AppLocalizations.of(context).editProfile2,
                               style: btnTextStyle),
                         ),
                       ),
@@ -183,7 +235,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                           alignment: Alignment.center,
                           width: btnW,
                           height: btnH,
-                          child: Text('Change Password'.hardcoded,
+                          child: Text(AppLocalizations.of(context).changePwd2,
                               style: btnTextStyle),
                         ),
                       ),
@@ -195,7 +247,8 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                           alignment: Alignment.center,
                           width: btnW,
                           height: btnH,
-                          child: Text('Call App Supervisor'.hardcoded,
+                          child: Text(
+                              AppLocalizations.of(context).callAppSupervisor,
                               style: btnTextStyle),
                         ),
                       ),
@@ -239,7 +292,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                                     'assets/images/user_icon_logout.png'),
                               ),
                               Text(
-                                'LOG OUT'.hardcoded,
+                                AppLocalizations.of(context).logOut,
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w600,
@@ -253,7 +306,7 @@ class _HomeAccountPageState extends ConsumerState<HomeAccountPage> {
                       ),
                       Flexible(child: SizedBox(height: 60.h)),
                       Text(
-                        'App Version 0100.0'.hardcoded,
+                        AppLocalizations.of(context).appVersion0100,
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w500,

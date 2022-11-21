@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @immutable
 class Trip {
@@ -39,20 +39,6 @@ class Trip {
   final String destCity;
   final String details;
 
-  String getStatusTitle() {
-    const List<String> kStatusTitles = [
-      'None',
-      'Pending',
-      'Accepted',
-      'Rejected',
-      'Started',
-      'Finished',
-      'Canceled',
-    ];
-    return kStatusTitles[status.index];
-  }
-
-  String getTripTitle() => 'Trip # $id';
   String getTripTitleShort() => '# $id';
 
   String getStartDateStr() => DateFormat('MMM d y (E)').format(startDate);
@@ -69,22 +55,22 @@ class Trip {
     return '${duration.inHours}:$twoDigitMinutes Min';
   }
 
-  String getNotifyText() {
+  String getNotifyText(BuildContext context) {
     switch (status) {
       case TripStatus.pending:
-        return 'New pending trip'.hardcoded;
+        return AppLocalizations.of(context).newPendingTrip;
       case TripStatus.accepted:
-        return 'Trip has been accepted'.hardcoded;
+        return AppLocalizations.of(context).tripHasBeenAccepted;
       case TripStatus.rejected:
-        return 'Trip has been rejected'.hardcoded;
+        return AppLocalizations.of(context).tripHasBeenRejected;
       case TripStatus.started:
-        return 'Trip has been started'.hardcoded;
+        return AppLocalizations.of(context).tripHasBeenStarted;
       case TripStatus.finished:
-        return 'Trip has been finished'.hardcoded;
+        return AppLocalizations.of(context).tripHasBeenFinished;
       case TripStatus.canceled:
-        return 'Trip has been canceled'.hardcoded;
+        return AppLocalizations.of(context).tripHasBeenCanceled;
       default:
-        return 'unknown status...'.hardcoded;
+        return AppLocalizations.of(context).unknownStatus;
     }
   }
 

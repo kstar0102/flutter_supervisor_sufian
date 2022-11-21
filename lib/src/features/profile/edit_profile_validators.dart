@@ -1,5 +1,7 @@
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:flutter/material.dart';
+
 import 'package:alnabali_driver/src/utils/string_validators.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Mixin class to be used for client-side email & password validation
 mixin EidtProfileValidators {
@@ -7,39 +9,39 @@ mixin EidtProfileValidators {
   final phoneValidator = PhoneRegexValidator();
   final birthValidator = DateRegexValidator();
 
-  String? usernameErrorText(String username) {
+  String? usernameErrorText(String username, BuildContext context) {
     if (nonEmptyValidator.isValid(username)) {
       return null;
     }
 
-    return 'Username can\'t be empty.'.hardcoded;
+    return AppLocalizations.of(context).usernameCantBeEmpty;
   }
 
-  String? phoneErrorText(String phone) {
+  String? phoneErrorText(String phone, BuildContext context) {
     if (nonEmptyValidator.isValid(phone)) {
       //if (phoneValidator.isValid(phone)) {
       return null;
     }
 
-    return 'Phone number is not valid.'.hardcoded;
+    return AppLocalizations.of(context).phoneNumberIsNotValid;
   }
 
-  String? birthErrorText(String birth) {
+  String? birthErrorText(String birth, BuildContext context) {
     if (nonEmptyValidator.isValid(birth)) {
       //if (phoneValidator.isValid(birth)) {
       return null;
     }
 
     return birth.isEmpty
-        ? 'Date of birth can\'t be empty.'
-        : 'Date of birth is not valid.'.hardcoded;
+        ? AppLocalizations.of(context).dateOfBirthCantBe
+        : AppLocalizations.of(context).dateOfBirthIsNotValid;
   }
 
-  String? addressErrorText(String address) {
+  String? addressErrorText(String address, BuildContext context) {
     if (nonEmptyValidator.isValid(address)) {
       return null;
     }
 
-    return 'Address can\'t be empty.'.hardcoded;
+    return AppLocalizations.of(context).addrCantBeEmpty;
   }
 }

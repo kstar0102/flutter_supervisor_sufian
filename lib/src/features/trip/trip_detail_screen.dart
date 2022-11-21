@@ -1,4 +1,7 @@
+import 'package:alnabali_driver/src/features/trip/track_card.dart';
+import 'package:alnabali_driver/src/features/trip/trip_card.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
+import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,10 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:alnabali_driver/src/constants/app_styles.dart';
-import 'package:alnabali_driver/src/features/trip/trip_card.dart';
 import 'package:alnabali_driver/src/features/trip/trip_controller.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
-import 'package:alnabali_driver/src/widgets/progress_hud.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TripDetailScreen extends ConsumerStatefulWidget {
   const TripDetailScreen({
@@ -23,8 +25,10 @@ class TripDetailScreen extends ConsumerStatefulWidget {
   ConsumerState<TripDetailScreen> createState() => _TripDetailScreenState();
 }
 
-class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
+class _TripDetailScreenState extends ConsumerState<TripDetailScreen>
+    with SingleTickerProviderStateMixin {
   late Trip info;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -32,6 +36,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
 
     info =
         ref.read(tripControllerProvider.notifier).getTripInfo(widget.tripId)!;
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -45,9 +50,49 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              margin: EdgeInsets.symmetric(vertical: 10.h),
-              height: 192.h,
-              child: Image.asset('assets/images/home_icon.png'),
+              margin: EdgeInsets.only(top: 80.h, bottom: 50.h),
+              child: Column(
+                children: [
+                  Text(
+                    info.tripName,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w800,
+                      fontSize: 50.sp,
+                      color: Colors.white,
+                    ),
+                  ),
+                  // Text(
+                  //   '${AppLocalizations.of(context).trip} # ${info.id}',
+                  //   style: TextStyle(
+                  //     fontFamily: 'Montserrat',
+                  //     fontWeight: FontWeight.w500,
+                  //     fontSize: 44.sp,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 30.h,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: const AssetImage(
+                            'assets/images/company_mcdonald\'s.png'),
+                      ),
+                      Text(
+                        ' # ${info.id}',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 44.sp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: Container(
@@ -62,33 +107,92 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   child: Column(
                     children: [
                       Container(
-                        height: 573.h,
-                        margin: EdgeInsets.symmetric(vertical: 60.h),
-                        child: Image.asset('assets/images/trip_detail.png'),
+                        height: 100.h,
+                        margin: EdgeInsets.only(
+                          left: 250.w,
+                          right: 250.w,
+                          top: 60.h,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              kColorPrimaryBlue,
+                              Color(0xFF0083A6),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: TabBar(
+                          controller: _tabController,
+                          indicator: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            color: kColorPrimaryBlue,
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.white,
+                          labelStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 36.sp,
+                          ),
+                          tabs: [
+                            Tab(text: AppLocalizations.of(context).details2),
+                            Tab(text: AppLocalizations.of(context).tracking),
+                          ],
+                          onTap: (index) {},
+                        ),
                       ),
-                      TripCard(
-                        info: info,
-                        onYesNo: (id, targetStatus, extra) {
-                          // ? this code duplicated with TripsListView...
-                          successCallback(value) {
-                            if (value == true) {
-                              showOkayDialog(context, info, targetStatus);
-                            }
+                      Flexible(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            Column(
+                              children: [
+                                Container(
+                                  height: 573.h,
+                                  margin:
+                                      EdgeInsets.only(top: 20.h, bottom: 60.h),
+                                  child: Image.asset(
+                                      'assets/images/trip_detail.png'),
+                                ),
+                                TripCard(
+                                  info: info,
+                                  onYesNo: (id, targetStatus, extra) {
+                                    // ? this code duplicated with TripsListView...
+                                    successCallback(value) {
+                                      if (value == true) {
+                                        showOkayDialog(
+                                            context, info, targetStatus);
+                                      }
 
-                            // * rebuild detail screen for card update.
-                            setState(() {
-                              info = ref
-                                  .read(tripControllerProvider.notifier)
-                                  .getTripInfo(widget.tripId)!;
-                            });
-                          }
+                                      // * rebuild detail screen for card update.
+                                      setState(() {
+                                        info = ref
+                                            .read(
+                                                tripControllerProvider.notifier)
+                                            .getTripInfo(widget.tripId)!;
+                                      });
+                                    }
 
-                          ref
-                              .read(tripControllerProvider.notifier)
-                              .doChangeTrip(info, targetStatus, extra)
-                              .then(successCallback);
-                        },
-                        showDetail: true,
+                                    ref
+                                        .read(tripControllerProvider.notifier)
+                                        .doChangeTrip(info, targetStatus, extra)
+                                        .then(successCallback);
+                                  },
+                                  showDetail: true,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                TrackCard(info: info),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

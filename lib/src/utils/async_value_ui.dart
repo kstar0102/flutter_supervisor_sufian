@@ -10,11 +10,11 @@ import 'package:alnabali_driver/src/exceptions/app_exception.dart';
 extension AsyncValueUI on AsyncValue {
   bool showAlertDialogOnError(BuildContext context) {
     if (!isRefreshing && hasError) {
-      final message = _errorMessage(error);
+      final message = _errorMessage(error, context);
       showToastMessage(message);
       // showExceptionAlertDialog(
       //   context: context,
-      //   title: 'Error'.hardcoded,
+      //   title: AppLocalizations.of(context).err,
       //   exception: message,
       // );
       return true;
@@ -22,9 +22,9 @@ extension AsyncValueUI on AsyncValue {
     return false;
   }
 
-  String _errorMessage(Object? error) {
+  String _errorMessage(Object? error, BuildContext context) {
     if (error is AppException) {
-      return error.details.message;
+      return error.getDetails(context).message;
     } else {
       return error.toString();
     }

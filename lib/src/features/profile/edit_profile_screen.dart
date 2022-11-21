@@ -9,10 +9,10 @@ import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/features/profile/profile_textfield.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
   final _address = TextEditingController();
 
   String _avatarImg = 'assets/images/user_avatar.png';
-  String _nameEn = 'unknown'.hardcoded;
+  String _nameEn = 'unknown';
 
   @override
   void initState() {
@@ -69,22 +69,22 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     final address = _address.text;
     String? inputError;
 
-    inputError = usernameErrorText(name);
+    inputError = usernameErrorText(name, context);
     if (inputError != null) {
       showToastMessage(inputError);
       return;
     }
-    inputError = phoneErrorText(phone);
+    inputError = phoneErrorText(phone, context);
     if (inputError != null) {
       showToastMessage(inputError);
       return;
     }
-    inputError = birthErrorText(birth);
+    inputError = birthErrorText(birth, context);
     if (inputError != null) {
       showToastMessage(inputError);
       return;
     }
-    inputError = addressErrorText(address);
+    inputError = addressErrorText(address, context);
     if (inputError != null) {
       showToastMessage(inputError);
       return;
@@ -93,7 +93,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     final controller = ref.read(editProfileCtrProvider.notifier);
     controller.doEditProfile(name, phone, birth, address).then((value) {
       if (value == true) {
-        showToastMessage('Updated profile successfully.'.hardcoded);
+        showToastMessage(AppLocalizations.of(context).updatedProfileSuccess);
       }
     });
   }
@@ -119,7 +119,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: 140.h),
                 child: Text(
-                  'EDIT PROFILE'.hardcoded,
+                  AppLocalizations.of(context).editProfile,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w800,
@@ -175,7 +175,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                                 txtFieldType: ProfileTextFieldType.name,
                                 controller: _name,
                                 onEditComplete: () {
-                                  if (usernameErrorText(_name.text) == null) {
+                                  if (usernameErrorText(_name.text, context) ==
+                                      null) {
                                     _node.nextFocus();
                                   }
                                 },
@@ -185,7 +186,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                                 txtFieldType: ProfileTextFieldType.phone,
                                 controller: _phone,
                                 onEditComplete: () {
-                                  if (phoneErrorText(_phone.text) == null) {
+                                  if (phoneErrorText(_phone.text, context) ==
+                                      null) {
                                     _node.nextFocus();
                                   }
                                 },
@@ -195,7 +197,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                                 txtFieldType: ProfileTextFieldType.dateOfBirth,
                                 controller: _birthday,
                                 onEditComplete: () {
-                                  if (birthErrorText(_birthday.text) == null) {
+                                  if (birthErrorText(_birthday.text, context) ==
+                                      null) {
                                     _node.nextFocus();
                                   }
                                 },
@@ -219,7 +222,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                                     shape: const StadiumBorder(),
                                   ),
                                   child: Text(
-                                    'SAVE'.hardcoded,
+                                    AppLocalizations.of(context).save,
                                     style: TextStyle(
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w700,

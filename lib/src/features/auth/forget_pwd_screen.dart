@@ -7,10 +7,10 @@ import 'package:go_router/go_router.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/auth/auth_controllers.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/utils/string_validators.dart';
 import 'package:alnabali_driver/src/widgets/login_button.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgetPwdScreen extends ConsumerStatefulWidget {
   const ForgetPwdScreen({Key? key}) : super(key: key);
@@ -80,12 +80,12 @@ class _ForgetPwdScreenState extends ConsumerState<ForgetPwdScreen> {
                     ),
                     Flexible(child: SizedBox(height: 90.h)),
                     Text(
-                      'FORGET PASSWORD'.hardcoded,
+                      AppLocalizations.of(context).forgetPwd,
                       style: kTitleTextStyle,
                     ),
                     Flexible(child: SizedBox(height: 100.h)),
                     Text(
-                      "Enter your new password below".hardcoded,
+                      AppLocalizations.of(context).enterYourNewPwd,
                       style: kSubTitleTextStyle,
                     ),
                     Flexible(child: SizedBox(height: 200.h)),
@@ -104,7 +104,7 @@ class _ForgetPwdScreenState extends ConsumerState<ForgetPwdScreen> {
                         decoration: InputDecoration(
                           label: Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Text('NEW PASSWORD'.hardcoded),
+                            child: Text(AppLocalizations.of(context).newPwd),
                           ),
                           labelStyle: kLabelStyle,
                           errorStyle: kErrorStyle,
@@ -135,7 +135,8 @@ class _ForgetPwdScreenState extends ConsumerState<ForgetPwdScreen> {
                         decoration: InputDecoration(
                           label: Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Text('CONFIRM PASSWORD'.hardcoded),
+                            child:
+                                Text(AppLocalizations.of(context).confirmPwd),
                           ),
                           labelStyle: kLabelStyle,
                           errorStyle: kErrorStyle,

@@ -6,8 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final dialogShape = RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(40.h)));
@@ -61,15 +61,15 @@ Future<void> showOkayDialog(
     builder: (BuildContext context) {
       String title = '';
       if (okStatus == TripStatus.accepted) {
-        title = 'You have accepted trip # ${info.id}'.hardcoded;
+        title = '${AppLocalizations.of(context).youHaveAccepted}${info.id}';
       } else if (okStatus == TripStatus.rejected) {
-        title = 'You have rejected trip # ${info.id}'.hardcoded;
+        title = '${AppLocalizations.of(context).youHaveRejected}${info.id}';
       } else if (okStatus == TripStatus.started) {
-        title = 'You have started trip # ${info.id}'.hardcoded;
+        title = '${AppLocalizations.of(context).youHaveStarted}${info.id}';
       } else if (okStatus == TripStatus.finished) {
-        title = 'You have finished trip # ${info.id}'.hardcoded;
+        title = '${AppLocalizations.of(context).youHaveFinished}${info.id}';
       } else if (okStatus == TripStatus.canceled) {
-        title = 'You have canceled trip # ${info.id}'.hardcoded;
+        title = '${AppLocalizations.of(context).youHaveCanceled}${info.id}';
       }
 
       return AlertDialog(
@@ -115,7 +115,7 @@ Future<void> showOkayDialog(
                 shape: const StadiumBorder(),
               ),
               child: Text(
-                'OKAY'.hardcoded,
+                AppLocalizations.of(context).okay,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
@@ -147,13 +147,11 @@ Future<bool?> showConfirmDialog(
     builder: (BuildContext context) {
       String title = '';
       if (status == TripStatus.pending) {
-        title =
-            'Are you sure you want to accept the trip # $tripNo ?'.hardcoded;
+        title = '${AppLocalizations.of(context).areYouSureAccept}$tripNo?';
       } else if (status == TripStatus.accepted) {
-        title = 'Are you sure you want to start the trip # $tripNo ?'.hardcoded;
+        title = '${AppLocalizations.of(context).areYouSureAccept}$tripNo?';
       } else if (status == TripStatus.started) {
-        title =
-            'Are you sure you want to finish the trip # $tripNo ?'.hardcoded;
+        title = '${AppLocalizations.of(context).areYouSureAccept}$tripNo?';
       }
 
       return AlertDialog(
@@ -200,7 +198,7 @@ Future<bool?> showConfirmDialog(
                 shape: const StadiumBorder(),
               ),
               child: Text(
-                'YES'.hardcoded,
+                AppLocalizations.of(context).yes,
                 style: yesTextStyle,
               ),
             ),
@@ -211,7 +209,7 @@ Future<bool?> showConfirmDialog(
             onPressed: () {
               Navigator.pop(context, false);
             },
-            title: 'NO'.hardcoded,
+            title: AppLocalizations.of(context).no,
           ),
         ],
       );
@@ -250,7 +248,7 @@ Future<String?> showRejectDialog(
             SizedBox(
               width: 660.w,
               child: Text(
-                'You are rejecting trip # $tripNo'.hardcoded,
+                '${AppLocalizations.of(context).youAreRejecting}$tripNo',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -261,7 +259,7 @@ Future<String?> showRejectDialog(
               ),
             ),
             Text(
-              'Please fill the reason for rejection!'.hardcoded,
+              AppLocalizations.of(context).pleaseFillTheReason,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Montserrat',
@@ -307,7 +305,7 @@ Future<String?> showRejectDialog(
                 shape: const StadiumBorder(),
               ),
               child: Text(
-                'REJECT'.hardcoded,
+                AppLocalizations.of(context).reject,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
@@ -322,7 +320,7 @@ Future<String?> showRejectDialog(
             onPressed: () {
               Navigator.pop(context, null);
             },
-            title: 'NO'.hardcoded,
+            title: AppLocalizations.of(context).no,
           ),
         ],
       );
@@ -344,7 +342,7 @@ Future<bool?> showLogoutDialog(BuildContext context) {
         titlePadding: titlePadding,
         title: Align(
           child: Text(
-            'Log Out'.hardcoded,
+            AppLocalizations.of(context).logOut2,
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w700,
@@ -365,7 +363,7 @@ Future<bool?> showLogoutDialog(BuildContext context) {
             SizedBox(
               width: 680.w,
               child: Text(
-                'Are you sure you want to logout ?'.hardcoded,
+                AppLocalizations.of(context).areYouSureLogout,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -393,7 +391,7 @@ Future<bool?> showLogoutDialog(BuildContext context) {
                 shape: const StadiumBorder(),
               ),
               child: Text(
-                'YES'.hardcoded,
+                AppLocalizations.of(context).yes,
                 style: yesTextStyle,
               ),
             ),
@@ -404,7 +402,7 @@ Future<bool?> showLogoutDialog(BuildContext context) {
             onPressed: () {
               Navigator.pop(context, false);
             },
-            title: 'NO'.hardcoded,
+            title: AppLocalizations.of(context).no,
           ),
         ],
       );

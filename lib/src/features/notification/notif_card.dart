@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/notification/notif.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotifCard extends StatelessWidget {
   const NotifCard({
@@ -59,7 +59,7 @@ class NotifCard extends StatelessWidget {
                             backgroundColor: getStatusColor(info.status),
                             child: Center(
                               child: Text(
-                                "TRIP".hardcoded,
+                                AppLocalizations.of(context).trip,
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w400,

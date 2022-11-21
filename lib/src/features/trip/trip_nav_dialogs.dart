@@ -6,11 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-Widget _buildCourseRow(Trip info) {
+Widget _buildCourseRow(Trip info, BuildContext context) {
   final guideTextStyle = TextStyle(
     fontFamily: 'Montserrat',
     fontWeight: FontWeight.w700,
@@ -35,7 +35,8 @@ Widget _buildCourseRow(Trip info) {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('ORIGIN LOCATION'.hardcoded, style: guideTextStyle),
+          Text(AppLocalizations.of(context).originLocation,
+              style: guideTextStyle),
           Text(info.orgArea, style: courseTextStyle),
           Text(info.orgCity, style: cityTextStyle),
         ],
@@ -44,7 +45,8 @@ Widget _buildCourseRow(Trip info) {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('DESTINATION LOCATION'.hardcoded, style: guideTextStyle),
+          Text(AppLocalizations.of(context).destLocation,
+              style: guideTextStyle),
           Text(info.destArea, style: courseTextStyle),
           Text(info.destCity, style: cityTextStyle),
         ],
@@ -53,7 +55,7 @@ Widget _buildCourseRow(Trip info) {
   );
 }
 
-Widget _buildDistTimeRow(double dist, double time) {
+Widget _buildDistTimeRow(double dist, double time, BuildContext context) {
   final guideStyle = TextStyle(
     fontFamily: 'Montserrat',
     fontWeight: FontWeight.w700,
@@ -72,7 +74,7 @@ Widget _buildDistTimeRow(double dist, double time) {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Distance'.hardcoded, style: guideStyle),
+          Text(AppLocalizations.of(context).distance, style: guideStyle),
           RichText(
             text: TextSpan(
               style: valueStyle,
@@ -92,7 +94,7 @@ Widget _buildDistTimeRow(double dist, double time) {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Time'.hardcoded, style: guideStyle),
+          Text(AppLocalizations.of(context).time, style: guideStyle),
           RichText(
             text: TextSpan(
               style: valueStyle,
@@ -120,11 +122,11 @@ Future<void> showNavDialog(
   final btnW = 280.w;
   final btnH = 84.h;
 
-  String yesTitle = 'unknown';
+  String yesTitle = AppLocalizations.of(context).unknown;
   if (info.status == TripStatus.accepted) {
-    yesTitle = 'START TRIP'.hardcoded;
+    yesTitle = AppLocalizations.of(context).startTrip;
   } else if (info.status == TripStatus.started) {
-    yesTitle = 'FINISH TRIP'.hardcoded;
+    yesTitle = AppLocalizations.of(context).finishTrip;
   }
 
   return showDialog<void>(
@@ -215,9 +217,9 @@ Future<void> showNavDialog(
                         ],
                       ),
                     ),
-                    _buildCourseRow(info),
+                    _buildCourseRow(info, context),
                     SizedBox(height: 20.h),
-                    _buildDistTimeRow(40, 15),
+                    _buildDistTimeRow(40, 15, context),
                   ],
                 ),
               ),
@@ -231,7 +233,7 @@ Future<void> showNavDialog(
           GradientButton(
             width: btnW,
             height: btnH,
-            title: 'REJECT'.hardcoded,
+            title: AppLocalizations.of(context).reject,
             onPressed: () {
               Navigator.pop(context, false);
 
@@ -357,7 +359,7 @@ Future<void> showNavStatusDialog(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'Going to'.hardcoded,
+                  AppLocalizations.of(context).goingTo,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w600,
@@ -367,8 +369,8 @@ Future<void> showNavStatusDialog(
                 ),
                 Text(
                   isGoDest
-                      ? 'Destination Location'.hardcoded
-                      : 'Origin Location'.hardcoded,
+                      ? AppLocalizations.of(context).destLocation2
+                      : AppLocalizations.of(context).orginLocation2,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w600,

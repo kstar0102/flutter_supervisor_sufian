@@ -7,9 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/auth/auth_controllers.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/login_button.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgetMobileScreen extends ConsumerStatefulWidget {
   const ForgetMobileScreen({Key? key}) : super(key: key);
@@ -62,7 +62,7 @@ class _ForgetMobileScreenState extends ConsumerState<ForgetMobileScreen> {
                   ),
                   Flexible(flex: 1, child: SizedBox(height: 90.h)),
                   Text(
-                    "FORGET PASSWORD".hardcoded,
+                    AppLocalizations.of(context).forgetPwd,
                     style: kTitleTextStyle,
                   ),
                   Flexible(flex: 1, child: SizedBox(height: 110.h)),
@@ -71,12 +71,16 @@ class _ForgetMobileScreenState extends ConsumerState<ForgetMobileScreen> {
                     text: TextSpan(
                       style: kSubTitleTextStyle,
                       children: [
-                        TextSpan(text: 'We will send a one time '.hardcoded),
                         TextSpan(
-                          text: 'OTP'.hardcoded,
+                            text: AppLocalizations.of(context)
+                                .weWillSendAOneTime),
+                        TextSpan(
+                          text: AppLocalizations.of(context).otp,
                           style: const TextStyle(fontWeight: FontWeight.w800),
                         ),
-                        TextSpan(text: ' on \n your mobile number'.hardcoded),
+                        TextSpan(
+                            text: AppLocalizations.of(context)
+                                .onYourMobileNumber),
                       ],
                     ),
                   ),
@@ -94,7 +98,8 @@ class _ForgetMobileScreenState extends ConsumerState<ForgetMobileScreen> {
                       decoration: InputDecoration(
                         label: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: Text('MOBILE NUMBER'.hardcoded),
+                          child:
+                              Text(AppLocalizations.of(context).mobileNumber),
                         ),
                         labelStyle: kLabelStyle,
                         errorStyle: kErrorStyle,

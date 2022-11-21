@@ -1,5 +1,6 @@
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/utils/string_validators.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Mixin class to be used for client-side email & password validation
 mixin EmailAndPasswordValidators {
@@ -15,19 +16,19 @@ mixin EmailAndPasswordValidators {
     return passwordSignInSubmitValidator.isValid(password);
   }
 
-  String? emailErrorText(String email) {
+  String? emailErrorText(String email, BuildContext context) {
     final bool showErrorText = !canSubmitEmail(email);
     final String errorText = email.isEmpty
-        ? 'Email can\'t be empty.'.hardcoded
-        : 'Invalid email address.'.hardcoded;
+        ? AppLocalizations.of(context).emailCantBeEmpty
+        : AppLocalizations.of(context).invalidEmailAddr;
     return showErrorText ? errorText : null;
   }
 
-  String? passwordErrorText(String password) {
+  String? passwordErrorText(String password, BuildContext context) {
     final bool showErrorText = !canSubmitPassword(password);
     final String errorText = password.isEmpty
-        ? 'Password can\'t be empty.'.hardcoded
-        : 'Password is too short.'.hardcoded;
+        ? AppLocalizations.of(context).pwdCantBeEmpty
+        : AppLocalizations.of(context).pwdIsTooShort;
     return showErrorText ? errorText : null;
   }
 }

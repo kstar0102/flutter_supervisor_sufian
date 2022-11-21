@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const kDialogDefaultKey = Key('dialog-default-key');
 
@@ -70,11 +70,11 @@ Future<void> showExceptionAlertDialog({
       context: context,
       title: title,
       content: exception.toString(),
-      defaultActionText: 'OK'.hardcoded,
+      defaultActionText: AppLocalizations.of(context).ok,
     );
 
 Future<void> showNotImplementedAlertDialog({required BuildContext context}) =>
     showAlertDialog(
       context: context,
-      title: 'Not implemented'.hardcoded,
+      title: AppLocalizations.of(context).notImplemented,
     );

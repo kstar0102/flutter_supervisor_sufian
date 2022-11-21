@@ -204,7 +204,7 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
       if (currLocation != null) {
         final tripCtr = ref.read(tripControllerProvider.notifier);
         tripCtr.doUpdateLocation(
-            currLocation!.latitude!, currLocation!.longitude!);
+            currLocation!.latitude!, currLocation!.longitude!, widget.tripId);
       }
     });
   }

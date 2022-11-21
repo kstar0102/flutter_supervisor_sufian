@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 part 'app_exception.freezed.dart';
 
@@ -29,7 +30,7 @@ class AppExceptionData {
 }
 
 extension AppExceptionDetails on AppException {
-  AppExceptionData get details {
+  AppExceptionData getDetails(BuildContext context) {
     return when(
       // Auth
       // emailAlreadyInUse: () => AppExceptionData(
@@ -42,18 +43,12 @@ extension AppExceptionDetails on AppException {
       // ),
       wrongPassword: () => AppExceptionData(
         'wrong-password',
-        'Wrong password'.hardcoded,
+        AppLocalizations.of(context).wrongPwd,
       ),
       userNotFound: () => AppExceptionData(
         'user-not-found',
-        'User not found'.hardcoded,
+        AppLocalizations.of(context).userNotFound,
       ),
-
-      // Orders
-      // parseOrderFailure: (status) => AppExceptionData(
-      //   'parse-order-failure',
-      //   'Could not parse order status: $status'.hardcoded,
-      // ),
     );
   }
 }

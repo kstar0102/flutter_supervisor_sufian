@@ -7,10 +7,10 @@ import 'package:go_router/go_router.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/auth/auth_controllers.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/login_button.dart';
 import 'package:alnabali_driver/src/widgets/otp_field.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgetOTPScreen extends ConsumerStatefulWidget {
   const ForgetOTPScreen({Key? key}) : super(key: key);
@@ -53,7 +53,7 @@ class _ForgetOTPScreenState extends ConsumerState<ForgetOTPScreen> {
                   ),
                   Flexible(flex: 1, child: SizedBox(height: 90.h)),
                   Text(
-                    "FORGET PASSWORD".hardcoded,
+                    AppLocalizations.of(context).forgetPwd,
                     style: kTitleTextStyle,
                   ),
                   Flexible(flex: 1, child: SizedBox(height: 120.h)),
@@ -62,14 +62,14 @@ class _ForgetOTPScreenState extends ConsumerState<ForgetOTPScreen> {
                     text: TextSpan(
                       style: kSubTitleTextStyle,
                       children: [
-                        TextSpan(text: 'An '.hardcoded),
+                        TextSpan(text: AppLocalizations.of(context).an),
                         TextSpan(
-                          text: 'OTP'.hardcoded,
+                          text: AppLocalizations.of(context).otp,
                           style: const TextStyle(fontWeight: FontWeight.w800),
                         ),
                         TextSpan(
-                            text:
-                                ' was sent to your \n mobile number'.hardcoded),
+                            text: AppLocalizations.of(context)
+                                .wasSentToYourMobile),
                       ],
                     ),
                   ),
@@ -127,7 +127,7 @@ class _ForgetOTPScreenState extends ConsumerState<ForgetOTPScreen> {
                   ),
                   Flexible(flex: 1, child: SizedBox(height: 90.h)),
                   Text(
-                    "Did not receive the verification OTP?".hardcoded,
+                    AppLocalizations.of(context).didNotreceiveThe,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Montserrat',
@@ -147,7 +147,8 @@ class _ForgetOTPScreenState extends ConsumerState<ForgetOTPScreen> {
                         color: Colors.white,
                       ),
                       children: <TextSpan>[
-                        TextSpan(text: 'Resend OTP in '.hardcoded),
+                        TextSpan(
+                            text: AppLocalizations.of(context).resendOTPIn),
                         const TextSpan(
                           text: '00:59',
                           style: TextStyle(

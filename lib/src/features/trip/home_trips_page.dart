@@ -7,7 +7,7 @@ import 'package:alnabali_driver/src/constants/app_constants.dart';
 import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/trips_list_controller.dart';
 import 'package:alnabali_driver/src/features/trip/trips_list_view.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeTripsPage extends ConsumerStatefulWidget {
   const HomeTripsPage({Key? key}) : super(key: key);
@@ -71,8 +71,8 @@ class _HomeTripsPageState extends ConsumerState<HomeTripsPage>
                 fontSize: 40.sp,
               ),
               tabs: [
-                Tab(text: 'TODAY TRIPS'.hardcoded),
-                Tab(text: 'PAST TRIPS'.hardcoded),
+                Tab(text: AppLocalizations.of(context).todayTrips),
+                Tab(text: AppLocalizations.of(context).pastTrips),
               ],
               onTap: (index) {
                 ref.read(tripsKindProvider.state).state =

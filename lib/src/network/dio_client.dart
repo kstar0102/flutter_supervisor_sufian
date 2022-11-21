@@ -219,7 +219,7 @@ class DioClient {
 
   // * POST '/driver-location/update'
   static Future<dynamic> postDriverLocUpdate(
-      String id, double lat, double lon) async {
+      String id, double lat, double lon, String tripId) async {
     final token = await _getToken();
 
     var dio = Dio(_baseOptions);
@@ -232,6 +232,7 @@ class DioClient {
           'driver_id': id,
           'latigude': lat,
           'longitude': lon,
+          'trip_id': tripId,
         },
       );
       return response.data;

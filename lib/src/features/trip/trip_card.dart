@@ -9,9 +9,9 @@ import 'package:alnabali_driver/src/constants/app_styles.dart';
 import 'package:alnabali_driver/src/features/trip/trip_busline.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/routing/app_router.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/widgets/gradient_button.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 typedef TripCardCallback = void Function(
     Trip info, TripStatus targetStatus, String? extra);
@@ -84,7 +84,7 @@ class _TripCardState extends State<TripCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'BUS NO.'.hardcoded,
+              AppLocalizations.of(context).busNo,
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w600,
@@ -102,7 +102,7 @@ class _TripCardState extends State<TripCard> {
               ),
             ),
             Text(
-              'Passengers'.hardcoded,
+              AppLocalizations.of(context).passengers,
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w500,
@@ -146,7 +146,7 @@ class _TripCardState extends State<TripCard> {
         Container(
           margin: EdgeInsets.only(top: 20.w, bottom: 4.h),
           child: Text(
-            'REASON FOR REJECTION'.hardcoded,
+            AppLocalizations.of(context).reasonForRejection,
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w600,
@@ -175,7 +175,7 @@ class _TripCardState extends State<TripCard> {
         Container(
           margin: EdgeInsets.only(top: 20.w, bottom: 4.h),
           child: Text(
-            'DETAILS'.hardcoded,
+            AppLocalizations.of(context).details,
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w600,
@@ -206,13 +206,13 @@ class _TripCardState extends State<TripCard> {
       final btnH = 84.h;
 
       // as default, suppose status is pending
-      String yesTitle = 'ACCEPT'.hardcoded;
-      String noTitle = 'REJECT'.hardcoded;
+      String yesTitle = AppLocalizations.of(context).accept;
+      String noTitle = AppLocalizations.of(context).reject;
       if (widget.info.status == TripStatus.accepted) {
-        yesTitle = 'START'.hardcoded;
+        yesTitle = AppLocalizations.of(context).start;
       } else if (widget.info.status == TripStatus.started) {
-        yesTitle = 'FINISH'.hardcoded;
-        noTitle = 'NAVIGATION'.hardcoded;
+        yesTitle = AppLocalizations.of(context).finish;
+        noTitle = AppLocalizations.of(context).navigation;
       }
 
       return SizedBox(
@@ -296,6 +296,16 @@ class _TripCardState extends State<TripCard> {
   }
 
   Widget _buildCardContents() {
+    List<String> kStatusTitles = [
+      AppLocalizations.of(context).none,
+      AppLocalizations.of(context).pending,
+      AppLocalizations.of(context).accepted,
+      AppLocalizations.of(context).rejected,
+      AppLocalizations.of(context).started,
+      AppLocalizations.of(context).finished,
+      AppLocalizations.of(context).canceled,
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -308,7 +318,7 @@ class _TripCardState extends State<TripCard> {
               child: Image.asset(_getStatusImgPath(widget.info.status)),
             ),
             Text(
-              widget.info.getStatusTitle(),
+              kStatusTitles[widget.info.status.index],
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w400,
@@ -321,7 +331,7 @@ class _TripCardState extends State<TripCard> {
         Padding(
           padding: EdgeInsets.only(top: 2.h),
           child: Text(
-            widget.info.getTripTitle(),
+            '${AppLocalizations.of(context).trip} # ${widget.info.id}',
             style: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w500,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum TripKind {
   today,
@@ -41,4 +42,30 @@ Color getStatusColor(TripStatus status) {
     Color(0xFFFF00FF),
   ];
   return kStatusColors[status.index];
+}
+
+String getTabTitleFromID(TripStatus status, BuildContext context) {
+  final kTripTabTitles = [
+    AppLocalizations.of(context).all,
+    AppLocalizations.of(context).pending,
+    AppLocalizations.of(context).accepted,
+    AppLocalizations.of(context).rejected,
+    AppLocalizations.of(context).started,
+    AppLocalizations.of(context).finished,
+    AppLocalizations.of(context).canceled,
+  ];
+  return kTripTabTitles[status.index];
+}
+
+String getTrackExplain(TripStatus status, BuildContext context) {
+  final kTripTabTitles = [
+    '',
+    AppLocalizations.of(context).trackPending,
+    AppLocalizations.of(context).trackAccepted,
+    AppLocalizations.of(context).trackRejected,
+    AppLocalizations.of(context).trackStarted,
+    AppLocalizations.of(context).trackFinished,
+    AppLocalizations.of(context).trackCanceled,
+  ];
+  return kTripTabTitles[status.index];
 }

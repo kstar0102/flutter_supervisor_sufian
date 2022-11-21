@@ -10,9 +10,9 @@ import 'package:alnabali_driver/src/features/profile/profile_textfield.dart';
 import 'package:alnabali_driver/src/features/profile/profile_controllers.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
 import 'package:alnabali_driver/src/utils/async_value_ui.dart';
-import 'package:alnabali_driver/src/utils/string_hardcoded.dart';
 import 'package:alnabali_driver/src/utils/string_validators.dart';
 import 'package:alnabali_driver/src/widgets/custom_painter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -50,19 +50,19 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 
     // check validations.
     if (!pwdEmptyValidator.isValid(currPwd)) {
-      showToastMessage('Current password can\'t be empty.'.hardcoded);
+      showToastMessage(AppLocalizations.of(context).currentPwdCantBe);
       return;
     }
     if (!pwdEmptyValidator.isValid(new1Pwd)) {
-      showToastMessage('Please input new password.'.hardcoded);
+      showToastMessage(AppLocalizations.of(context).pleaseInputNewPwd);
       return;
     }
     if (!pwdEmptyValidator.isValid(new2Pwd)) {
-      showToastMessage('Please input confirm new password.'.hardcoded);
+      showToastMessage(AppLocalizations.of(context).pleaseInputConfirmPwd);
       return;
     }
     if (new1Pwd != new2Pwd) {
-      showToastMessage('New passwords do not match.'.hardcoded);
+      showToastMessage(AppLocalizations.of(context).newPwdsDoNotMatch);
       return;
     }
 
@@ -74,7 +74,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         _new1.clear();
         _new2.clear();
 
-        showToastMessage('Changed password successfully.'.hardcoded);
+        showToastMessage(AppLocalizations.of(context).changedPwdSuccess);
       }
     });
   }
@@ -100,7 +100,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: 150.h),
                   child: Text(
-                    'CHANGE PASSWORD'.hardcoded,
+                    AppLocalizations.of(context).changePwd,
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w800,
@@ -171,7 +171,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                                   shape: const StadiumBorder(),
                                 ),
                                 child: Text(
-                                  'SAVE'.hardcoded,
+                                  AppLocalizations.of(context).save,
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w700,
