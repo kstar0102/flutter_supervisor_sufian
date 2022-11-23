@@ -90,5 +90,5 @@ String getTrackExplain(TripStatus status, BuildContext context) {
 }
 
 String getClientImageURL(String clientName) {
-  return 'https://via.placeholder.com/150';
+  return 'http://167.86.102.230/Alnabali/public/android/client/avatar/$clientName';
 }

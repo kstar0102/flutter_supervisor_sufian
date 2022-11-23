@@ -71,8 +71,7 @@ class NotifCard extends StatelessWidget {
                           CircleAvatar(
                             radius: 50.h,
                             backgroundColor: Colors.transparent,
-                            backgroundImage: NetworkImage(
-                                getClientImageURL(info.clientName)),
+                            backgroundImage: NetworkImage(info.clientAvatar),
                           ),
                           Text(
                             info.getNotifTitle(),

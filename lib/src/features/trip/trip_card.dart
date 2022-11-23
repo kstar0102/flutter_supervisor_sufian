@@ -50,7 +50,7 @@ class _TripCardState extends State<TripCard> {
             backgroundColor: Colors.transparent,
             backgroundImage:
                 //const AssetImage('assets/images/company_mcdonald\'s.png'),
-                NetworkImage(getClientImageURL(widget.info.clientName)),
+                NetworkImage(widget.info.clientAvatar),
           ),
         ),
         Expanded(

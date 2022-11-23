@@ -326,11 +326,11 @@ Future<void> showNavStatusDialog(
                 backgroundColor: Colors.transparent,
                 backgroundImage:
                     //const AssetImage('assets/images/company_mcdonald\'s.png'),
-                    NetworkImage(getClientImageURL(info.clientName)),
+                    NetworkImage(info.clientAvatar),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10.w),
+              padding: EdgeInsets.only(left: 10.w, right: 10.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

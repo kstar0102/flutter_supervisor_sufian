@@ -17,6 +17,7 @@ import 'package:alnabali_driver/src/features/trip/trip_nav_dialogs.dart';
 import 'package:alnabali_driver/src/features/trip/trip.dart';
 import 'package:alnabali_driver/src/widgets/dialogs.dart';
 import 'package:alnabali_driver/src/widgets/progress_hud.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TripNavScreen extends ConsumerStatefulWidget {
   const TripNavScreen({
@@ -308,7 +309,7 @@ class _NavigationScreenState extends ConsumerState<TripNavScreen> {
               alignment: Alignment.center,
               margin: EdgeInsets.only(top: 130.h, bottom: 60.h),
               child: Text(
-                'TRIP #${widget.tripId}',
+                '${AppLocalizations.of(context).trip} #${widget.tripId}',
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w800,

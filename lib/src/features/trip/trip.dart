@@ -21,6 +21,7 @@ class Trip {
     required this.destArea,
     required this.destCity,
     required this.details,
+    required this.clientAvatar,
   });
 
   final String id;
@@ -37,6 +38,7 @@ class Trip {
   final String destArea;
   final String destCity;
   final String details;
+  final String clientAvatar;
 
   String getTripTitleShort() => '# $id';
 
@@ -73,6 +75,7 @@ class Trip {
       destArea: data['destination_area'],
       destCity: data['destination_city'],
       details: data['details'] ?? '',
+      clientAvatar: data['client_avatar'],
     );
   }
 
@@ -91,6 +94,7 @@ class Trip {
       destArea: destArea,
       destCity: destCity,
       details: details,
+      clientAvatar: clientAvatar,
     );
   }
 

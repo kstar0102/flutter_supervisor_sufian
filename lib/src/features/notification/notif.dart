@@ -18,6 +18,7 @@ class Notif {
     required this.driverName,
     required this.status,
     required this.notifyDate,
+    required this.clientAvatar,
   });
 
   final String id;
@@ -30,6 +31,7 @@ class Notif {
   final DateTime notifyDate;
   final String driverName;
   final TripStatus status;
+  final String clientAvatar;
 
   String getNotifTitle() => '#$tripId';
   String getNotifyTimeText() => DateFormat('hh:mm a').format(notifyDate);
@@ -48,6 +50,7 @@ class Notif {
       notifyDate: DateFormat('y-m-dd').parse('${data['updated_at']}'),
       driverName: data['driver_name'].toString(),
       status: status,
+      clientAvatar: data['client_avatar'],
     );
   }
 
