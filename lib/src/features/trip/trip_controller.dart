@@ -1,5 +1,6 @@
 import 'package:alnabali_driver/src/features/trip/transaction.dart';
 import 'package:alnabali_driver/src/features/trip/trips_list_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
@@ -36,6 +37,15 @@ class TripController extends StateNotifier<AsyncValue<bool>> {
         () => tripsRepo.doUpdateLocation(lat, lon, tripId));
 
     return newState.hasValue;
+  }
+
+  void saveToken(String token) async {
+    tripsRepo.saveToken(token);
+  }
+
+  Future<bool> saveFCMToken(String fcm_token) async {
+    dynamic result = await tripsRepo.saveFCMToken(fcm_token);
+    return result;
   }
 }
 

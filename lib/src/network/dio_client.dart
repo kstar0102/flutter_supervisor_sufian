@@ -259,4 +259,25 @@ class DioClient {
       throw errorMessage;
     }
   }
+
+  static Future<dynamic> saveFCMToken(String id, String fcm_token) async {
+    final token = await _getToken();
+
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+
+    try {
+      final response = await dio.post(
+        '/driver/save/fcm_token',
+        data: {
+          'id': id,
+          'fcm_token': fcm_token,
+        },
+      );
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
 }

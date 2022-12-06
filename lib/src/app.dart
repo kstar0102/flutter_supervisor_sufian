@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:alnabali_driver/src/routing/app_router.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AlnabaliDriverApp extends ConsumerWidget {

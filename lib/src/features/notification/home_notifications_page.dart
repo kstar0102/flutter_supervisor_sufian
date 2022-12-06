@@ -1,8 +1,10 @@
 import 'dart:developer' as developer;
+import 'package:alnabali_driver/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 
@@ -92,9 +94,12 @@ class _HomeNotificationsPageState extends ConsumerState<HomeNotificationsPage> {
                   );
                 },
                 itemBuilder: (context, element) {
-                  return NotifCard(
-                    info: element,
-                    onPressed: () {},
+                  return GestureDetector(
+                    onTap: () {},
+                    child: NotifCard(
+                      info: element,
+                      onPressed: () {},
+                    ),
                   );
                 },
               )

@@ -1,4 +1,9 @@
+import 'package:alnabali_driver/src/features/auth/auth_repository.dart';
+import 'package:alnabali_driver/src/features/trip/trip_controller.dart';
+import 'package:alnabali_driver/src/widgets/dialogs.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,16 +16,140 @@ import 'package:alnabali_driver/src/widgets/gnav/gnav.dart';
 import 'package:alnabali_driver/src/widgets/gnav/gbutton.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HomeScreen extends StatefulWidget {
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _controller = PageController();
   int selectedIndex = 0;
+
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  String mToken = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    requestPermission();
+    getToken().then((value) {
+      saveFCMToken().then((value) {
+        print("fcmtoken" + value.toString());
+        if (!value) {
+          showToastMessage("Failed to register device");
+        }
+      });
+    });
+    initInfo();
+  }
+
+  initInfo() {
+    var androidInitialize =
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iosInitialize = const DarwinInitializationSettings();
+
+    var initializationSettings =
+        InitializationSettings(android: androidInitialize, iOS: iosInitialize);
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (details) {
+        try {
+          if (details != null && details.toString().isNotEmpty) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(),
+                ));
+          }
+        } catch (e) {}
+        return;
+      },
+    );
+    FirebaseMessaging.onMessage.listen((message) async {
+      print("===============OnMessage================");
+      print(
+          "onMessage: ${message.notification?.title}/${message.notification?.body}");
+
+      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        message.notification!.body.toString(),
+        htmlFormatBigText: true,
+        contentTitle: message.notification!.title.toString(),
+        htmlFormatContentTitle: true,
+      );
+      AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+        "channelId",
+        "channelName",
+        importance: Importance.high,
+        styleInformation: bigTextStyleInformation,
+        priority: Priority.high,
+        playSound: false,
+        // sound: RawResourceAndroidNotificationSound('notification'),
+      );
+      NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: const DarwinNotificationDetails(),
+      );
+      await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
+          message.notification?.body, platformChannelSpecifics,
+          payload: message.data['body']);
+    });
+  }
+
+  Future<void> getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      print('My token is $token');
+      setState(() {
+        mToken = token!;
+        // Commons.fcm_token = token!;
+        // print('My token is $mToken');
+      });
+      saveToken(token!);
+    });
+  }
+
+  void saveToken(String token) async {
+    final tripCtr = ref.read(tripControllerProvider.notifier);
+    tripCtr.saveToken(token);
+  }
+
+  Future<bool> saveFCMToken() async {
+    if (mToken == "") return false;
+    final tripCtr = ref.read(tripControllerProvider.notifier);
+    return await tripCtr.saveFCMToken(mToken);
+  }
+
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
-import 'package:alnabali_driver/src/features/trip/transaction.dart';
+import 'package:alnabali_driver/src/features/trip/transaction.dart' as trans;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:alnabali_driver/src/constants/app_constants.dart';
@@ -22,7 +23,7 @@ class TripsRepository {
 
   final TripKind repoType;
   final _trips = InMemoryStore<TripList>([]);
-  final _transactions = InMemoryStore<TransactionList>([]);
+  final _transactions = InMemoryStore<trans.TransactionList>([]);
 
   Trip? getTripInfo(String tripId) {
     final searched = _trips.value.where((t) => t.id == tripId).toList();
@@ -66,6 +67,7 @@ class TripsRepository {
 
       return true;
     } else {
+      return false;
       throw UnimplementedError;
     }
   }
@@ -127,14 +129,15 @@ class TripsRepository {
     return false;
   }
 
-  Future<TransactionList> doFetchTransaction(String tripId) async {
+  Future<trans.TransactionList> doFetchTransaction(String tripId) async {
     final data = await DioClient.getTransaction(tripId);
     developer.log('doFetchTransaction() returned: $data');
 
     var result = data['result'];
     if (result is List) {
       try {
-        final transs = result.map((data) => Transaction.fromMap(data)).toList();
+        final transs =
+            result.map((data) => trans.Transaction.fromMap(data)).toList();
         developer.log('fetched transactions: ${transs.length}');
         return transs;
       } catch (e) {
@@ -144,6 +147,32 @@ class TripsRepository {
     } else {
       throw UnimplementedError;
     }
+  }
+
+  void saveToken(String token) async {
+    await FirebaseFirestore.instance
+        .collection("UserTokens")
+        .doc("driver${authRepo.uid}")
+        .set({
+      'token': token,
+    });
+    print("complete saving token");
+  }
+
+  Future<bool> saveFCMToken(String fcm_token) async {
+    developer.log('dofcmtoken: ' + authRepo.uid.toString());
+    final data =
+        await DioClient.saveFCMToken(authRepo.uid.toString(), fcm_token);
+    developer.log('doUpdateLocation() returned: $data');
+
+    var result = data['result'];
+    if (result == 'success') {
+      developer.log('hello fcmtoken');
+      return true;
+    } else {
+      //developer.log('Failed to updated driver location to server.');
+    }
+    return false;
   }
 }
 
